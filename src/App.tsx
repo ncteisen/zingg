@@ -10,18 +10,25 @@ type HomeProps = {
 function Home(Props: HomeProps) {
   console.log("Home.render()");
   return (
-    <div className="App">
-      <div className="App-header">
-        <h2>Welcome to Zingg!</h2>
+     <div className="App">
+        <div className="App-header">
+          <h2>Welcome to the Zingg!</h2>
+        </div>
+        <div id="mainContainer" className="game-container-color container rounded">
+          <div id="gameBoard" className="container">
+            <div className="row">
+              <div className="col app-para">
+              <p>Testing</p>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col">
+                  <a className="btn start-button green2" onClick={Props.handleHomeToLobby}>Start!</a>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <br/>
-      <p className="App-intro">
-        Hope ur ready to get litty
-      </p>
-      <button onClick={Props.handleHomeToLobby}>
-        start
-      </button>
-    </div>
   );
 }
 
@@ -40,13 +47,16 @@ type AppState = {
 class App extends React.Component<AppProps, AppState> {
     state = {
         value: '',
-        // names: new Array<string>(),
-        names: ['Noah', 'Sarah', 'Josh', 'Sachin', 'Mk$', "Bryan"],
-        state: AppStateEnum.GAME
+        names: new Array<string>(),
+        state: AppStateEnum.HOME
     }
 
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (this.state.names.length >= 8) {
+      alert("Eight players max!!")
+      return;
+    }
     this.setState({
       names: this.state.names.concat(this.state.value),
       value: ''

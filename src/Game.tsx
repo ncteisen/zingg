@@ -25,7 +25,7 @@ class Game extends React.Component<GameProps, GameState> {
     super(props);
     var players = new Array<PlayerData>();
     for (var player_name of props.player_names) {
-      players.push(new PlayerData(player_name));
+      players.push(new PlayerData(player_name, ""));
     }
     this.state = {
       deck: CardDataList,
@@ -113,7 +113,7 @@ class Game extends React.Component<GameProps, GameState> {
         <div className="App-header">
           <h2>Welcome to the game!</h2>
         </div>
-        <div id="gameContainer" className="game-container-color container rounded">
+        <div id="mainContainer" className="game-container-color container rounded">
           <div id="gameBoard" className="container">
             <div className="row">
               <div className="col-3">
@@ -129,24 +129,26 @@ class Game extends React.Component<GameProps, GameState> {
                 {this.renderPlayer(3)}
               </div>
             </div>
-            <div className="row">
-              <div className="col-3">
-                {this.renderPlayer(4)}
+            {this.state.players.length > 4 &&
+              <div className="row">
+                <div className="col-3">
+                  {this.renderPlayer(4)}
+                </div>
+                <div className="col-3">
+                  {this.renderPlayer(5)}
+                </div>
+                <div className="col-3">
+                  {this.renderPlayer(6)}
+                </div>
+                <div className="col-3">
+                  {this.renderPlayer(7)}
+                </div>
               </div>
-              <div className="col-3">
-                {this.renderPlayer(5)}
-              </div>
-              <div className="col-3">
-                {this.renderPlayer(6)}
-              </div>
-              <div className="col-3">
-                {this.renderPlayer(7)}
-              </div>
-            </div>
+            }
             <div className="row">
               <div className="col">
-                <div id="headerContainer1" className="red3 container rounded">
-                <div id="headerContainer2" className="red2 container rounded">
+                <div id="headerContainer1" className="orange3 container rounded">
+                <div id="headerContainer2" className="orange2 container rounded">
                   It's {current_player.name}'s Turn!
                 </div>
                 </div>
@@ -157,7 +159,7 @@ class Game extends React.Component<GameProps, GameState> {
         				<div id="cardContainer" className="container">
                   {this.renderCard()}
         				</div>
-                <a onClick={this.handleButtonClick} className="btn">{this.buttonText()}</a>
+                <a onClick={this.handleButtonClick} className="btn game-btn">{this.buttonText()}</a>
               </div>
             </div>
           </div>

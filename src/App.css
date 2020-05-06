@@ -49,15 +49,12 @@
 }
 
 #playerPlaceholder {
-  border-style: dotted;
-  border-width: 2px;
-  border-color: #e06666;
   margin-top:24px;
   padding: 2px;
   height: 32px;
 }
 
-#gameContainer {
+#mainContainer {
   margin-top:20px;
   display: flex;
   flex-wrap: wrap;
@@ -67,6 +64,10 @@
 
 .game-container-color {
   background-color: #E6E6FA;
+}
+
+.lobby-form {
+  margin: 10px;
 }
 
 #gameBoard {
@@ -114,20 +115,53 @@
   display: flex;
 }
 
-.btn {
+.lobby-btn-add {
+  border-color: #4c1130;
+  margin-left: 5px;
+}
+
+.lobby-btn-start {
+  border-color: #4c1130;
+  margin: auto;
+  font-size: 30px;
+  margin-top: 160px;
+}
+
+.player-holder {
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  margin-top: 30px;
+  height: 400px;
+}
+
+.players-title{
+  margin-bottom: 20px;
+}
+
+.lobby-player {
+  margin-top: 10px;
+  width: 250px;
+}
+
+.start-game-holder {
+  height: 400px;
+}
+
+.game-btn {
   background-color: #a64d79;
   border-color: #4c1130;
   margin-top: 140px;
   color: white;
 }
 
-.btn:hover {
+.game-btn:hover {
   background-color: #741b47;
   border-color: black;
   color: white;
 }
 
-.btn:active {
+.game-btn:active {
   background-color: #c27ba0;
   border-color: #4c1130;
   color: white;
@@ -183,6 +217,10 @@
   border-color: #073763;
 }
 
+.app-para {
+  margin-top: 30px; 
+}
+
 .card-text {
   padding: 5px;
   margin: auto;
@@ -204,3 +242,9 @@
   font-family: "Comic Sans MS", cursive, sans-serif;
 }
 
+.start-button {
+  border-color: #4c1130;
+  margin: auto;
+  font-size: 30px;
+  margin-top: 160px;
+}
