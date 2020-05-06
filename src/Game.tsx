@@ -1,108 +1,8 @@
 import React from 'react';
-import back from './assets/back.png'
-import beer from './assets/beer.png'
 
-enum CardType {
-  BACK = "Back",
-  ACTION = "Action",
-  STATUS = "Status",
-  INTERRUPT = "Interrupt",
-}
-
-class CardData {
-  title: string;
-  body: string;
-  img: any;
-  type: CardType;
-  constructor(title: string, body: string, img: any, type: CardType) {
-    this.title = title;
-    this.body = body;
-    this.img = img;
-    this.type = type;
-  }
-}
-
-class PlayerData {
-  name: string;
-  constructor(name: string) {
-    this.name = name;
-  }
-}
-
-type PlayerProps = {
-  name: string;
-  isTurn: boolean;
-};
-function Player(props: PlayerProps) {
-    return (
-      <div id="player1" className={props.isTurn ? "red4" : "game-container-color" + " rounded container"}>
-      <div id="player2" className="red3 container rounded">
-      <div id="player3" className="red2 container rounded">
-      <div id="player4" className="red1 container rounded">
-        {props.name}
-      </div>
-      </div>
-      </div>
-      </div>
-      );
-}
-
-function PlaceholderPlayer() {
-    return (
-      <div id="playerPlaceholder" className="container rounded">
-      </div>
-      );
-}
-
-type CardProps = {
-  data: CardData
-}
-function Card(props: CardProps) {
-  return (
-    <div id="deck1" className="blue4 container rounded">
-    <div id="deck2" className="blue3 container rounded">
-    <div id="deck3" className="blue2 container rounded">
-      <div id="card" className="blue1 card">
-        <div className="card-body-holder1 rounded">
-        <div className="card-body-holder2 rounded">
-          <div className="card-title-holder rounded">
-            <h4 className="card-title">{props.data.title}</h4>
-          </div>
-          <img className="card-img-top" src={props.data.img} alt="Card image"/>
-          <div className="card-type-holder rounded">
-            <p className="card-type">{props.data.type}</p>
-          </div>
-          <div className="card-text-holder rounded">
-          <p className="card-text">{props.data.body}</p>
-          </div>
-        </div>
-        </div>
-      </div>
-    </div>
-    </div>
-    </div>
-    );
-}
-
-
-function BackOfCard() {
-  return (
-    <div id="deck1" className="purple4 container rounded">
-    <div id="deck2" className="purple3 container rounded">
-    <div id="deck3" className="purple2 container rounded">
-      <div id="card" className="purple1 card">
-        <div className="card-back-holder1 rounded">
-        <div className="card-body-holder2 rounded">
-          <h4 className="card-back-title">Zingg</h4>
-          <img className="card-img-top back-img-centered" src={back} alt="Card image"/>
-        </div>
-        </div>
-      </div>
-    </div>
-    </div>
-    </div>
-    );
-}
+import CardDataList from "./CardDataList";
+import Card, { CardType, CardData, BackOfCard } from "./Card";
+import Player, { PlaceholderPlayer, PlayerData } from "./Player";
 
 enum DeckState {
   START,
@@ -127,10 +27,8 @@ class Game extends React.Component<GameProps, GameState> {
     for (var player_name of props.player_names) {
       players.push(new PlayerData(player_name));
     }
-    var deck = new Array<CardData>();
-    deck.push(new CardData("Title", "Body", beer, CardType.ACTION));
     this.state = {
-      deck: deck,
+      deck: CardDataList,
       deck_idx: 0,
       deckState: DeckState.START,
       players: players,

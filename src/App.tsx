@@ -2,6 +2,7 @@ import React from 'react';
 import Game from './Game';
 import Lobby from './Lobby';
 import './App.css';
+import './Colors.css';
 
 type HomeProps = {
   handleHomeToLobby: () => void
