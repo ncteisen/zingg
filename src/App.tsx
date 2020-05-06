@@ -40,7 +40,7 @@ class App extends React.Component<AppProps, AppState> {
     state = {
         value: '',
         // names: new Array<string>(),
-        names: ['Noah', 'Sarah'],
+        names: ['Noah', 'Sarah', 'Josh', 'Sachin', 'Mk$', "Bryan"],
         state: AppStateEnum.GAME
     }
 
@@ -80,7 +80,7 @@ class App extends React.Component<AppProps, AppState> {
   }
 
   renderGame() {
-    return <Game names={this.state.names} />
+    return <Game player_names={this.state.names} />
   }
 
   render() {
