@@ -1,0 +1,4 @@
+- all muted players drink
+- all non muted players drink
+- choose multi-person screen to dance
+- find a pen

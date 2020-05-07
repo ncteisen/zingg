@@ -4,7 +4,7 @@ import back from './assets/back.png'
 export enum CardType {
   ACTION = "Action",
   STATUS = "Status",
-  INTERRUPT = "Interrupt",
+  INTERRUPT = "All Players",
 }
  
 export class CardData {

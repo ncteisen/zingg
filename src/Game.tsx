@@ -11,7 +11,6 @@ enum CardPosition {
 }
 
 enum DeckState {
-  START,
   BACK,
   FRONT,
 }
@@ -55,10 +54,6 @@ class Game extends React.Component<GameProps, GameState> {
 
   renderCard(pos: CardPosition) {
     switch (this.state.deckState) {
-      case DeckState.START:
-        return <BackOfCard />
-        break;
-
       case DeckState.BACK:
         return <BackOfCard />
         break;
@@ -79,10 +74,6 @@ class Game extends React.Component<GameProps, GameState> {
 
   handleButtonClick = (pos: CardPosition) => {
     switch (this.state.deckState) {
-      case DeckState.START:
-        this.setState({deckState: DeckState.FRONT})
-        break;
-
       case DeckState.BACK:
         this.setState({deckState: DeckState.FRONT})
         break;
@@ -106,14 +97,25 @@ class Game extends React.Component<GameProps, GameState> {
 
   buttonText() {
     switch (this.state.deckState) {
-      case DeckState.START:
-        return "Start Game!"
-
       case DeckState.BACK:
         return "Flip card"
 
       case DeckState.FRONT:
         return "Next player"
+      
+      default:
+        break;
+    } 
+  }
+
+  getBannerText() {
+    var current_player = this.state.players[this.state.player_idx];
+    switch (this.state.deckState) {
+      case DeckState.BACK:
+        return "It's " + current_player.name + "'s turn, pick which card to flip!"
+
+      case DeckState.FRONT:
+        return "It's " + current_player.name + "'s turn, carry out the action on the card, then press the 'Next Player' button."
       
       default:
         break;
@@ -165,7 +167,7 @@ class Game extends React.Component<GameProps, GameState> {
               <div className="col">
                 <div id="headerContainer1" className="orange3 container rounded">
                 <div id="headerContainer2" className="orange2 container rounded">
-                  It's {current_player.name}'s turn, pick which card to flip!
+                  {this.getBannerText()}
                 </div>
                 </div>
               </div>

@@ -97,7 +97,7 @@
 #headerContainer1 {
   margin-top:20px;
   padding: 2px;
-  width: 500px;
+  width: 750px;
 }
 
 #headerContainer2 {
@@ -239,7 +239,7 @@
 .card-title {
   margin: auto;
   padding: 5px;
-  font-size: 23px;
+  font-size: 21px;
   font-family: "Comic Sans MS", cursive, sans-serif;
 }
 
