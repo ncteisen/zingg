@@ -11,10 +11,26 @@ import jeop from './assets/jeop.png'
 import think from './assets/think.png'
 import superlatives from './assets/superlatives.png'
 import alcoholism from './assets/alcoholism.png'
+import ketchup from './assets/ketchup.png'
+import categories from './assets/categories.png'
 
 import Card, { CardData, CardType } from "./Card";
 
 let CardDataList = [
+
+	new CardData(
+		"Categories",
+		`Pick a category. Now go around the circle and name things within 
+		the category. First to hesitate or repeat a word must drink.`,
+		categories,
+		CardType.ACTION),
+
+	new CardData(
+		"Catch Up",
+		`Everyone decide on the who the most sober player is. He or 
+		she must take a shot.`,
+		ketchup,
+		CardType.INTERRUPT),
 
 	new CardData(
 		"Alcoholism is Funny",
