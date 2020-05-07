@@ -76,6 +76,19 @@
   display: inline-block;
 }
 
+#appHeaderContainer {
+  margin-top:20px;
+  padding: 2px;
+  width: 700px;
+}
+
+.app-text {
+  font-size: 15px;
+  text-align: justify;
+  text-justify: inter-word;
+  padding: 10px;
+}
+
 #headerContainer1 {
   margin-top:20px;
   padding: 2px;
@@ -149,21 +162,40 @@
 }
 
 .game-btn {
-  background-color: #a64d79;
+  background-color: #c27ba0;
   border-color: #4c1130;
   margin-top: 140px;
   color: white;
 }
 
 .game-btn:hover {
-  background-color: #741b47;
+  background-color: #a64d79;
   border-color: black;
   color: white;
 }
 
 .game-btn:active {
-  background-color: #c27ba0;
+  background-color: #d5a6bd;
   border-color: #4c1130;
+  color: white;
+}
+
+.next-player-btn {
+  background-color: #f6b26b;
+  margin-top: 170px;
+  color: white;
+  border-color: black;
+}
+
+.next-player-btn:hover {
+  background-color: #f6b26b;
+  border-color: black;
+  color: white;
+}
+
+.next-player-btn:active {
+  background-color: #f9cb9c;
+  border-color: black;
   color: white;
 }
 

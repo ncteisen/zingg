@@ -17,8 +17,22 @@ function Home(Props: HomeProps) {
         <div id="mainContainer" className="game-container-color container rounded">
           <div id="gameBoard" className="container">
             <div className="row">
-              <div className="col app-para">
-              <p>Testing</p>
+              <div className="col">
+                <div id="appHeaderContainer" className="magenta2 container rounded">
+                <div id="headerContainer2" className="magenta1 container rounded">
+                <p className="app-text">
+                  Welcome! This site allows playing Zingg on the web.
+                  It is optimized for using Zoom, Hangouts, or Meet to
+                  video conference and play. One person should load this site
+                  and then present it to everyone else.
+                </p>
+                <p className="app-text">
+                  Lorem ipsem Lorem ipsem Lorem ipsem Lorem ipsem Lorem 
+                  ipsem Lorem ipsem Lorem ipsem Lorem ipsem Lorem ipsem 
+                  Lorem ipsem Lorem ipsem Lorem ipsem Lorem ipsem 
+                </p>
+                </div>
+                </div>
               </div>
             </div>
             <div className="row">
@@ -47,8 +61,9 @@ type AppState = {
 class App extends React.Component<AppProps, AppState> {
     state = {
         value: '',
-        names: new Array<string>(),
-        state: AppStateEnum.HOME
+        // names: new Array<string>(),
+        names: ["Noah", "Sarah", "Caela"],
+        state: AppStateEnum.GAME
     }
 
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

@@ -4,6 +4,12 @@ import CardDataList from "./CardDataList";
 import Card, { CardType, CardData, BackOfCard } from "./Card";
 import Player, { PlaceholderPlayer, PlayerData } from "./Player";
 
+enum CardPosition {
+  UNSET,
+  LEFT,
+  RIGHT,
+}
+
 enum DeckState {
   START,
   BACK,
@@ -19,6 +25,7 @@ type GameState = {
   deckState: DeckState;
   players: PlayerData[];
   player_idx: number;
+  pos: CardPosition;
 };
 class Game extends React.Component<GameProps, GameState> {
   constructor(props: GameProps){
@@ -33,6 +40,7 @@ class Game extends React.Component<GameProps, GameState> {
       deckState: DeckState.START,
       players: players,
       player_idx: 0,
+      pos: CardPosition.UNSET,
     }
   }
 
@@ -45,7 +53,7 @@ class Game extends React.Component<GameProps, GameState> {
     }
   }
 
-  renderCard() {
+  renderCard(pos: CardPosition) {
     switch (this.state.deckState) {
       case DeckState.START:
         return <BackOfCard />
@@ -56,7 +64,11 @@ class Game extends React.Component<GameProps, GameState> {
         break;
 
       case DeckState.FRONT:
-        return <Card data={this.state.deck[this.state.deck_idx]} />
+        if (pos == this.state.pos) {
+          return <Card data={this.state.deck[this.state.deck_idx]} />
+        } else {
+          return <BackOfCard />
+        }
         break;
       
       default:
@@ -65,7 +77,7 @@ class Game extends React.Component<GameProps, GameState> {
     }
   }
 
-  handleButtonClick = () => {
+  handleButtonClick = (pos: CardPosition) => {
     switch (this.state.deckState) {
       case DeckState.START:
         this.setState({deckState: DeckState.FRONT})
@@ -86,6 +98,10 @@ class Game extends React.Component<GameProps, GameState> {
       default:
         break;
     }
+
+    this.setState({
+      pos: pos
+    })
   }
 
   buttonText() {
@@ -149,7 +165,7 @@ class Game extends React.Component<GameProps, GameState> {
               <div className="col">
                 <div id="headerContainer1" className="orange3 container rounded">
                 <div id="headerContainer2" className="orange2 container rounded">
-                  It's {current_player.name}'s Turn!
+                  It's {current_player.name}'s turn, pick which card to flip!
                 </div>
                 </div>
               </div>
@@ -157,9 +173,29 @@ class Game extends React.Component<GameProps, GameState> {
             <div className="row">
               <div className="col">
         				<div id="cardContainer" className="container">
-                  {this.renderCard()}
+                  {this.renderCard(CardPosition.LEFT)}
         				</div>
-                <a onClick={this.handleButtonClick} className="btn game-btn">{this.buttonText()}</a>
+                {this.state.deckState != DeckState.FRONT &&
+                  <a onClick={() => this.handleButtonClick(CardPosition.LEFT)}
+                     className="btn game-btn">Flip card A</a>
+                }
+              </div>
+              <div className="col">
+                <div id="cardContainer" className="container">
+                  {this.renderCard(CardPosition.RIGHT)}
+                </div>
+                {this.state.deckState != DeckState.FRONT &&
+                  <a onClick={() => this.handleButtonClick(CardPosition.RIGHT)}
+                     className="btn game-btn">Flip card B</a>
+                }
+              </div>
+            </div>
+            <div className="row">
+              <div className="col">
+                {this.state.deckState == DeckState.FRONT &&
+                  <a onClick={() => this.handleButtonClick(CardPosition.UNSET)}
+                     className="btn next-player-btn">Next Player</a>
+                }
               </div>
             </div>
           </div>
