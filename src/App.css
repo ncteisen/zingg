@@ -1,7 +1,7 @@
 .App {
   text-align: center;
   background-color: #F0F8FF;
-  height: 800px;
+  height: 850px;
 }
 
 .App-logo {
@@ -23,10 +23,15 @@
   color: #61dafb;
 }
 
-.card-img-top {
+.card-img-holder {
   height: 140px;
   width: 110px;
   margin: auto;
+}
+
+.card-img-top {
+  margin-top: 2px;
+  padding: 10px;
 }
 
 #player1 {
@@ -59,7 +64,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  height: 700px;
+  height: 750px;
 }
 
 .game-container-color {
@@ -254,8 +259,11 @@
 }
 
 .card-text {
-  padding: 5px;
+  padding: 8px;                                  
+  padding-top: 15px;                                  
   margin: auto;
+  text-align: center;
+  text-align: justify;
   font-size: 13px;
   height: 140px;
   font-family: "Trebuchet MS", Helvetica, sans-serif;

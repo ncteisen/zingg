@@ -37,10 +37,10 @@ class Game extends React.Component<GameProps, GameState> {
     this.state = {
       deck: CardDataList,
       deck_idx: 0,
-      deckState: DeckState.START,
+      deckState: DeckState.FRONT, // change me back to back
       players: players,
       player_idx: 0,
-      pos: CardPosition.UNSET,
+      pos: CardPosition.RIGHT, // Change me back to unset
     }
   }
 
@@ -89,7 +89,7 @@ class Game extends React.Component<GameProps, GameState> {
 
       case DeckState.FRONT:
         this.setState({
-          deckState: DeckState.BACK,
+          deckState: DeckState.FRONT,
           player_idx: (this.state.player_idx + 1) % this.state.players.length,
           deck_idx: (this.state.deck_idx + 1) % this.state.deck.length
         })
@@ -100,7 +100,7 @@ class Game extends React.Component<GameProps, GameState> {
     }
 
     this.setState({
-      pos: pos
+      pos: CardPosition.RIGHT // TODO, change me back to pos
     })
   }
 

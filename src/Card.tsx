@@ -46,7 +46,9 @@ function Card(props: CardProps) {
           <div className="card-title-holder rounded">
             <h4 className="card-title">{props.data.title}</h4>
           </div>
+          <div className="card-img-holder rounded">
           <img className="card-img-top" src={props.data.img} alt="Card image"/>
+          </div>
           <div className="card-type-holder rounded">
             <p className="card-type">{props.data.type}</p>
           </div>
