@@ -31,10 +31,19 @@ import yenta from './assets/yenta.png'
 import rps from './assets/rps.png'
 import name from './assets/name.png'
 import lovehate from './assets/lovehate.png'
+import noah from './assets/noah.png'
 
 import Card, { CardData, CardType } from "./Card";
 
 let CardDataList = [
+
+	new CardData(
+		"The Noah",
+		`Everyone take a drink for your humble creator. Unless he is playing, 
+		then he takes a fucking drink.`,
+		noah,  //TODO
+		[],
+		CardType.INTERRUPT),
 
 	new CardData(
 		"Love it or Hate it",
@@ -42,6 +51,7 @@ let CardDataList = [
 		around and says either “love it” or “hate it.” You go last, everyone 
 		drinks if they didn’t match your response.`,
 		lovehate,
+		["I love it in the butt", "I hate peanut butter"],
 		CardType.ACTION),
 
 	new CardData(
@@ -50,6 +60,7 @@ let CardDataList = [
 		fail, you drink. If everyone knows each other well, level it up 
 		(last names, middle names, siblings names, etc etc)`,
 		name,
+		[],
 		CardType.ACTION),
 
 	new CardData(
@@ -58,6 +69,7 @@ let CardDataList = [
 		scissors, best of three. Loser drinks. For every tie, the spectators 
 		drink.`,
 		rps,
+		[],
 		CardType.ACTION),
 
 	new CardData(
@@ -65,6 +77,7 @@ let CardDataList = [
 		`Finish your drink. If you do it in under 9 seconds, 
 		everyone else must take a drink.`,
 		chug,
+		[],
 		CardType.ACTION),
 
 	new CardData(
@@ -72,12 +85,14 @@ let CardDataList = [
 		`Pick 2 players. They must compliment each other, 
 		then drink together. Mazel tov!`,
 		yenta,
+		[],
 		CardType.ACTION),
 
 	new CardData(
 		"Never Have I Ever",
 		`Play Never Have I Ever with three fingers. You start.`,
 		never,
+		[],
 		CardType.ACTION),
 
 	new CardData(
@@ -86,6 +101,7 @@ let CardDataList = [
 		done. Everyone drinks and puts a finger down if they haven’t done it. 
 		(this is the opposite of Never Have I Ever)`,
 		judge,
+		[],
 		CardType.ACTION),
 
 	new CardData(
@@ -93,6 +109,7 @@ let CardDataList = [
 		`Start humming a song. First player to name the tune chooses 
 		a losing player to drink.`,
 		tune,
+		[],
 		CardType.ACTION),
 
 	new CardData(
@@ -100,6 +117,7 @@ let CardDataList = [
 		`All single players must drink. Toast to how awesome it is 
 		or how lonely it is, your call.`,
 		single,
+		[],
 		CardType.INTERRUPT),
 
 	new CardData(
@@ -107,6 +125,7 @@ let CardDataList = [
 		`All players must drink as many times as the number of times 
 		that they have masturbated this past week. Everyone counts together.`,
 		love,
+		[],
 		CardType.ACTION),
 
 	new CardData(
@@ -114,6 +133,7 @@ let CardDataList = [
 		`Pose a question. Go around the circle; everyone must answer. 
 		They may abstain only if they take a shot.`,
 		survey,
+		[],
 		CardType.ACTION),
 
 	new CardData(
@@ -121,12 +141,14 @@ let CardDataList = [
 		`If two players in the game have hooked up in the past, they must 
 		both drink and silently recall the last time it happened.`,
 		elephant,
+		[],
 		CardType.INTERRUPT),
 
 	new CardData(
 		"Dare or Dare",
 		`Dare a player to do something. They can refuse by taking a shot.`,
 		dare,
+		[],
 		CardType.ACTION),
 
 	new CardData(
@@ -134,6 +156,7 @@ let CardDataList = [
 		`Player with the closest birthday must drink. If it is their 
 		birthday today, they must take a shot.`,
 		cake,
+		[],
 		CardType.INTERRUPT),
 
 	new CardData(
@@ -141,6 +164,7 @@ let CardDataList = [
 		`All players in a relationship must drink. If your SO is playing, 
 		say something cute and drink twice.`,
 		marriage,
+		[],
 		CardType.INTERRUPT),
 
 	new CardData(
@@ -148,6 +172,7 @@ let CardDataList = [
 		`Choose two players who are on the same screen to race to the bottom. 
 		Loser drinks again. Everyone else should make racing noises.`,
 		races,
+		[],
 		CardType.ACTION),
 
 	new CardData(
@@ -156,6 +181,7 @@ let CardDataList = [
 		asked one question by every other player. They may refuse to 
 		answer only if they drink.`,
 		hotseat2,
+		[],
 		CardType.ACTION),
 
 	new CardData(
@@ -163,6 +189,7 @@ let CardDataList = [
 		`YOU are in the hot seat! All other players get to ask you one 
 		question. You may refuse to answer only if you drink.`,
 		hotseat,
+		[],
 		CardType.ACTION),
 
 	new CardData(
@@ -171,6 +198,7 @@ let CardDataList = [
 		the screen and name things within the category. First to hesitate 
 		or repeat a word must drink.`,
 		categories,
+		[],
 		CardType.ACTION),
 
 	new CardData(
@@ -178,6 +206,7 @@ let CardDataList = [
 		`Everyone decide on the who the most sober player is. He or 
 		she must take a shot.`,
 		ketchup,
+		[],
 		CardType.INTERRUPT),
 
 	new CardData(
@@ -185,6 +214,7 @@ let CardDataList = [
 		`Everyone decide on who is the drunkest player. They must drink twice. 
 		Laugh at how drunk they are.`,
 		alcoholism,
+		[],
 		CardType.INTERRUPT),
 
 	new CardData(
@@ -194,6 +224,7 @@ let CardDataList = [
 		should be. Everyone drinks for each time they are named in the 
 		chat.`,
 		superlatives,
+		[],
 		CardType.ACTION),
 
 	new CardData(
@@ -202,6 +233,7 @@ let CardDataList = [
 		immediately start drinking. They may only stop once they
 		can answer the question.`,
 		think,
+		[],
 		CardType.ACTION),
 
 	new CardData(
@@ -210,18 +242,21 @@ let CardDataList = [
 		right question for that answer chooses a losing player 
 		to drink. This might be similar to some game show.`,
 		jeop,
+		[],
 		CardType.ACTION),
 
 	new CardData(
 		"Fuck Guys",
 		"All male players must drink.",
 		male,
+		[],
 		CardType.INTERRUPT),
 
 	new CardData(
 		"Fuck Girls",
 		"All female players must drink.",
 		female,
+		[],
 		CardType.INTERRUPT),
 
 	new CardData(
@@ -229,24 +264,28 @@ let CardDataList = [
 		`Announce an action or event. The player(s) who did that thing 
 		most recently must drink. Figure it out.`,
 		confess,
+		[],
 		CardType.ACTION),
 
 	new CardData(
 		"Drink",
 		"Take a drink! Make sure you do it on camera.",
 		beer1,
+		[],
 		CardType.ACTION),
 
 	new CardData(
 		"Big Drink",
 		"Take a big drink! Make sure you do it on camera.",
 		drink1,
+		[],
 		CardType.ACTION),
 
 	new CardData(
 		"The Orator",
 		"Make a long toast. Everyone takes a long drink.",
 		orator,
+		[],
 		CardType.ACTION),
 
 	new CardData(
@@ -254,6 +293,7 @@ let CardDataList = [
 		`You must take a shot. Or, if you are a softy, go 
 		ahead and take a big drink.`,
 		shot1,
+		[],
 		CardType.ACTION),
 
 	new CardData(
@@ -261,6 +301,7 @@ let CardDataList = [
 		`Start acting out a movie or movie character. First player 
 		to name the movie or character chooses a losing player to drink.`,
 		movie1,
+		[],
 		CardType.ACTION),
 ]
 
