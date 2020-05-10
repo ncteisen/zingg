@@ -49,10 +49,10 @@ class Game extends React.Component<GameProps, GameState> {
     this.state = {
       deck: shuffle(CardDataList),
       deck_idx: 0,
-      deckState: DeckState.FRONT, // change me back to back
+      deckState: DeckState.BACK, // TODO, make a mode for this.
       players: players,
       player_idx: 0,
-      pos: CardPosition.RIGHT, // Change me back to unset
+      pos: CardPosition.UNSET, // TODO, make a mode for this.
     }
   }
 
@@ -93,7 +93,7 @@ class Game extends React.Component<GameProps, GameState> {
 
       case DeckState.FRONT:
         this.setState({
-          deckState: DeckState.FRONT,
+          deckState: DeckState.BACK,  // TODO, make a mode for this.
           player_idx: (this.state.player_idx + 1) % this.state.players.length,
           deck_idx: (this.state.deck_idx + 1) % this.state.deck.length
         })
@@ -104,7 +104,7 @@ class Game extends React.Component<GameProps, GameState> {
     }
 
     this.setState({
-      pos: CardPosition.RIGHT // TODO, change me back to pos
+      pos: pos // TODO, make a mode for this.
     })
   }
 
@@ -142,7 +142,7 @@ class Game extends React.Component<GameProps, GameState> {
     return (
       <div className="App">
         <div className="App-header">
-          <h2>Welcome to the game!</h2>
+          <h2>Zingg Web</h2>
         </div>
         <div id="mainContainer" className="game-container-color container rounded">
           <div id="gameBoard" className="container">

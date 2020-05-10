@@ -12,7 +12,7 @@ function Home(Props: HomeProps) {
   return (
      <div className="App">
         <div className="App-header">
-          <h2>Welcome to the Zingg!</h2>
+          <h2>Welcome to the Zingg Web!</h2>
         </div>
         <div id="mainContainer" className="game-container-color container rounded">
           <div id="gameBoard" className="container">

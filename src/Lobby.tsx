@@ -12,7 +12,7 @@ function Lobby(Props: LobbyProps) {
   return (
       <div className="App">
         <div className="App-header">
-          <h2>Welcome to the lobby!</h2>
+          <h2>Zingg Web</h2>
         </div>
         <div id="mainContainer" className="game-container-color container rounded">
           <div id="gameBoard" className="container">
