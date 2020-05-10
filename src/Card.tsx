@@ -59,11 +59,10 @@ function Card(props: CardProps) {
               <div className="col">
                 <p className="card-type">{props.data.type}</p>
               </div>
-                <div className="col">
-                  {props.data.tips.length > 0 &&
+                {props.data.tips.length > 0 &&
+                  <div className="col">
                     <span id="ExampleTooltip" className={color + "2 btn card-tooltip"}>{tooltipOpen ? "hide" : "show"} examples</span>
-                  }
-                  <Tooltip  trigger="hover"
+                    <Tooltip  trigger="hover"
                             placement="right-end"
                             isOpen={tooltipOpen}
                             target="ExampleTooltip"
@@ -79,6 +78,7 @@ function Card(props: CardProps) {
                     ))}
                   </Tooltip>
                 </div>
+              }
             </div>
           </div>
           <div className="card-text-holder rounded">

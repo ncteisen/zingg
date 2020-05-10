@@ -167,7 +167,11 @@ let CardDataList = [
 		"Dare or Dare",
 		`Dare a player to do something. They can refuse by taking a shot.`,
 		dare,
-		[],
+		[
+			"Lick someone",
+			"Do 10 pushups (on camera!)",
+			"Do something sexy or whatever"
+		],
 		CardType.ACTION),
 
 	new CardData(
@@ -234,7 +238,11 @@ let CardDataList = [
 		should be. Everyone drinks for each time they are named in the 
 		chat.`,
 		superlatives,
-		[],
+		[
+			"Most likely to get COVID",
+			"Least likely to poop today",
+			"Best dancer",
+		],
 		CardType.ACTION),
 
 	new CardData(
@@ -243,7 +251,11 @@ let CardDataList = [
 		immediately start drinking. They may only stop once they
 		can answer the question.`,
 		think,
-		[],
+		[
+			"Name a movie with Brad Pitt",
+			"Who was the third president",
+			"Name an NFL quarterback",
+		],
 		CardType.ACTION),
 
 	new CardData(
@@ -274,7 +286,11 @@ let CardDataList = [
 		`Announce an action or event. The player(s) who did that thing 
 		most recently must drink. Figure it out.`,
 		confess,
-		[],
+		[
+			"Last person to have sex",
+			"Last person to puke from drinking",
+			"Last person to masturbate",
+		],
 		CardType.ACTION),
 
 	new CardData(
