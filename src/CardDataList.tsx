@@ -38,6 +38,28 @@ import Card, { CardData, CardType } from "./Card";
 let CardDataList = [
 
 	new CardData(
+		"Categories",
+		`Pick a category. Now go around the player order from the top of
+		the screen and name things within the category. First to hesitate 
+		or repeat a word must drink.`,
+		categories,
+		[`You seriously needed to see examples for fucking categories?? 
+		Jesus christ take two drinks for that and learn a little creativity`],
+		CardType.ACTION),
+
+	new CardData(
+		"Survey",
+		`Pose a question. Go around the circle; everyone must answer. 
+		They may abstain only if they take a shot.`,
+		survey,
+		[
+			"Where would your dream vacation be?",
+			"What's the craziest place you have hooked up?",
+			"Would you rather live in a world without music or without color?"
+		],
+		CardType.ACTION),
+
+	new CardData(
 		"The Noah",
 		`Everyone take a drink for your humble creator. Unless he is playing, 
 		then he takes a fucking drink.`,
@@ -51,7 +73,12 @@ let CardDataList = [
 		around and says either “love it” or “hate it.” You go last, everyone 
 		drinks if they didn’t match your response.`,
 		lovehate,
-		["I love it in the butt", "I hate peanut butter"],
+		[
+			"Sex with the lights on",
+			"Smoking weed",
+			"Eating sushi",
+			"Contemplating the emptiness of the universe"
+		],
 		CardType.ACTION),
 
 	new CardData(
@@ -129,14 +156,6 @@ let CardDataList = [
 		CardType.ACTION),
 
 	new CardData(
-		"Survey",
-		`Pose a question. Go around the circle; everyone must answer. 
-		They may abstain only if they take a shot.`,
-		survey,
-		[],
-		CardType.ACTION),
-
-	new CardData(
 		"Elephant in the Room",
 		`If two players in the game have hooked up in the past, they must 
 		both drink and silently recall the last time it happened.`,
@@ -189,15 +208,6 @@ let CardDataList = [
 		`YOU are in the hot seat! All other players get to ask you one 
 		question. You may refuse to answer only if you drink.`,
 		hotseat,
-		[],
-		CardType.ACTION),
-
-	new CardData(
-		"Categories",
-		`Pick a category. Now go around the player order from the top of
-		the screen and name things within the category. First to hesitate 
-		or repeat a word must drink.`,
-		categories,
 		[],
 		CardType.ACTION),
 
