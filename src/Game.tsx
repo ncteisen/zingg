@@ -4,6 +4,8 @@ import CardDataList from "./CardDataList";
 import Card, { CardType, CardData, BackOfCard } from "./Card";
 import Player, { PlaceholderPlayer, PlayerData } from "./Player";
 
+const cardDebuggingMode = false;
+
 enum CardPosition {
   UNSET,
   LEFT,
@@ -49,10 +51,10 @@ class Game extends React.Component<GameProps, GameState> {
     this.state = {
       deck: shuffle(CardDataList),
       deck_idx: 0,
-      deckState: DeckState.BACK, // TODO, make a mode for this.
+      deckState: cardDebuggingMode ? DeckState.FRONT : DeckState.BACK,
       players: players,
       player_idx: 0,
-      pos: CardPosition.UNSET, // TODO, make a mode for this.
+      pos: cardDebuggingMode ? CardPosition.RIGHT : CardPosition.UNSET,
     }
   }
 
@@ -93,7 +95,7 @@ class Game extends React.Component<GameProps, GameState> {
 
       case DeckState.FRONT:
         this.setState({
-          deckState: DeckState.BACK,  // TODO, make a mode for this.
+          deckState: cardDebuggingMode ? DeckState.BACK : DeckState.FRONT,
           player_idx: (this.state.player_idx + 1) % this.state.players.length,
           deck_idx: (this.state.deck_idx + 1) % this.state.deck.length
         })
@@ -104,7 +106,7 @@ class Game extends React.Component<GameProps, GameState> {
     }
 
     this.setState({
-      pos: pos // TODO, make a mode for this.
+      pos: cardDebuggingMode ? CardPosition.RIGHT : pos,
     })
   }
 
