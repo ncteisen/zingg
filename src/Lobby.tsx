@@ -1,4 +1,5 @@
 import React from 'react';
+import GameHeader from './GameHeader'
 
 type LobbyProps = {
   handleLobbyToGame: () => void
@@ -11,9 +12,7 @@ function Lobby(Props: LobbyProps) {
   console.log("Lobby.render()");
   return (
       <div className="App">
-        <div className="App-header">
-          <h2>Zingg Web</h2>
-        </div>
+        <GameHeader />
         <div id="mainContainer" className="game-container-color container rounded">
           <div id="gameBoard" className="container">
             <div className="row">
@@ -56,7 +55,9 @@ function Lobby(Props: LobbyProps) {
               </div>
               </div>
               <div className="col start-game-holder">
-                <a className="btn lobby-btn-start green2" onClick={Props.handleLobbyToGame}>Start game</a>
+                {Props.names.length > 1 &&
+                  <a className="btn lobby-btn-start green2" onClick={Props.handleLobbyToGame}>Start game</a>
+                }
               </div>
             </div>
           </div>

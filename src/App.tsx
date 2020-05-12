@@ -12,7 +12,11 @@ function Home(Props: HomeProps) {
   return (
      <div className="App">
         <div className="App-header">
-          <h2>Welcome to the Zingg Web!</h2>
+        <div className="App-header2">
+        <div className="App-header3">
+          <h2 className="App-header-text">Welcome to the Zingg Web!</h2>
+        </div>
+        </div>
         </div>
         <div id="mainContainer" className="game-container-color container rounded">
           <div id="gameBoard" className="container">
@@ -21,15 +25,27 @@ function Home(Props: HomeProps) {
                 <div id="appHeaderContainer" className="magenta2 container rounded">
                 <div id="headerContainer2" className="magenta1 container rounded">
                 <p className="app-text">
-                  Welcome! This site allows playing Zingg on the web.
+                  Welcome! This site allows playing <i>Zingg</i> on the web.
                   It is optimized for using Zoom, Hangouts, or Meet to
-                  video conference and play. One person should load this site
-                  and then present it to everyone else.
+                  video conference and play. Only <b>one</b> person should load
+                  this site and then present it to everyone else. They will
+                  do all of the clicking for everyone.
                 </p>
                 <p className="app-text">
-                  Lorem ipsem Lorem ipsem Lorem ipsem Lorem ipsem Lorem 
-                  ipsem Lorem ipsem Lorem ipsem Lorem ipsem Lorem ipsem 
-                  Lorem ipsem Lorem ipsem Lorem ipsem Lorem ipsem 
+                  Never heard of Zingg?? What the hell, how did you hear about
+                  this site... Anyway, check out a summary and the original
+                  rules at <a href="http://www.getzingg.com" target="_">getzingg.com</a>.
+                </p>
+                <p className="app-text">
+                  This version of <i>Zingg</i> is a little simpler than the paper
+                  version. There are no hands, you simply draw cards and carry
+                  out the actions! Some actions apply only to the player who
+                  drew it. Others apply to everyone.
+                </p>
+                <p className="app-text">
+                  This site was created quickly and it is full of dirty hacks,
+                  so please <b>don't refresh or you will lose all of the game
+                  state</b>!
                 </p>
                 </div>
                 </div>
@@ -61,15 +77,22 @@ type AppState = {
 class App extends React.Component<AppProps, AppState> {
     state = {
         value: '',
-        // names: new Array<string>(),
-        names: ["Noah", "Sarah", "Caela"],
-        state: AppStateEnum.GAME
+        names: new Array<string>(),
+        state: AppStateEnum.LOBBY
     }
 
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (this.state.names.length >= 8) {
       alert("Eight players max!!")
+      return;
+    }
+    if (this.state.value.length == 0) {
+      alert("Empty name!")
+      return;
+    }
+    if (this.state.names.includes(this.state.value)) {
+      alert("Duplicate name!")
       return;
     }
     this.setState({

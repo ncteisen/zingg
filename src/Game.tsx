@@ -3,6 +3,7 @@ import React from 'react';
 import CardDataList from "./CardDataList";
 import Card, { CardType, CardData, BackOfCard } from "./Card";
 import Player, { PlaceholderPlayer, PlayerData } from "./Player";
+import GameHeader from './GameHeader'
 
 const cardDebuggingMode = false;
 
@@ -95,7 +96,7 @@ class Game extends React.Component<GameProps, GameState> {
 
       case DeckState.FRONT:
         this.setState({
-          deckState: cardDebuggingMode ? DeckState.BACK : DeckState.FRONT,
+          deckState: cardDebuggingMode ? DeckState.FRONT : DeckState.BACK,
           player_idx: (this.state.player_idx + 1) % this.state.players.length,
           deck_idx: (this.state.deck_idx + 1) % this.state.deck.length
         })
@@ -143,9 +144,7 @@ class Game extends React.Component<GameProps, GameState> {
     var current_player = this.state.players[this.state.player_idx];
     return (
       <div className="App">
-        <div className="App-header">
-          <h2>Zingg Web</h2>
-        </div>
+        <GameHeader />
         <div id="mainContainer" className="game-container-color container rounded">
           <div id="gameBoard" className="container">
             <div className="row">
