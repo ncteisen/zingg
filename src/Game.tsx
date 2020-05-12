@@ -5,7 +5,7 @@ import Card, { CardType, CardData, BackOfCard } from "./Card";
 import Player, { PlaceholderPlayer, PlayerData } from "./Player";
 import GameHeader from './GameHeader'
 
-const cardDebuggingMode = true;
+const cardDebuggingMode = false;
 
 enum CardPosition {
   UNSET,
