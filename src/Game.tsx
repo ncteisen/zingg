@@ -100,10 +100,11 @@ class Game extends React.Component<GameProps, GameState> {
   }
 
   handlePlayerClicked = (idx: number) => {
-    if (this.showNextPlayerButton()) {
+    var current_card = this.state.deck[this.state.deck_idx];
+    if (this.state.deckState == DeckState.BACK ||
+        current_card.type != CardType.STATUS) {
       return;
     }
-    var current_card = this.state.deck[this.state.deck_idx];
     let players = [...this.state.players];
     let player = {...players[idx]};
     player.status = current_card.body;
