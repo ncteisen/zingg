@@ -32,15 +32,80 @@ import rps from './assets/rps.png'
 import name from './assets/name.png'
 import lovehate from './assets/lovehate.png'
 import noah from './assets/noah.png'
+import question from './assets/question.png'
+import alcoholic from './assets/alcoholic.png'
+import nickname from './assets/nickname.png'
+import viking from './assets/viking.png'
+import force from './assets/force.png'
+import quiet from './assets/quiet.png'
+import sponge from './assets/sponge.png'
+import sleuth from './assets/sleuth.png'
+import spy from './assets/spy.png'
 
 import Card, { CardData, CardType } from "./Card";
 
 let CardDataList = [
 
 	new CardData(
-		"Example Status",
-		`Blah blah blah`,
-		categories,
+		"I Spy",
+		`Play the game I Spy with an object on someone else's zoom screen. 
+		Winner chooses a losing player to drink.`,
+		spy,
+		[],
+		CardType.ACTION),
+
+	new CardData(
+		"Seeker's Delight",
+		`Choose a player to search for a rather mundane object in their house
+		that they probably have somewhere. If they find one in under a minute
+		everyone drinks.`,
+		sleuth,
+		["A Pen", "A Checkbook", "Stamps", "TV Remote"],
+		CardType.ACTION),
+
+	new CardData(
+		"We Can't Hear You!",
+		`All muted players drink.`,
+		sponge,
+		[],
+		CardType.INTERRUPT),
+
+	new CardData(
+		"Shut the Fuck Up",
+		`All non-muted players drink.`,
+		quiet,
+		[],
+		CardType.INTERRUPT),
+
+	new CardData(
+		"Force Field",
+		`Every time selected player is ordered  to drink, everyone else must 
+		also drink.`,
+		force,
+		[],
+		CardType.STATUS),
+
+	new CardData(
+		"Viking Master",
+		`This player is now the Viking Master. If no one playing knows what 
+		that means, google it and everyone drinks.`,
+		viking,
+		[],
+		CardType.STATUS),
+
+	new CardData(
+		"My Name is My Name",
+		`Give a nickname to a player and place this status in front of them. 
+		Anyone who forgets to use the nickname must drink. They should update 
+		their Zoom name`,
+		nickname,
+		[],
+		CardType.STATUS),
+
+	new CardData(
+		"Question Master",
+		`If anyone answers a question from this player, that person must drink.`,
+		question,
 		[],
 		CardType.STATUS),
 

@@ -2,3 +2,5 @@
 - all non muted players drink
 - choose multi-person screen to dance
 - find a pen
+- stay on camera status
+- i spy on someones zoom
