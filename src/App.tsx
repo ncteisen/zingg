@@ -77,8 +77,9 @@ type AppState = {
 class App extends React.Component<AppProps, AppState> {
     state = {
         value: '',
-        names: new Array<string>(),
-        state: AppStateEnum.LOBBY
+        // names: new Array<string>(),
+        names: ["Noah", "Sarah"],
+        state: AppStateEnum.GAME
     }
 
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

@@ -5,7 +5,7 @@ import Card, { CardType, CardData, BackOfCard } from "./Card";
 import Player, { PlaceholderPlayer, PlayerData } from "./Player";
 import GameHeader from './GameHeader'
 
-const cardDebuggingMode = false;
+const cardDebuggingMode = true;
 
 enum CardPosition {
   UNSET,
@@ -14,8 +14,10 @@ enum CardPosition {
 }
 
 enum DeckState {
+  // Back of a card.
   BACK,
-  FRONT,
+  // Front of a card.
+  FRONT
 }
 
 function shuffle(arr: CardData[]) {
@@ -46,11 +48,11 @@ class Game extends React.Component<GameProps, GameState> {
   constructor(props: GameProps){
     super(props);
     var players = new Array<PlayerData>();
-    for (var player_name of props.player_names) {
-      players.push(new PlayerData(player_name, ""));
-    }
+    props.player_names.forEach(function (name, i) {
+      players.push(new PlayerData(name, "", i));
+    });
     this.state = {
-      deck: shuffle(CardDataList),
+      deck: cardDebuggingMode ? CardDataList : shuffle(CardDataList),
       deck_idx: 0,
       deckState: cardDebuggingMode ? DeckState.FRONT : DeckState.BACK,
       players: players,
@@ -62,7 +64,8 @@ class Game extends React.Component<GameProps, GameState> {
   renderPlayer(idx: number) {
     if (idx < this.state.players.length) {
       return <Player isTurn={idx == this.state.player_idx}
-                     name={this.state.players[idx].name} />;
+                     data={this.state.players[idx]}
+                     onClick={() => this.handlePlayerClicked(idx)} />;
     } else {
       return <PlaceholderPlayer />;
     }
@@ -88,6 +91,27 @@ class Game extends React.Component<GameProps, GameState> {
     }
   }
 
+  advanceToNextPlayer() {
+    this.setState({
+      deckState: cardDebuggingMode ? DeckState.FRONT : DeckState.BACK,
+      player_idx: (this.state.player_idx + 1) % this.state.players.length,
+      deck_idx: (this.state.deck_idx + 1) % this.state.deck.length
+    })
+  }
+
+  handlePlayerClicked = (idx: number) => {
+    if (this.showNextPlayerButton()) {
+      return;
+    }
+    var current_card = this.state.deck[this.state.deck_idx];
+    let players = [...this.state.players];
+    let player = {...players[idx]};
+    player.status = current_card.body;
+    players[idx] = player;
+    this.setState({players: players});
+    this.advanceToNextPlayer();
+  }
+
   handleButtonClick = (pos: CardPosition) => {
     switch (this.state.deckState) {
       case DeckState.BACK:
@@ -95,11 +119,7 @@ class Game extends React.Component<GameProps, GameState> {
         break;
 
       case DeckState.FRONT:
-        this.setState({
-          deckState: cardDebuggingMode ? DeckState.FRONT : DeckState.BACK,
-          player_idx: (this.state.player_idx + 1) % this.state.players.length,
-          deck_idx: (this.state.deck_idx + 1) % this.state.deck.length
-        })
+        this.advanceToNextPlayer();
         break;
       
       default:
@@ -130,12 +150,26 @@ class Game extends React.Component<GameProps, GameState> {
       case DeckState.BACK:
         return "It's " + current_player.name + "'s turn, pick which card to flip!"
 
-      case DeckState.FRONT:
-        return "It's " + current_player.name + "'s turn, carry out the action on the card, then press the 'Next Player' button."
+      case DeckState.FRONT: {
+        var current_card = this.state.deck[this.state.deck_idx];
+        switch (current_card.type) {
+          case CardType.ACTION:
+            return current_player.name + ", carry out the action on the card, then press the 'Next Player' button."
+          case CardType.INTERRUPT:
+            return "All players! Everyone follow the directions on the card, then press the 'Next Player' button."
+          case CardType.STATUS:
+            return "Status card! " + current_player.name + ", click on a player to place this status on"
+        }
+      }
       
       default:
         break;
     } 
+  }
+
+  showNextPlayerButton() {
+    var current_card = this.state.deck[this.state.deck_idx];
+    return this.state.deckState == DeckState.FRONT && current_card.type != CardType.STATUS;
   }
 
 
@@ -208,7 +242,7 @@ class Game extends React.Component<GameProps, GameState> {
             </div>
             <div className="row">
               <div className="col">
-                {this.state.deckState == DeckState.FRONT &&
+                {this.showNextPlayerButton() &&
                   <a onClick={() => this.handleButtonClick(CardPosition.UNSET)}
                      className="btn next-player-btn">Next Player</a>
                 }

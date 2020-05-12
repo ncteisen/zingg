@@ -38,6 +38,13 @@ import Card, { CardData, CardType } from "./Card";
 let CardDataList = [
 
 	new CardData(
+		"Example Status",
+		`Blah blah blah`,
+		categories,
+		[],
+		CardType.STATUS),
+
+	new CardData(
 		"Categories",
 		`Pick a category. Now go around the player order from the top of
 		the screen and name things within the category. First to hesitate 
