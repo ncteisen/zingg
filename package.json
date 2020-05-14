@@ -30,6 +30,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "check": "gts check",
     "clean": "gts clean",
     "compile": "tsc",
@@ -55,7 +57,9 @@
   },
   "devDependencies": {
     "@types/node": "^10.0.3",
+    "gh-pages": "^2.2.0",
     "gts": "^2.0.0",
     "typescript": "~3.8.0"
-  }
+  },
+  "homepage": "http://playzingg.com"
 }
