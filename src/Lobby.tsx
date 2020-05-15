@@ -19,7 +19,7 @@ function Lobby(Props: LobbyProps) {
               <div className="col">
                 <div id="headerContainer1" className="orange3 container rounded">
                 <div id="headerContainer2" className="orange2 container rounded">
-                Enter up to eight players!
+                Enter up to twelve players!
                 </div>
                 </div>
               </div>

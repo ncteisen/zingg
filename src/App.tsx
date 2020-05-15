@@ -83,8 +83,8 @@ class App extends React.Component<AppProps, AppState> {
 
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (this.state.names.length >= 8) {
-      alert("Eight players max!!")
+    if (this.state.names.length >= 12) {
+      alert("Twelve players max!!")
       return;
     }
     if (this.state.value.length == 0) {

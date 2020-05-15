@@ -212,6 +212,22 @@ class Game extends React.Component<GameProps, GameState> {
                 </div>
               </div>
             }
+            {this.state.players.length > 8 &&
+              <div className="row">
+                <div className="col-3">
+                  {this.renderPlayer(8)}
+                </div>
+                <div className="col-3">
+                  {this.renderPlayer(9)}
+                </div>
+                <div className="col-3">
+                  {this.renderPlayer(10)}
+                </div>
+                <div className="col-3">
+                  {this.renderPlayer(11)}
+                </div>
+              </div>
+            }
             <div className="row">
               <div className="col">
                 <div id="headerContainer1" className="orange3 container rounded">
