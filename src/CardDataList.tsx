@@ -48,7 +48,7 @@ let CardDataList = [
 
 	new CardData(
 		"I Spy",
-		`Play the game I Spy with an object on someone else's zoom screen. 
+		`Play the game I Spy with an object on someone else's Zoom screen. 
 		Winner chooses a losing player to drink.`,
 		spy,
 		[],
@@ -306,7 +306,7 @@ let CardDataList = [
 	new CardData(
 		"Superlatives",
 		`Create and announce a superlative. Pause for five seconds, 
-		then everyone writes in the chat to who they think the winner 
+		then everyone writes in the Zoom chat to who they think the winner 
 		should be. Everyone drinks for each time they are named in the 
 		chat.`,
 		superlatives,
