@@ -178,7 +178,7 @@ class Game extends React.Component<GameProps, GameState> {
     console.log("Game.render()");
     var current_player = this.state.players[this.state.player_idx];
     return (
-      <div className="App">
+      <div className="app-container">
         <GameHeader />
         <div id="mainContainer" className="game-container-color container rounded">
           <div id="gameBoard" className="container">

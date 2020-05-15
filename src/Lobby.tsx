@@ -11,7 +11,7 @@ type LobbyProps = {
 function Lobby(Props: LobbyProps) {
   console.log("Lobby.render()");
   return (
-      <div className="App">
+      <div className="app-container">
         <GameHeader />
         <div id="mainContainer" className="game-container-color container rounded">
           <div id="gameBoard" className="container">
