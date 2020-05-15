@@ -56,7 +56,7 @@ let CardDataList = [
 
 	new CardData(
 		"Seeker's Delight",
-		`Choose a player to search for a rather mundane object in their house
+		`Choose a player. Now pick a rather mundane object in their house
 		that they probably have somewhere. If they find one in under a minute
 		everyone drinks.`,
 		sleuth,
