@@ -103,7 +103,8 @@ let CardDataList = [
 
 	new CardData(
 		"Question Master",
-		`If anyone answers a question from this player, that person must drink.`,
+		`If anyone answers a question from this player, that person must 
+		drink. You can play this on yourself`,
 		question,
 		[],
 		CardType.STATUS),
@@ -264,7 +265,7 @@ let CardDataList = [
 		"Burning Throne",
 		`Select a player. They are now in the burning throne. They are 
 		asked one question by every other player. They may refuse to 
-		answer only if they drink.`,
+		answer only if they drink. You ask the first question.`,
 		hotseat2,
 		[],
 		CardType.ACTION),
@@ -272,7 +273,8 @@ let CardDataList = [
 	new CardData(
 		"Hot Seat",
 		`YOU are in the hot seat! All other players get to ask you one 
-		question. You may refuse to answer only if you drink.`,
+		question. You may refuse to answer only if you drink. If you answer 
+		all questions, everyone drinks.`,
 		hotseat,
 		[],
 		CardType.ACTION),
@@ -322,11 +324,13 @@ let CardDataList = [
 
 	new CardData(
 		"Quiz Bowl",
-		`Create and announce an answer. First player to yell the 
-		right question for that answer chooses a losing player 
-		to drink. This might be similar to some game show.`,
+		`Create and announce a quiz-like question. First player to yell the 
+		right answer chooses a losing player to drink. This might be similar 
+		to some game show.`,
 		jeop,
-		[],
+		[
+			"What is the only state in which the biggest three cities start with the letter C",
+		],
 		CardType.ACTION),
 
 	new CardData(
@@ -386,8 +390,9 @@ let CardDataList = [
 
 	new CardData(
 		"Movie Buff",
-		`Start acting out a movie or movie character. First player 
-		to name the movie or character chooses a losing player to drink.`,
+		`Start acting out a movie or movie character (no talking!). First 
+		player to name the movie or character chooses a losing player to 
+		drink.`,
 		movie1,
 		[],
 		CardType.ACTION),
