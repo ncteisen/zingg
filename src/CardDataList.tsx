@@ -25,7 +25,6 @@ import tune from './assets/tune.png'
 import single from './assets/single.png'
 import love from './assets/love.png'
 import never from './assets/never.png'
-import judge from './assets/judge.png'
 import chug from './assets/chug.png'
 import yenta from './assets/yenta.png'
 import rps from './assets/rps.png'
@@ -191,15 +190,6 @@ let CardDataList = [
 		"Never Have I Ever",
 		`Play Never Have I Ever with three fingers. You start.`,
 		never,
-		[],
-		CardType.ACTION),
-
-	new CardData(
-		"Don't Judge Me But...",
-		`Play Don’t Judge Me But with three fingers. Say something you have 
-		done. Everyone drinks and puts a finger down if they haven’t done it. 
-		(this is the opposite of Never Have I Ever)`,
-		judge,
 		[],
 		CardType.ACTION),
 

@@ -1,7 +1,5 @@
 .app-container {
   text-align: center;
-  background-color: #F0F8FF;
-  height: 880px;
 }
 
 .app-header {
@@ -85,7 +83,9 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  height: 790px;
+  height: 100%;
+  min-height: 790px;
+  min-width: 780px;
 }
 
 .game-container-color {
