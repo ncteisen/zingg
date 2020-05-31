@@ -33,7 +33,7 @@ function Home(Props: HomeProps) {
                   this site and then present it to everyone else. They will
                   do all of the clicking for everyone. For certain cars that 
                   involve everyone, it is nice to stop presenting so everyone 
-                  can see each other well/
+                  can see each other well.
                 </p>
                 <p className="app-text">
                   Never heard of Zingg?? What the hell, how did you hear about
