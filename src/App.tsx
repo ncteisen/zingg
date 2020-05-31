@@ -4,6 +4,8 @@ import Lobby from './Lobby';
 import './App.css';
 import './Colors.css';
 
+const gameDebuggingMode = false;
+
 type HomeProps = {
   handleHomeToLobby: () => void
 };
@@ -79,8 +81,8 @@ type AppState = {
 class App extends React.Component<AppProps, AppState> {
     state = {
         value: '',
-        names: new Array<string>(),
-        state: AppStateEnum.HOME
+        names: gameDebuggingMode ? ["Noah", "Sarahsdlfksdflksdjflk"] : new Array<string>(),
+        state: gameDebuggingMode ? AppStateEnum.GAME : AppStateEnum.HOME
     }
 
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

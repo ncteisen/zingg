@@ -44,6 +44,13 @@ import spy from './assets/spy.png'
 import Card, { CardData, CardType } from "./Card";
 
 let CardDataList = [
+	new CardData(
+		"Force Field",
+		`Every time selected player is ordered  to drink, everyone else must 
+		also drink.`,
+		force,
+		[],
+		CardType.STATUS),
 
 	new CardData(
 		"I Spy",
@@ -75,14 +82,6 @@ let CardDataList = [
 		quiet,
 		[],
 		CardType.INTERRUPT),
-
-	new CardData(
-		"Force Field",
-		`Every time selected player is ordered  to drink, everyone else must 
-		also drink.`,
-		force,
-		[],
-		CardType.STATUS),
 
 	new CardData(
 		"Viking Master",
