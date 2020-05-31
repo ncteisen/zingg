@@ -47,7 +47,7 @@ function Lobby(Props: LobbyProps) {
                   <div id="player2" className="lobby-player red3 container rounded">
                   <div id="player3" className="red2 container rounded">
                   <div id="player4" className="red1 container rounded">
-                    {name}
+                    {name.length < 12 ? name : name.slice(0, 9) + "..."}
                   </div>
                   </div>
                   </div>

@@ -22,7 +22,7 @@ function Player(props: PlayerProps) {
   const toggle = () => setTooltipOpen(!tooltipOpen);
 
   let name = props.data.name
-  if (name.length > 9) {
+  if (name.length > 12) {
     name = name.slice(0, 9) + "...";
   }
 
