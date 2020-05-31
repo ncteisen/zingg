@@ -216,7 +216,7 @@ let CardDataList = [
 		that they have masturbated this past week. Everyone counts together.`,
 		love,
 		[],
-		CardType.ACTION),
+		CardType.INTERRUPT),
 
 	new CardData(
 		"Elephant in the Room",
