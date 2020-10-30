@@ -31,7 +31,7 @@ function Home(Props: HomeProps) {
                   It is optimized for using Zoom, Hangouts, or Meet to
                   video conference and play. Only <b>one</b> person should load
                   this site and then present it to everyone else. They will
-                  do all of the clicking for everyone. For certain cars that 
+                  do all of the clicking for everyone. For certain cards that
                   involve everyone, it is nice to stop presenting so everyone 
                   can see each other well.
                 </p>
