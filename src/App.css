@@ -68,8 +68,13 @@
   margin: auto;
 }
 
-#player3 {
-  margin: auto;
+#btn1 {
+  padding: 3px;
+  border-radius: 5px;
+}
+
+#btn2 {
+  padding: 2px;
 }
 
 #playerPlaceholder {
@@ -163,7 +168,16 @@
   border-color: #4c1130;
   margin: auto;
   font-size: 30px;
-  margin-top: 160px;
+  margin-top: 130px;
+}
+
+.lobby-cant-start-message {
+  border-color: #4c1130;
+  margin: auto;
+  margin-left: 30px;
+  border-radius: 5px;
+  font-size: 20px;
+  margin-top: 130px;
 }
 
 .player-holder {
@@ -174,8 +188,18 @@
   height: 560px;
 }
 
-.players-title{
+.game-opts-holder {
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  margin-top: 30px;
+  margin-left: 30px;
+  height: 200px;
+}
+
+.lobby-box-title{
   margin-bottom: 20px;
+  margin-top: 10px;
 }
 
 .lobby-player {

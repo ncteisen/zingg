@@ -1,5 +1,6 @@
 import React from 'react';
 import Game from './Game';
+import GameOpts, { VirtualMode } from "./GameOpts";
 import Lobby from './Lobby';
 import './App.css';
 import './Colors.css';
@@ -70,19 +71,21 @@ enum AppStateEnum {
   HOME,
   LOBBY,
   GAME
-}
+};
 
 type AppProps = {};
 type AppState = {
   value: string;
   names: string[];
   state: AppStateEnum;
+  opts: GameOpts;
 };
 class App extends React.Component<AppProps, AppState> {
     state = {
         value: '',
-        names: gameDebuggingMode ? ["Noah", "Sarahsdlfksdflksdjflk"] : new Array<string>(),
-        state: gameDebuggingMode ? AppStateEnum.GAME : AppStateEnum.HOME
+        names: gameDebuggingMode ? ["Noah", "Sarah"] : new Array<string>(),
+        state: gameDebuggingMode ? AppStateEnum.LOBBY : AppStateEnum.HOME,
+        opts: { virtualMode: VirtualMode.UNSET }
     }
 
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -118,6 +121,14 @@ class App extends React.Component<AppProps, AppState> {
     this.setState({value: event.target.value});
   }
 
+  handleVirtualClick = (virtualMode: VirtualMode) => {
+    this.setState(prevState => {
+      let opts = Object.assign({}, prevState.opts);  
+      opts.virtualMode = virtualMode;                
+      return { opts };
+    })
+  }
+
   renderHome() {
     return <Home handleHomeToLobby={this.handleHomeToLobby}/>;
   }
@@ -126,8 +137,10 @@ class App extends React.Component<AppProps, AppState> {
     return (
       <Lobby names={this.state.names}
            value={this.state.value}
+           gameOpts={this.state.opts}
            handleSubmit={this.handleSubmit}
            handleChange={this.handleChange}
+           handleVirtualClick={this.handleVirtualClick}
            handleLobbyToGame={this.handleLobbyToGame} />
     );
   }
