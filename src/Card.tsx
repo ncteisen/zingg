@@ -1,3 +1,4 @@
+import GameOpts, { VirtualMode } from "./GameOpts";
 import React, { useState } from 'react';
 import { Tooltip } from 'reactstrap';
 import back from './assets/back.png'
@@ -13,13 +14,15 @@ export class CardData {
   body: string;
   img: any;
   tips: string[];
+  mode: VirtualMode;
   type: CardType;
-  constructor(title: string, body: string, img: any, tips: string[], type: CardType) {
+  constructor(title: string, body: string, img: any, type?: CardType, tips?: string[], mode?: VirtualMode) {
     this.title = title;
     this.body = body;
     this.img = img;
-    this.tips = tips;
-    this.type = type;
+    this.tips = tips && tips || [];
+    this.mode = mode && mode || VirtualMode.UNSET;
+    this.type = type && type || CardType.ACTION;
   }
 }
 

@@ -84,7 +84,7 @@ class App extends React.Component<AppProps, AppState> {
     state = {
         value: '',
         names: gameDebuggingMode ? ["Noah", "Sarah"] : new Array<string>(),
-        state: gameDebuggingMode ? AppStateEnum.LOBBY : AppStateEnum.HOME,
+        state: gameDebuggingMode ? AppStateEnum.GAME : AppStateEnum.HOME,
         opts: { virtualMode: VirtualMode.UNSET }
     }
 
@@ -136,17 +136,18 @@ class App extends React.Component<AppProps, AppState> {
   renderLobby() {
     return (
       <Lobby names={this.state.names}
-           value={this.state.value}
-           gameOpts={this.state.opts}
-           handleSubmit={this.handleSubmit}
-           handleChange={this.handleChange}
-           handleVirtualClick={this.handleVirtualClick}
-           handleLobbyToGame={this.handleLobbyToGame} />
+             value={this.state.value}
+             gameOpts={this.state.opts}
+             handleSubmit={this.handleSubmit}
+             handleChange={this.handleChange}
+             handleVirtualClick={this.handleVirtualClick}
+             handleLobbyToGame={this.handleLobbyToGame} />
     );
   }
 
   renderGame() {
-    return <Game player_names={this.state.names} />
+    return <Game player_names={this.state.names}
+                 gameOpts={this.state.opts} />
   }
 
   render() {

@@ -2,6 +2,7 @@ import React from 'react';
 
 import CardDataList from "./CardDataList";
 import Card, { CardType, CardData, BackOfCard } from "./Card";
+import GameOpts, { VirtualMode } from "./GameOpts";
 import Player, { PlaceholderPlayer, PlayerData } from "./Player";
 import GameHeader from './GameHeader'
 
@@ -35,6 +36,7 @@ function shuffle(arr: CardData[]) {
 
 type GameProps = {
   player_names: string[];
+  gameOpts: GameOpts;
 };
 type GameState = {
   deck: CardData[];
@@ -51,8 +53,11 @@ class Game extends React.Component<GameProps, GameState> {
     props.player_names.forEach(function (name, i) {
       players.push(new PlayerData(name, "", i));
     });
+    var cards = CardDataList.filter(function (card) {
+      return card.mode == VirtualMode.UNSET || card.mode == props.gameOpts.virtualMode;
+    });
     this.state = {
-      deck: cardDebuggingMode ? CardDataList : shuffle(CardDataList),
+      deck: cardDebuggingMode ? cards : shuffle(cards),
       deck_idx: 0,
       deckState: cardDebuggingMode ? DeckState.FRONT : DeckState.BACK,
       players: players,

@@ -69,7 +69,7 @@ function Lobby(Props: LobbyProps) {
                     <h4 className="lobby-box-title">Game Options:</h4>
                     <div className="row">
                       <div className="col-6">
-                      Are you playing virtually (over Zoom, Meet, etc etc)?
+                      Are you playing virtually (over Zoom, Meet, etc etc etc)?
                       </div>
                       <div className="col-3">
                         <div id="btn1" onClick={() => Props.handleVirtualClick(VirtualMode.VIRTUAL)} className="blue2 container rounded btn">
