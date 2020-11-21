@@ -85,7 +85,7 @@ class App extends React.Component<AppProps, AppState> {
         value: '',
         names: gameDebuggingMode ? ["Noah", "Sarah"] : new Array<string>(),
         state: gameDebuggingMode ? AppStateEnum.GAME : AppStateEnum.HOME,
-        opts: { virtualMode: VirtualMode.UNSET }
+        opts: { virtualMode: gameDebuggingMode ? VirtualMode.LIVE : VirtualMode.UNSET }
     }
 
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

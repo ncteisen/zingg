@@ -41,6 +41,7 @@ import quiet from './assets/quiet.png'
 import sponge from './assets/sponge.png'
 import sleuth from './assets/sleuth.png'
 import spy from './assets/spy.png'
+import coin from './assets/coin.png'
 
 import Card, { CardData, CardType } from "./Card";
 
@@ -69,12 +70,19 @@ function MakeVirtualCardWithTips(title: string, body: string, img: any, type: Ca
 }
 
 let CardDataList = [
+	MakeLiveCard(
+		"Feeling Lucky?",
+		`Flip a coin. Heads, each player drinks once. Tails, you drink once 
+		for each player.`,
+		coin,
+		CardType.ACTION),
+
 	MakeCard(
 		"Force Field",
 		`Every time selected player is ordered  to drink, everyone else must 
 		also drink.`,
 		force,
-		CardType.ACTION),
+		CardType.STATUS),
 
 	MakeVirtualCard(
 		"I Spy",
