@@ -1,25 +1,26 @@
 {
   "files": {
     "main.css": "/static/css/main.658a485d.chunk.css",
-    "main.js": "/static/js/main.922a4295.chunk.js",
-    "main.js.map": "/static/js/main.922a4295.chunk.js.map",
+    "main.js": "/static/js/main.d94b0cff.chunk.js",
+    "main.js.map": "/static/js/main.d94b0cff.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.7ec330c8.js",
     "runtime-main.js.map": "/static/js/runtime-main.7ec330c8.js.map",
     "static/css/2.69121389.chunk.css": "/static/css/2.69121389.chunk.css",
-    "static/js/2.b6b18fc0.chunk.js": "/static/js/2.b6b18fc0.chunk.js",
-    "static/js/2.b6b18fc0.chunk.js.map": "/static/js/2.b6b18fc0.chunk.js.map",
+    "static/js/2.0f42e22a.chunk.js": "/static/js/2.0f42e22a.chunk.js",
+    "static/js/2.0f42e22a.chunk.js.map": "/static/js/2.0f42e22a.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.56776c09dc3e8c4f3e02afe3e770090a.js": "/precache-manifest.56776c09dc3e8c4f3e02afe3e770090a.js",
+    "precache-manifest.a47934f01bcc9e0db64353921c56739b.js": "/precache-manifest.a47934f01bcc9e0db64353921c56739b.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.69121389.chunk.css.map": "/static/css/2.69121389.chunk.css.map",
     "static/css/main.658a485d.chunk.css.map": "/static/css/main.658a485d.chunk.css.map",
-    "static/js/2.b6b18fc0.chunk.js.LICENSE.txt": "/static/js/2.b6b18fc0.chunk.js.LICENSE.txt",
+    "static/js/2.0f42e22a.chunk.js.LICENSE.txt": "/static/js/2.0f42e22a.chunk.js.LICENSE.txt",
     "static/media/alcoholism.png": "/static/media/alcoholism.0b5e90ff.png",
     "static/media/back.png": "/static/media/back.e37c667d.png",
     "static/media/beer1.png": "/static/media/beer1.cbb90e8d.png",
     "static/media/cake.png": "/static/media/cake.5617219e.png",
     "static/media/categories.png": "/static/media/categories.691ae4c6.png",
     "static/media/chug.png": "/static/media/chug.2c16cdf8.png",
+    "static/media/coin.png": "/static/media/coin.8abd3831.png",
     "static/media/drink1.png": "/static/media/drink1.72936340.png",
     "static/media/force.png": "/static/media/force.9672389d.png",
     "static/media/hotseat2.png": "/static/media/hotseat2.2da4573f.png",
@@ -37,8 +38,8 @@
   "entrypoints": [
     "static/js/runtime-main.7ec330c8.js",
     "static/css/2.69121389.chunk.css",
-    "static/js/2.b6b18fc0.chunk.js",
+    "static/js/2.0f42e22a.chunk.js",
     "static/css/main.658a485d.chunk.css",
-    "static/js/main.922a4295.chunk.js"
+    "static/js/main.d94b0cff.chunk.js"
   ]
 }
