@@ -158,7 +158,8 @@ let CardDataList = [
 		[
 			"Where would your dream vacation be?",
 			"What's the craziest place you have hooked up?",
-			"Would you rather live in a world without music or without color?"
+			"Would you rather live in a world without music or without color?",
+			"What is your worst date story?"
 		]),
 
 	MakeCard(
