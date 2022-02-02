@@ -70,14 +70,20 @@ function MakeVirtualCardWithTips(title: string, body: string, img: any, type: Ca
 }
 
 let CardDataList = [
-	MakeCard(
+	MakeCardWithTips(
 		"Perfect Person, But...",
 		`Announce a "Perfect Person, But..." Everyone goes around and says 
 		if it is a dealbreaker for them. You go last, everyone drinks if 
 		they didn’t match your response.`,
 		// TODO(ncteisen): update photo
 		shot1,
-		CardType.ACTION),
+		CardType.ACTION,
+		[
+			"Perfect person, but they have credit card debt",
+			"Perfect person, but every time they cum they say bazinga",
+			"Perfect person, but they don't drink",
+			"Perfect person, but they have dick nipples",
+		]),
 
 	MakeLiveCard(
 		"Feeling Lucky?",
