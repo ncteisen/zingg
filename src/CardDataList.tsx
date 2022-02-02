@@ -302,7 +302,7 @@ let CardDataList = [
 	MakeCard(
 		"Burning Throne",
 		`Select a player. They are now in the burning throne. They are 
-		asked one question by every other player. They may refuse to 
+		asked one question by all other players. They may refuse to 
 		answer only if they drink. You ask the first question.`,
 		hotseat2,
 		CardType.ACTION),
