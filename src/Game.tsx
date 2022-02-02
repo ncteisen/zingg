@@ -6,7 +6,7 @@ import GameOpts, { VirtualMode } from "./GameOpts";
 import Player, { PlaceholderPlayer, PlayerData } from "./Player";
 import GameHeader from './GameHeader'
 
-const cardDebuggingMode = false;
+const cardDebuggingMode = true;
 
 enum CardPosition {
   UNSET,

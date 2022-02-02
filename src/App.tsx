@@ -5,7 +5,7 @@ import Lobby from './Lobby';
 import './App.css';
 import './Colors.css';
 
-const gameDebuggingMode = false;
+const gameDebuggingMode = true;
 
 type HomeProps = {
   handleHomeToLobby: () => void
