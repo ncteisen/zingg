@@ -70,6 +70,112 @@ function MakeVirtualCardWithTips(title: string, body: string, img: any, type: Ca
 }
 
 let CardDataList = [
+	MakeLiveCard(
+		"Sobriety Test",
+		`Select a player to stand on one foot and close their eyes for 10 
+		seconds. If they fail, they drink. if they succeed, everyone else 
+		drinks twice.`,
+		// TODO(ncteisen): add a new photo.
+		shot1,
+		CardType.ACTION),
+
+	MakeLiveCard(
+		"Waterfall",
+		`Everyone starts drinking, they must continue until the person to 
+		their left stops. You may stop first.`,
+		// TODO(ncteisen): add a new photo.
+		shot1,
+		CardType.ACTION),
+
+	MakeLiveCard(
+		"Let's Play a Game",
+		`Selected player must flip a coin until they get two heads in a row. 
+		They must drink for every tails.`,
+		// TODO(ncteisen): add a new photo.
+		shot1,
+		CardType.ACTION),
+
+	MakeLiveCard(
+		"Copy Me",
+		`Start by doing a motion. The next player repeats yours then add 
+		one of their own. First player to forget the pattern must drink.`,
+		// TODO(ncteisen): add a new photo.
+		shot1,
+		CardType.ACTION),
+
+	MakeLiveCard(
+		"Suave",
+		`Chose two players to ad-lib a cool handshake. If it gets awkward 
+		or clumsy, they both drink.`,
+		// TODO(ncteisen): add a new photo.
+		shot1,
+		CardType.ACTION),
+
+	MakeLiveCard(
+		"Comedian",
+		`Choose a player to tell a joke. If everyone agrees it is funny, 
+		everyone drinks. If not, the teller drinks.`,
+		// TODO(ncteisen): add a new photo.
+		shot1,
+		CardType.ACTION),
+
+	MakeLiveCard(
+		"Think You Can Dance?",
+		`Select one or two players to dance in front of everyone else. If 
+		the group decides they did a good job, everyone drinks. If not the 
+		dancer(s) must drink.`,
+		// TODO(ncteisen): add a new photo.
+		shot1,
+		CardType.ACTION),
+
+	MakeCard(
+		"The Rule Book",
+		`Make some new rule. But don't be a dick about it. Also drink.`,
+		// TODO(ncteisen): add a new photo.
+		shot1,
+		CardType.ACTION),
+
+	MakeLiveCard(
+		"Hockey",
+		`Spin a coin and call out a player’s name. That player may flick the 
+		coin. Anyone whose drink is hit (rebounds count!) must drink for the 
+		duration of another coin spin.`,
+		// TODO(ncteisen): add a new photo.
+		shot1,
+		CardType.ACTION),
+
+	MakeLiveCard(
+		"Sharpshooter",
+		`Pick a reasonable projectile and target. Selected player must toss or 
+		throw the projectile in or onto the target. If they hit everyone cheers 
+		and drinks. If they miss everyone boos and they drink.`,
+		// TODO(ncteisen): add a new photo.
+		shot1,
+		CardType.ACTION),
+
+	MakeLiveCard(
+		"Boner Alert",
+		`This player may make a finger-boner at any time. First player to see 
+		it and yell out "boner alert!" chooses a losing player to drink.`,
+		// TODO(ncteisen): add a new photo.
+		shot1,
+		CardType.STATUS),
+
+	MakeLiveCard(
+		"Made You Look",
+		`If this player is able to make anyone look at the ceiling, that 
+		person must drink.`,
+		// TODO(ncteisen): add a new photo.
+		shot1,
+		CardType.STATUS),
+
+	MakeLiveCard(
+		"Bartender",
+		`If anyone needs a new drink, this player must get it for them.`,
+		// TODO(ncteisen): add a new photo.
+		shot1,
+		CardType.STATUS),
+
 	MakeCardWithTips(
 		"Perfect Person, But...",
 		`Announce a "Perfect Person, But..." Everyone goes around and says 
@@ -473,112 +579,6 @@ let CardDataList = [
 		drink.`,
 		movie1,
 		CardType.ACTION),
-
-	MakeLiveCard(
-		"Sobriety Test",
-		`Select a player to stand on one foot and close their eyes for 10 
-		seconds. If they fail, they drink. if they succeed, everyone else 
-		drinks twice.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
-		CardType.ACTION),
-
-	MakeLiveCard(
-		"Waterfall",
-		`Everyone starts drinking, they must continue until the person to 
-		their left stops. You may stop first.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
-		CardType.ACTION),
-
-	MakeLiveCard(
-		"Let's Play a Game",
-		`Selected player must flip a coin until they get two heads in a row. 
-		They must drink for every tails.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
-		CardType.ACTION),
-
-	MakeLiveCard(
-		"Copy Me",
-		`Start by doing a motion. The next player repeats yours then add 
-		one of their own. First player to forget the pattern must drink.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
-		CardType.ACTION),
-
-	MakeLiveCard(
-		"Suave",
-		`Chose two players to ad-lib a cool handshake. If it gets awkward 
-		or clumsy, they both drink.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
-		CardType.ACTION),
-
-	MakeLiveCard(
-		"Comedian",
-		`Choose a player to tell a joke. If everyone agrees it is funny, 
-		everyone drinks. If not, the teller drinks.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
-		CardType.ACTION),
-
-	MakeLiveCard(
-		"Think You Can Dance?",
-		`Select one or two players to dance in front of everyone else. If 
-		the group decides they did a good job, everyone drinks. If not the 
-		dancer(s) must drink.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
-		CardType.ACTION),
-
-	MakeCard(
-		"The Rule Book",
-		`Make some new rule. But don't be a dick about it. Also drink.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
-		CardType.ACTION),
-
-	MakeLiveCard(
-		"Hockey",
-		`Spin a coin and call out a player’s name. That player may flick the 
-		coin. Anyone whose drink is hit (rebounds count!) must drink for the 
-		duration of another coin spin.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
-		CardType.ACTION),
-
-	MakeLiveCard(
-		"Sharpshooter",
-		`Pick a reasonable projectile and target. Selected player must toss or 
-		throw the projectile in or onto the target. If they hit everyone cheers 
-		and drinks. If they miss everyone boos and they drink.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
-		CardType.ACTION),
-
-	MakeLiveCard(
-		"Boner Alert",
-		`This player may make a finger-boner at any time. First player to see 
-		it and yell out "boner alert!" chooses a losing player to drink.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
-		CardType.STATUS),
-
-	MakeLiveCard(
-		"Made You Look",
-		`If this player is able to make anyone look at the ceiling, that 
-		person must drink.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
-		CardType.STATUS),
-
-	MakeLiveCard(
-		"Bartender",
-		`If anyone needs a new drink, this player must get it for them.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
-		CardType.STATUS),
 ]
 
 export default CardDataList;
