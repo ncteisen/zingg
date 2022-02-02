@@ -70,6 +70,15 @@ function MakeVirtualCardWithTips(title: string, body: string, img: any, type: Ca
 }
 
 let CardDataList = [
+	MakeCard(
+		"Perfect Person, But...",
+		`Announce a Perfect Person, But... Everyone goes around and says 
+		if it is a dealbreaker for them. You go last, everyone drinks if 
+		they didn’t match your response.`,
+		// TODO(ncteisen): update photo
+		shot1,
+		CardType.ACTION),
+
 	MakeLiveCard(
 		"Feeling Lucky?",
 		`Flip a coin. Heads, each player drinks once. Tails, you drink once 
