@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.658a485d.chunk.css",
-    "main.js": "/static/js/main.d94b0cff.chunk.js",
-    "main.js.map": "/static/js/main.d94b0cff.chunk.js.map",
+    "main.css": "/static/css/main.2a9b908f.chunk.css",
+    "main.js": "/static/js/main.f1ef0313.chunk.js",
+    "main.js.map": "/static/js/main.f1ef0313.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.7ec330c8.js",
     "runtime-main.js.map": "/static/js/runtime-main.7ec330c8.js.map",
     "static/css/2.69121389.chunk.css": "/static/css/2.69121389.chunk.css",
-    "static/js/2.0f42e22a.chunk.js": "/static/js/2.0f42e22a.chunk.js",
-    "static/js/2.0f42e22a.chunk.js.map": "/static/js/2.0f42e22a.chunk.js.map",
+    "static/js/2.c9455392.chunk.js": "/static/js/2.c9455392.chunk.js",
+    "static/js/2.c9455392.chunk.js.map": "/static/js/2.c9455392.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.a47934f01bcc9e0db64353921c56739b.js": "/precache-manifest.a47934f01bcc9e0db64353921c56739b.js",
+    "precache-manifest.61c6be2b445dd64db6d9ea3a5706a527.js": "/precache-manifest.61c6be2b445dd64db6d9ea3a5706a527.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.69121389.chunk.css.map": "/static/css/2.69121389.chunk.css.map",
-    "static/css/main.658a485d.chunk.css.map": "/static/css/main.658a485d.chunk.css.map",
-    "static/js/2.0f42e22a.chunk.js.LICENSE.txt": "/static/js/2.0f42e22a.chunk.js.LICENSE.txt",
+    "static/css/main.2a9b908f.chunk.css.map": "/static/css/main.2a9b908f.chunk.css.map",
+    "static/js/2.c9455392.chunk.js.LICENSE.txt": "/static/js/2.c9455392.chunk.js.LICENSE.txt",
     "static/media/alcoholism.png": "/static/media/alcoholism.0b5e90ff.png",
     "static/media/back.png": "/static/media/back.e37c667d.png",
     "static/media/beer1.png": "/static/media/beer1.cbb90e8d.png",
@@ -33,13 +33,14 @@
     "static/media/sleuth.png": "/static/media/sleuth.5fc4d3cb.png",
     "static/media/sponge.png": "/static/media/sponge.fd941560.png",
     "static/media/spy.png": "/static/media/spy.361fa202.png",
-    "static/media/viking.png": "/static/media/viking.055e562d.png"
+    "static/media/viking.png": "/static/media/viking.055e562d.png",
+    "static/media/waterfall.png": "/static/media/waterfall.da74dce7.png"
   },
   "entrypoints": [
     "static/js/runtime-main.7ec330c8.js",
     "static/css/2.69121389.chunk.css",
-    "static/js/2.0f42e22a.chunk.js",
-    "static/css/main.658a485d.chunk.css",
-    "static/js/main.d94b0cff.chunk.js"
+    "static/js/2.c9455392.chunk.js",
+    "static/css/main.2a9b908f.chunk.css",
+    "static/js/main.f1ef0313.chunk.js"
   ]
 }
