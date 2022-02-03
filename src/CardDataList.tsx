@@ -42,6 +42,8 @@ import sponge from './assets/sponge.png'
 import sleuth from './assets/sleuth.png'
 import spy from './assets/spy.png'
 import coin from './assets/coin.png'
+import sobriety from './assets/sobriety.png'
+import waterfall from './assets/waterfall.png'
 
 import Card, { CardData, CardType } from "./Card";
 
@@ -75,16 +77,14 @@ let CardDataList = [
 		`Select a player to stand on one foot and close their eyes for 10 
 		seconds. If they fail, they drink. if they succeed, everyone else 
 		drinks twice.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
+		sobriety,
 		CardType.ACTION),
 
 	MakeLiveCard(
 		"Waterfall",
 		`Everyone starts drinking, they must continue until the person to 
 		their left stops. You may stop first.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
+		waterfall,
 		CardType.ACTION),
 
 	MakeLiveCard(
