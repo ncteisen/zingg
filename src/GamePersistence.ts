@@ -29,6 +29,13 @@ export type SerializedGameState = {
   pos: CardPosition;
 };
 
+export type SerializedMobileGameState = {
+  deck: number[];
+  deck_idx: number;
+  deckState: DeckState;
+  pos: CardPosition;
+};
+
 export function playableCardIndexes(gameOpts: GameOpts) {
   return CardDataList.map(function (_card, idx) {
     return idx;
@@ -38,6 +45,21 @@ export function playableCardIndexes(gameOpts: GameOpts) {
       card.mode === VirtualMode.UNSET || card.mode === gameOpts.virtualMode
     );
   });
+}
+
+export function shuffleCardIndexes(arr: number[]) {
+  var i, j, temp;
+  for (i = arr.length - 1; i > 0; i--) {
+    j = Math.floor(Math.random() * (i + 1));
+    temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+  }
+  return arr;
+}
+
+export function createPlayableDeck(gameOpts: GameOpts) {
+  return shuffleCardIndexes(playableCardIndexes(gameOpts));
 }
 
 function isDeckState(value: unknown): value is DeckState {
@@ -93,6 +115,38 @@ export function isValidSerializedGameState(
     Number.isInteger(state.player_idx) &&
     state.player_idx >= 0 &&
     state.player_idx < state.players.length &&
+    isCardPosition(state.pos) &&
+    (state.deckState !== DeckState.FRONT || state.pos !== CardPosition.UNSET)
+  );
+}
+
+export function isValidSerializedMobileGameState(
+  value: unknown,
+  gameOpts: GameOpts
+): value is SerializedMobileGameState {
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+  var state = value as SerializedMobileGameState;
+  var playableIndexes = playableCardIndexes(gameOpts);
+  var playableSet = new Set(playableIndexes);
+
+  return (
+    Array.isArray(state.deck) &&
+    state.deck.length === playableIndexes.length &&
+    new Set(state.deck).size === playableIndexes.length &&
+    state.deck.every(function (idx) {
+      return (
+        Number.isInteger(idx) &&
+        idx >= 0 &&
+        idx < CardDataList.length &&
+        playableSet.has(idx)
+      );
+    }) &&
+    Number.isInteger(state.deck_idx) &&
+    state.deck_idx >= 0 &&
+    state.deck_idx < state.deck.length &&
+    isDeckState(state.deckState) &&
     isCardPosition(state.pos) &&
     (state.deckState !== DeckState.FRONT || state.pos !== CardPosition.UNSET)
   );

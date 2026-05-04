@@ -9,22 +9,12 @@ import {
   CardPosition,
   DeckState,
   SerializedGameState,
+  createPlayableDeck,
   isValidSerializedGameState,
   playableCardIndexes,
 } from './GamePersistence';
 
 const cardDebuggingMode = false;
-
-function shuffle(arr: number[]) {
-  var i, j, temp;
-  for (i = arr.length - 1; i > 0; i--) {
-    j = Math.floor(Math.random() * (i + 1));
-    temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
-  }
-  return arr;
-}
 
 type GameProps = {
   player_names: string[];
@@ -72,7 +62,7 @@ class Game extends React.Component<GameProps, GameState> {
     });
     var deck = playableCardIndexes(props.gameOpts);
     this.state = {
-      deck: cardDebuggingMode ? deck : shuffle(deck),
+      deck: cardDebuggingMode ? deck : createPlayableDeck(props.gameOpts),
       deck_idx: 0,
       deckState: cardDebuggingMode ? DeckState.FRONT : DeckState.BACK,
       players: players,

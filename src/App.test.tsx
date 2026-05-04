@@ -6,15 +6,43 @@ import {VirtualMode} from './GameOpts';
 import {CardPosition, DeckState} from './GamePersistence';
 
 const STORAGE_KEY = 'zingg-game-state-v1';
+const desktopWidth = 1024;
 
 afterEach(() => {
   cleanup();
   window.localStorage.clear();
+  setViewportWidth(desktopWidth);
 });
+
+function setViewportWidth(width: number) {
+  Object.defineProperty(window, 'innerWidth', {
+    configurable: true,
+    value: width,
+    writable: true,
+  });
+  Object.defineProperty(window, 'matchMedia', {
+    configurable: true,
+    value: function (query: string) {
+      return {
+        matches: query === '(max-width: 767px)' ? width <= 767 : false,
+        media: query,
+        onchange: null,
+        addEventListener: function () {},
+        removeEventListener: function () {},
+        addListener: function () {},
+        removeListener: function () {},
+        dispatchEvent: function () {
+          return false;
+        },
+      } as MediaQueryList;
+    },
+    writable: true,
+  });
+}
 
 function openLobby() {
   render(<App />);
-  fireEvent.click(screen.getByRole('button', {name: /start game/i}));
+  fireEvent.click(screen.getByRole('button', {name: /classic game/i}));
 }
 
 function addPlayer(name: string) {
@@ -41,9 +69,63 @@ test('renders the home screen with empty storage', () => {
   render(<App />);
 
   expect(screen.getByText(/Welcome to Web Zingg!/i)).toBeInTheDocument();
+  expect(screen.getByRole('button', {name: /classic game/i})).toBeInTheDocument();
+  expect(
+    screen.getByRole('button', {name: /pass-the-phone game/i})
+  ).toBeInTheDocument();
   expect(
     screen.queryByRole('button', {name: /reset game/i})
   ).not.toBeInTheDocument();
+});
+
+test('phone viewport opens the mobile landing instead of classic home', () => {
+  setViewportWidth(390);
+
+  render(<App />);
+
+  expect(screen.getByText(/Mobile mode/i)).toBeInTheDocument();
+  expect(
+    screen.getByRole('button', {name: /start mobile game/i})
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByRole('button', {name: /classic game/i})
+  ).not.toBeInTheDocument();
+});
+
+test('mobile game can reveal a card, advance, and resume progress', async () => {
+  setViewportWidth(390);
+  render(<App />);
+
+  fireEvent.click(screen.getByRole('button', {name: /start mobile game/i}));
+  expect(screen.getByText(/Pick A or B/i)).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole('button', {name: /card a/i}));
+
+  await waitFor(function () {
+    var saved = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '{}');
+    expect(saved.playMode).toBe('mobile');
+    expect(saved.screen).toBe('MOBILE_GAME');
+    expect(saved.mobileGameState.deckState).toBe(DeckState.FRONT);
+    expect(saved.mobileGameState.pos).toBe(CardPosition.LEFT);
+  });
+
+  var savedBefore = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '{}');
+  var currentCard = CardDataList[savedBefore.mobileGameState.deck[0]];
+  expect(screen.getByText(currentCard.title)).toBeInTheDocument();
+
+  cleanup();
+  render(<App />);
+
+  expect(screen.getByText(currentCard.title)).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole('button', {name: /next player/i}));
+
+  await waitFor(function () {
+    var saved = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '{}');
+    expect(saved.mobileGameState.deck_idx).toBe(1);
+    expect(saved.mobileGameState.deckState).toBe(DeckState.BACK);
+  });
+  expect(screen.getByText(/Pick A or B/i)).toBeInTheDocument();
 });
 
 test('persists and restores unfinished lobby setup', async () => {
@@ -222,4 +304,52 @@ test('ignores incompatible saved game state without crashing', () => {
   render(<App />);
 
   expect(screen.getByText(/Welcome to Web Zingg!/i)).toBeInTheDocument();
+});
+
+test('ignores incompatible saved mobile game state without crashing', () => {
+  saveState({
+    version: 2,
+    playMode: 'mobile',
+    screen: 'MOBILE_GAME',
+    value: '',
+    names: [],
+    opts: {virtualMode: VirtualMode.LIVE},
+    mobileGameState: {
+      deck: [9999],
+      deck_idx: 0,
+      deckState: DeckState.BACK,
+      pos: CardPosition.UNSET,
+    },
+  });
+
+  render(<App />);
+
+  expect(screen.getByText(/Welcome to Web Zingg!/i)).toBeInTheDocument();
+});
+
+test('phone viewport ignores classic saved state and falls back to mobile landing', () => {
+  setViewportWidth(390);
+  saveState({
+    version: 1,
+    screen: 'GAME',
+    value: '',
+    names: ['Noah', 'Sarah'],
+    opts: {virtualMode: VirtualMode.LIVE},
+    gameState: {
+      deck: playableDeck(VirtualMode.LIVE),
+      deck_idx: 0,
+      deckState: DeckState.BACK,
+      players: [
+        {name: 'Noah', status: '', idx: 0},
+        {name: 'Sarah', status: '', idx: 1},
+      ],
+      player_idx: 0,
+      pos: CardPosition.UNSET,
+    },
+  });
+
+  render(<App />);
+
+  expect(screen.getByText(/Mobile mode/i)).toBeInTheDocument();
+  expect(screen.queryByText(/Noah/i)).not.toBeInTheDocument();
 });
