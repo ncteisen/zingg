@@ -10,6 +10,7 @@ type LobbyProps = {
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleVirtualClick: (virtualMode: VirtualMode) => void;
+  handleResetRequest: () => void;
 };
 function Lobby(Props: LobbyProps) {
   console.log('Lobby.render()');
@@ -35,7 +36,7 @@ function Lobby(Props: LobbyProps) {
   }
   return (
     <div className="app-shell">
-      <GameHeader />
+      <GameHeader onResetRequest={Props.handleResetRequest} />
       <main className="page-frame lobby-frame">
         <section className="section-intro section-intro-lime">
           <p className="eyebrow">Lobby</p>

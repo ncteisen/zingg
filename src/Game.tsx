@@ -1,27 +1,21 @@
 import React from 'react';
 
 import CardDataList from './CardDataList';
-import Card, {CardType, CardData, BackOfCard} from './Card';
-import GameOpts, {VirtualMode} from './GameOpts';
+import Card, {CardType, BackOfCard} from './Card';
+import GameOpts from './GameOpts';
 import Player, {PlaceholderPlayer, PlayerData} from './Player';
 import GameHeader from './GameHeader';
+import {
+  CardPosition,
+  DeckState,
+  SerializedGameState,
+  isValidSerializedGameState,
+  playableCardIndexes,
+} from './GamePersistence';
 
 const cardDebuggingMode = false;
 
-enum CardPosition {
-  UNSET,
-  LEFT,
-  RIGHT,
-}
-
-enum DeckState {
-  // Back of a card.
-  BACK,
-  // Front of a card.
-  FRONT,
-}
-
-function shuffle(arr: CardData[]) {
+function shuffle(arr: number[]) {
   var i, j, temp;
   for (i = arr.length - 1; i > 0; i--) {
     j = Math.floor(Math.random() * (i + 1));
@@ -35,9 +29,12 @@ function shuffle(arr: CardData[]) {
 type GameProps = {
   player_names: string[];
   gameOpts: GameOpts;
+  initialGameState?: SerializedGameState;
+  onGameStateChange: (state: SerializedGameState) => void;
+  onResetRequest: () => void;
 };
 type GameState = {
-  deck: CardData[];
+  deck: number[];
   deck_idx: number;
   deckState: DeckState;
   players: PlayerData[];
@@ -47,24 +44,72 @@ type GameState = {
 class Game extends React.Component<GameProps, GameState> {
   constructor(props: GameProps) {
     super(props);
+
+    if (
+      props.initialGameState &&
+      isValidSerializedGameState(
+        props.initialGameState,
+        props.player_names,
+        props.gameOpts
+      )
+    ) {
+      this.state = {
+        deck: props.initialGameState.deck,
+        deck_idx: props.initialGameState.deck_idx,
+        deckState: props.initialGameState.deckState,
+        players: props.initialGameState.players.map(function (player) {
+          return new PlayerData(player.name, player.status, player.idx);
+        }),
+        player_idx: props.initialGameState.player_idx,
+        pos: props.initialGameState.pos,
+      };
+      return;
+    }
+
     var players = new Array<PlayerData>();
     props.player_names.forEach(function (name, i) {
       players.push(new PlayerData(name, '', i));
     });
-    var cards = CardDataList.filter(function (card) {
-      return (
-        card.mode === VirtualMode.UNSET ||
-        card.mode === props.gameOpts.virtualMode
-      );
-    });
+    var deck = playableCardIndexes(props.gameOpts);
     this.state = {
-      deck: cardDebuggingMode ? cards : shuffle(cards),
+      deck: cardDebuggingMode ? deck : shuffle(deck),
       deck_idx: 0,
       deckState: cardDebuggingMode ? DeckState.FRONT : DeckState.BACK,
       players: players,
       player_idx: 0,
       pos: cardDebuggingMode ? CardPosition.RIGHT : CardPosition.UNSET,
     };
+  }
+
+  componentDidMount() {
+    this.props.onGameStateChange(this.serializeState());
+  }
+
+  componentDidUpdate(_prevProps: GameProps, prevState: GameState) {
+    if (prevState !== this.state) {
+      this.props.onGameStateChange(this.serializeState());
+    }
+  }
+
+  serializeState(): SerializedGameState {
+    return {
+      deck: this.state.deck,
+      deck_idx: this.state.deck_idx,
+      deckState: this.state.deckState,
+      players: this.state.players.map(function (player) {
+        return {
+          name: player.name,
+          status: player.status,
+          idx: player.idx,
+        };
+      }),
+      player_idx: this.state.player_idx,
+      pos: this.state.pos,
+    };
+  }
+
+  currentCard() {
+    return CardDataList[this.state.deck[this.state.deck_idx]];
   }
 
   renderPlayer(idx: number) {
@@ -88,7 +133,7 @@ class Game extends React.Component<GameProps, GameState> {
 
       case DeckState.FRONT:
         if (pos === this.state.pos) {
-          return <Card data={this.state.deck[this.state.deck_idx]} />;
+          return <Card data={this.currentCard()} />;
         } else {
           return <BackOfCard />;
         }
@@ -107,7 +152,7 @@ class Game extends React.Component<GameProps, GameState> {
   }
 
   handlePlayerClicked = (idx: number) => {
-    var current_card = this.state.deck[this.state.deck_idx];
+    var current_card = this.currentCard();
     if (
       this.state.deckState === DeckState.BACK ||
       current_card.type !== CardType.STATUS
@@ -163,7 +208,7 @@ class Game extends React.Component<GameProps, GameState> {
         );
 
       case DeckState.FRONT: {
-        var current_card = this.state.deck[this.state.deck_idx];
+        var current_card = this.currentCard();
         switch (current_card.type) {
           case CardType.ACTION:
             return (
@@ -190,7 +235,7 @@ class Game extends React.Component<GameProps, GameState> {
   }
 
   showNextPlayerButton() {
-    var current_card = this.state.deck[this.state.deck_idx];
+    var current_card = this.currentCard();
     return (
       this.state.deckState === DeckState.FRONT &&
       current_card.type !== CardType.STATUS
@@ -207,7 +252,7 @@ class Game extends React.Component<GameProps, GameState> {
         : 4;
     return (
       <div className="app-shell">
-        <GameHeader />
+        <GameHeader onResetRequest={this.props.onResetRequest} />
         <main className="page-frame game-frame">
           <section className="game-dashboard">
             <div className="player-grid" aria-label="Players">

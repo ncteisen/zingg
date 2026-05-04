@@ -1,8 +1,219 @@
-import {render} from '@testing-library/react';
+import {cleanup, fireEvent, render, screen, waitFor} from '@testing-library/react';
 import App from './App';
+import CardDataList from './CardDataList';
+import {CardType} from './Card';
+import {VirtualMode} from './GameOpts';
+import {CardPosition, DeckState} from './GamePersistence';
 
-test('renders learn react link', () => {
-  const {getByText} = render(<App />);
-  const linkElement = getByText(/Welcome to the Zingg Web!/i);
-  expect(linkElement).toBeInTheDocument();
+const STORAGE_KEY = 'zingg-game-state-v1';
+
+afterEach(() => {
+  cleanup();
+  window.localStorage.clear();
+});
+
+function openLobby() {
+  render(<App />);
+  fireEvent.click(screen.getByRole('button', {name: /start game/i}));
+}
+
+function addPlayer(name: string) {
+  fireEvent.change(screen.getByLabelText(/name/i), {
+    target: {value: name},
+  });
+  fireEvent.click(screen.getByDisplayValue('Add'));
+}
+
+function playableDeck(virtualMode: VirtualMode) {
+  return CardDataList.map(function (_card, idx) {
+    return idx;
+  }).filter(function (idx) {
+    var card = CardDataList[idx];
+    return card.mode === VirtualMode.UNSET || card.mode === virtualMode;
+  });
+}
+
+function saveState(state: object) {
+  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+test('renders the home screen with empty storage', () => {
+  render(<App />);
+
+  expect(screen.getByText(/Welcome to the Zingg Web!/i)).toBeInTheDocument();
+  expect(
+    screen.queryByRole('button', {name: /reset game/i})
+  ).not.toBeInTheDocument();
+});
+
+test('persists and restores unfinished lobby setup', async () => {
+  openLobby();
+  fireEvent.change(screen.getByLabelText(/name/i), {
+    target: {value: 'Noah'},
+  });
+
+  await waitFor(function () {
+    expect(window.localStorage.getItem(STORAGE_KEY)).toContain('Noah');
+  });
+
+  cleanup();
+  render(<App />);
+
+  expect(screen.getByText(/Build the table/i)).toBeInTheDocument();
+  expect(screen.getByLabelText(/name/i)).toHaveValue('Noah');
+  expect(screen.getByRole('button', {name: /reset game/i})).toBeInTheDocument();
+});
+
+test('persists and restores started game progress', async () => {
+  openLobby();
+  addPlayer('Noah');
+  addPlayer('Sarah');
+  fireEvent.click(screen.getByRole('button', {name: 'No'}));
+  fireEvent.click(screen.getByRole('button', {name: /start game/i}));
+  fireEvent.click(screen.getByRole('button', {name: /flip card a/i}));
+
+  await waitFor(function () {
+    var saved = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '{}');
+    expect(saved.gameState.deckState).toBe(DeckState.FRONT);
+    expect(saved.gameState.pos).toBe(CardPosition.LEFT);
+  });
+
+  var savedBefore = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '{}');
+  var currentCard = CardDataList[savedBefore.gameState.deck[0]];
+
+  cleanup();
+  render(<App />);
+
+  expect(screen.getByText(currentCard.title)).toBeInTheDocument();
+  await waitFor(function () {
+    var savedAfter = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '{}');
+    expect(savedAfter.gameState).toEqual(savedBefore.gameState);
+  });
+});
+
+test('restores player statuses from saved game state', () => {
+  var deck = playableDeck(VirtualMode.LIVE);
+  var savedStatus = 'Keeper of questionable decisions';
+
+  saveState({
+    version: 1,
+    screen: 'GAME',
+    value: '',
+    names: ['Noah', 'Sarah'],
+    opts: {virtualMode: VirtualMode.LIVE},
+    gameState: {
+      deck: deck,
+      deck_idx: 0,
+      deckState: DeckState.BACK,
+      players: [
+        {name: 'Noah', status: '', idx: 0},
+        {name: 'Sarah', status: savedStatus, idx: 1},
+      ],
+      player_idx: 0,
+      pos: CardPosition.UNSET,
+    },
+  });
+
+  render(<App />);
+
+  expect(screen.getByLabelText('Status: ' + savedStatus)).toBeInTheDocument();
+});
+
+test('persists status assignment during a game', async () => {
+  var deck = playableDeck(VirtualMode.LIVE);
+  var statusIdx =
+    deck.find(function (idx) {
+      return CardDataList[idx].type === CardType.STATUS;
+    }) || deck[0];
+  var orderedDeck = [statusIdx].concat(
+    deck.filter(function (idx) {
+      return idx !== statusIdx;
+    })
+  );
+  var statusCard = CardDataList[statusIdx];
+
+  saveState({
+    version: 1,
+    screen: 'GAME',
+    value: '',
+    names: ['Noah', 'Sarah'],
+    opts: {virtualMode: VirtualMode.LIVE},
+    gameState: {
+      deck: orderedDeck,
+      deck_idx: 0,
+      deckState: DeckState.FRONT,
+      players: [
+        {name: 'Noah', status: '', idx: 0},
+        {name: 'Sarah', status: '', idx: 1},
+      ],
+      player_idx: 0,
+      pos: CardPosition.LEFT,
+    },
+  });
+
+  render(<App />);
+  fireEvent.click(screen.getByRole('button', {name: /Sarah/i}));
+
+  await waitFor(function () {
+    var saved = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '{}');
+    expect(saved.gameState.players[1].status).toBe(statusCard.body);
+    expect(saved.gameState.deck_idx).toBe(1);
+  });
+});
+
+test('reset modal can cancel or clear saved state', async () => {
+  openLobby();
+  addPlayer('Noah');
+
+  fireEvent.click(screen.getByRole('button', {name: /reset game/i}));
+  expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole('button', {name: /cancel/i}));
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  expect(screen.getByText('Noah')).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole('button', {name: /reset game/i}));
+  fireEvent.click(
+    screen.getAllByRole('button', {name: /reset game/i})[
+      screen.getAllByRole('button', {name: /reset game/i}).length - 1
+    ]
+  );
+
+  await waitFor(function () {
+    expect(screen.getByText(/Welcome to the Zingg Web!/i)).toBeInTheDocument();
+    expect(window.localStorage.getItem(STORAGE_KEY)).toBeNull();
+  });
+});
+
+test('ignores malformed saved state without crashing', () => {
+  window.localStorage.setItem(STORAGE_KEY, '{not-json');
+
+  render(<App />);
+
+  expect(screen.getByText(/Welcome to the Zingg Web!/i)).toBeInTheDocument();
+});
+
+test('ignores incompatible saved game state without crashing', () => {
+  saveState({
+    version: 1,
+    screen: 'GAME',
+    value: '',
+    names: ['Noah', 'Sarah'],
+    opts: {virtualMode: VirtualMode.VIRTUAL},
+    gameState: {
+      deck: [9999],
+      deck_idx: 0,
+      deckState: DeckState.BACK,
+      players: [
+        {name: 'Noah', status: '', idx: 0},
+        {name: 'Sarah', status: '', idx: 1},
+      ],
+      player_idx: 0,
+      pos: CardPosition.UNSET,
+    },
+  });
+
+  render(<App />);
+
+  expect(screen.getByText(/Welcome to the Zingg Web!/i)).toBeInTheDocument();
 });
