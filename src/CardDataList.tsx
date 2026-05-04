@@ -42,6 +42,7 @@ import spy from './assets/spy.png'
 import coin from './assets/coin.png'
 import sobriety from './assets/sobriety.png'
 import waterfall from './assets/waterfall.png'
+import sandwich from './assets/sandwich.png'
 
 import { CardData, CardType } from "./Card";
 
@@ -115,6 +116,13 @@ let CardDataList = [
 		everyone drinks. If not, the teller drinks.`,
 		// TODO(ncteisen): add a new photo.
 		shot1,
+		CardType.ACTION),
+
+	MakeLiveCard(
+		"Compliment Sandwich",
+		`Choose a player. Give them a compliment, an insult, and another
+		compliment. If the group rejects the sandwich, you drink.`,
+		sandwich,
 		CardType.ACTION),
 
 	MakeLiveCard(

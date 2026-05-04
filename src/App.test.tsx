@@ -11,6 +11,7 @@ const desktopWidth = 1024;
 afterEach(() => {
   cleanup();
   window.localStorage.clear();
+  window.history.pushState({}, '', '/');
   setViewportWidth(desktopWidth);
 });
 
@@ -170,6 +171,34 @@ test('persists and restores started game progress', async () => {
   await waitFor(function () {
     var savedAfter = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '{}');
     expect(savedAfter.gameState).toEqual(savedBefore.gameState);
+  });
+});
+
+test('development debugCard query opens requested card face-up in mobile mode', async () => {
+  saveState({
+    version: 1,
+    screen: 'HOME',
+    value: '',
+    names: [],
+    opts: {virtualMode: VirtualMode.UNSET},
+  });
+  window.history.pushState({}, '', '/?debugCard=Compliment%20Sandwich');
+
+  render(<App />);
+
+  expect(screen.getByText('Compliment Sandwich')).toBeInTheDocument();
+  expect(
+    screen.getByText(/Give them a compliment, an insult, and another/i)
+  ).toBeInTheDocument();
+  expect(screen.getByRole('button', {name: /next player/i})).toBeInTheDocument();
+  expect(screen.queryByText(/Pick A or B/i)).not.toBeInTheDocument();
+  expect(screen.queryByText(/Current turn/i)).not.toBeInTheDocument();
+
+  await waitFor(function () {
+    var saved = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '{}');
+    expect(saved.playMode).toBe('mobile');
+    expect(saved.screen).toBe('MOBILE_GAME');
+    expect(saved.mobileGameState.deckState).toBe(DeckState.FRONT);
   });
 });
 

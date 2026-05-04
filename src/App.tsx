@@ -1,10 +1,14 @@
 import React from 'react';
 import Game from './Game';
+import CardDataList from './CardDataList';
 import {
+  CardPosition,
+  DeckState,
   SerializedGameState,
   SerializedMobileGameState,
   isValidSerializedGameState,
   isValidSerializedMobileGameState,
+  playableCardIndexes,
 } from './GamePersistence';
 import GameOpts, {VirtualMode} from './GameOpts';
 import Lobby from './Lobby';
@@ -251,6 +255,46 @@ function isPhoneViewport() {
   return window.innerWidth <= 767;
 }
 
+function getDebugCardTitle() {
+  if (!import.meta.env.DEV || typeof window === 'undefined') {
+    return null;
+  }
+  return new URLSearchParams(window.location.search).get('debugCard');
+}
+
+function buildDebugCardAppState(cardTitle: string): AppState | null {
+  var playableIndexes = playableCardIndexes(mobileGameOpts);
+  var debugCardIndex = playableIndexes.find(function (idx) {
+    return CardDataList[idx].title.toLowerCase() === cardTitle.toLowerCase();
+  });
+
+  if (debugCardIndex === undefined) {
+    return null;
+  }
+
+  var deck = [debugCardIndex].concat(
+    playableIndexes.filter(function (idx) {
+      return idx !== debugCardIndex;
+    })
+  );
+
+  return {
+    value: '',
+    names: new Array<string>(),
+    state: AppStateEnum.MOBILE_GAME,
+    playMode: 'mobile',
+    opts: mobileGameOpts,
+    gameState: undefined,
+    mobileGameState: {
+      deck: deck,
+      deck_idx: 0,
+      deckState: DeckState.FRONT,
+      pos: CardPosition.RIGHT,
+    },
+    showResetModal: false,
+  };
+}
+
 function savedNamesAreValid(value: unknown): value is string[] {
   return (
     Array.isArray(value) &&
@@ -298,6 +342,14 @@ function buildClassicAppState(
 function loadInitialAppState(): AppState {
   if (typeof window === 'undefined') {
     return createInitialAppState();
+  }
+
+  var debugCardTitle = getDebugCardTitle();
+  if (debugCardTitle) {
+    var debugCardState = buildDebugCardAppState(debugCardTitle);
+    if (debugCardState) {
+      return debugCardState;
+    }
   }
 
   var rawState = window.localStorage.getItem(STORAGE_KEY);
