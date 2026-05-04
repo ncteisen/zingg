@@ -1,16 +1,14 @@
 import React from 'react';
 
-
 function GameHeader() {
   return (
-        <div className="app-header">
-        <div className="app-header2">
-        <div className="app-header3">
-          <h2 className="game-header-text">Zingg Web</h2>
-        </div>
-        </div>
-        </div>
-        );
+    <header className="site-header">
+      <a className="brand-mark" href="http://www.getzingg.com" target="_">
+        Zingg
+      </a>
+      <span className="header-kicker">Living-room chaos, online</span>
+    </header>
+  );
 }
 
 export default GameHeader;

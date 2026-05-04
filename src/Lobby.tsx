@@ -1,97 +1,141 @@
 import React from 'react';
-import GameOpts, { VirtualMode } from "./GameOpts";
-import GameHeader from './GameHeader'
+import GameOpts, {VirtualMode} from './GameOpts';
+import GameHeader from './GameHeader';
 
 type LobbyProps = {
-  handleLobbyToGame: () => void
+  handleLobbyToGame: () => void;
   names: string[];
   value: string;
   gameOpts: GameOpts;
-  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void
-  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
-  handleVirtualClick: (virtualMode: VirtualMode) => void
+  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleVirtualClick: (virtualMode: VirtualMode) => void;
 };
 function Lobby(Props: LobbyProps) {
-  console.log("Lobby.render()");
-  let start_button;
-  if (Props.names.length > 1 && Props.gameOpts.virtualMode != VirtualMode.UNSET) {
-    start_button = <a className="btn lobby-btn-start green2" onClick={Props.handleLobbyToGame}>Start game</a>;
+  console.log('Lobby.render()');
+  let start_button: React.ReactNode;
+  if (
+    Props.names.length > 1 &&
+    Props.gameOpts.virtualMode !== VirtualMode.UNSET
+  ) {
+    start_button = (
+      <button
+        className="pill-button pill-button-primary lobby-btn-start"
+        onClick={Props.handleLobbyToGame}
+      >
+        Start game
+      </button>
+    );
   } else {
-    start_button = <p className="lobby-cant-start-message green2">Please enter at least two players and select all game options!!</p>
+    start_button = (
+      <p className="lobby-cant-start-message">
+        Add at least two friends and choose your chaos format.
+      </p>
+    );
   }
   return (
-      <div className="app-container">
-        <GameHeader />
-        <div id="mainContainer" className="game-container-color container rounded">
-          <div id="gameBoard" className="container">
-            <div className="row">
-              <div className="col">
-                <div id="headerContainer1" className="orange3 container rounded">
-                <div id="headerContainer2" className="orange2 container rounded">
-                Enter up to twelve players!
-                </div>
-                </div>
-              </div>
+    <div className="app-shell">
+      <GameHeader />
+      <main className="page-frame lobby-frame">
+        <section className="section-intro section-intro-lime">
+          <p className="eyebrow">Lobby</p>
+          <h1>Build the table.</h1>
+          <p>
+            Add the people in the room, the people in the little Zoom boxes, and
+            anyone else willing to make questionable choices.
+          </p>
+        </section>
+
+        <section className="lobby-grid">
+          <div className="setup-panel">
+            <div className="panel-heading">
+              <p className="eyebrow">Players</p>
+              <h2>{Props.names.length}/12 seats filled</h2>
             </div>
-            <div className="row">
-              <div className="col">
-                <div id="headerContainer1" className="blue3 container rounded">
-                <div id="headerContainer2" className="blue2 container rounded">
-                <form onSubmit={Props.handleSubmit} className="lobby-form">
-                  <label>
-                    Name:&nbsp;
-                    <input className="blue1" type="text" value={Props.value} onChange={Props.handleChange} />
-                  </label>
-                  <input type="submit" value="Add player" className="blue3 btn lobby-btn-add"/>
-                </form>
-                </div>
-                </div>
+            <form onSubmit={Props.handleSubmit} className="lobby-form">
+              <label htmlFor="player-name">Name</label>
+              <div className="input-row">
+                <input
+                  id="player-name"
+                  className="text-input"
+                  type="text"
+                  value={Props.value}
+                  onChange={Props.handleChange}
+                  placeholder="Add a player"
+                />
+                <input
+                  type="submit"
+                  value="Add"
+                  className="pill-button pill-button-secondary lobby-btn-add"
+                />
               </div>
-            </div>
-            <div className="row">
-              <div className="col player-holder purple1">
-              <h4 className="lobby-box-title">Players:</h4>
-              <div>
-                {Props.names.map((name, index) => (
-                  <div id="player2" className="lobby-player red3 container rounded">
-                  <div id="player3" className="red2 container rounded">
-                  <div id="player4" className="red1 container rounded">
-                    {name.length < 12 ? name : name.slice(0, 9) + "..."}
-                  </div>
-                  </div>
-                  </div>
-                ))}
-              </div>
-              </div>
-              <div className="col start-game-holder">
-                <div className="row">
-                  <div className="col game-opts-holder purple1">
-                    <h4 className="lobby-box-title">Game Options:</h4>
-                    <div className="row">
-                      <div className="col-6">
-                      Are you playing virtually (over Zoom, Meet, etc etc etc)?
-                      </div>
-                      <div className="col-3">
-                        <div id="btn1" onClick={() => Props.handleVirtualClick(VirtualMode.VIRTUAL)} className="blue2 container rounded btn">
-                          <a id="btn2" className={Props.gameOpts.virtualMode == VirtualMode.VIRTUAL ? "blue1" : "blue2" + " btn"}>Yes</a>
-                        </div>
-                      </div>
-                      <div className="col-3">
-                        <div id="btn1" onClick={() => Props.handleVirtualClick(VirtualMode.LIVE)} className="blue2 container rounded btn">
-                          <a id="btn2"  className={Props.gameOpts.virtualMode == VirtualMode.LIVE ? "blue1" : "blue2" + " btn"}>No</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+            </form>
+            <div className="player-roster" aria-label="Players">
+              {Props.names.length === 0 && (
+                <p className="empty-state">No players yet.</p>
+              )}
+              {Props.names.map((name, index) => (
+                <div className="roster-player" key={index}>
+                  <span className="roster-number">{index + 1}</span>
+                  <span>
+                    {name.length < 12 ? name : name.slice(0, 9) + '...'}
+                  </span>
                 </div>
-                <div className="row">
-                {start_button}
-                </div>
-              </div>
+              ))}
             </div>
           </div>
-        </div>
-      </div>
+
+          <aside className="setup-panel setup-panel-accent">
+            <div className="panel-heading">
+              <p className="eyebrow">Game options</p>
+              <h2>Choose your chaos format</h2>
+            </div>
+            <p className="option-copy">
+              Is this happening through a screen, or are you all wedged onto the
+              same suspicious couch?
+            </p>
+            <div
+              className="segmented-control"
+              role="group"
+              aria-label="Virtual game mode"
+            >
+              <button
+                onClick={() => Props.handleVirtualClick(VirtualMode.VIRTUAL)}
+                className={
+                  Props.gameOpts.virtualMode === VirtualMode.VIRTUAL
+                    ? 'segment-option selected'
+                    : 'segment-option'
+                }
+              >
+                Yes
+              </button>
+              <button
+                onClick={() => Props.handleVirtualClick(VirtualMode.LIVE)}
+                className={
+                  Props.gameOpts.virtualMode === VirtualMode.LIVE
+                    ? 'segment-option selected'
+                    : 'segment-option'
+                }
+              >
+                No
+              </button>
+            </div>
+            <div className="start-game-holder">
+              <div className="readiness-card">
+                <span className="readiness-label">Ready check</span>
+                <strong>
+                  {Props.names.length > 1 &&
+                  Props.gameOpts.virtualMode !== VirtualMode.UNSET
+                    ? 'Locked in'
+                    : 'Needs setup'}
+                </strong>
+              </div>
+              {start_button}
+            </div>
+          </aside>
+        </section>
+      </main>
+    </div>
   );
 }
 

@@ -1,10 +1,10 @@
 import React from 'react';
 
-import CardDataList from "./CardDataList";
-import Card, { CardType, CardData, BackOfCard } from "./Card";
-import GameOpts, { VirtualMode } from "./GameOpts";
-import Player, { PlaceholderPlayer, PlayerData } from "./Player";
-import GameHeader from './GameHeader'
+import CardDataList from './CardDataList';
+import Card, {CardType, CardData, BackOfCard} from './Card';
+import GameOpts, {VirtualMode} from './GameOpts';
+import Player, {PlaceholderPlayer, PlayerData} from './Player';
+import GameHeader from './GameHeader';
 
 const cardDebuggingMode = false;
 
@@ -18,21 +18,19 @@ enum DeckState {
   // Back of a card.
   BACK,
   // Front of a card.
-  FRONT
+  FRONT,
 }
 
 function shuffle(arr: CardData[]) {
-    var i,
-        j,
-        temp;
-    for (i = arr.length - 1; i > 0; i--) {
-        j = Math.floor(Math.random() * (i + 1));
-        temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
-    }
-    return arr;    
-};
+  var i, j, temp;
+  for (i = arr.length - 1; i > 0; i--) {
+    j = Math.floor(Math.random() * (i + 1));
+    temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+  }
+  return arr;
+}
 
 type GameProps = {
   player_names: string[];
@@ -47,14 +45,17 @@ type GameState = {
   pos: CardPosition;
 };
 class Game extends React.Component<GameProps, GameState> {
-  constructor(props: GameProps){
+  constructor(props: GameProps) {
     super(props);
     var players = new Array<PlayerData>();
     props.player_names.forEach(function (name, i) {
-      players.push(new PlayerData(name, "", i));
+      players.push(new PlayerData(name, '', i));
     });
     var cards = CardDataList.filter(function (card) {
-      return card.mode == VirtualMode.UNSET || card.mode == props.gameOpts.virtualMode;
+      return (
+        card.mode === VirtualMode.UNSET ||
+        card.mode === props.gameOpts.virtualMode
+      );
     });
     this.state = {
       deck: cardDebuggingMode ? cards : shuffle(cards),
@@ -63,14 +64,18 @@ class Game extends React.Component<GameProps, GameState> {
       players: players,
       player_idx: 0,
       pos: cardDebuggingMode ? CardPosition.RIGHT : CardPosition.UNSET,
-    }
+    };
   }
 
   renderPlayer(idx: number) {
     if (idx < this.state.players.length) {
-      return <Player isTurn={idx == this.state.player_idx}
-                     data={this.state.players[idx]}
-                     onClick={() => this.handlePlayerClicked(idx)} />;
+      return (
+        <Player
+          isTurn={idx === this.state.player_idx}
+          data={this.state.players[idx]}
+          onClick={() => this.handlePlayerClicked(idx)}
+        />
+      );
     } else {
       return <PlaceholderPlayer />;
     }
@@ -79,20 +84,17 @@ class Game extends React.Component<GameProps, GameState> {
   renderCard(pos: CardPosition) {
     switch (this.state.deckState) {
       case DeckState.BACK:
-        return <BackOfCard />
-        break;
+        return <BackOfCard />;
 
       case DeckState.FRONT:
-        if (pos == this.state.pos) {
-          return <Card data={this.state.deck[this.state.deck_idx]} />
+        if (pos === this.state.pos) {
+          return <Card data={this.state.deck[this.state.deck_idx]} />;
         } else {
-          return <BackOfCard />
+          return <BackOfCard />;
         }
-        break;
-      
+
       default:
-        return <BackOfCard />
-        break;
+        return <BackOfCard />;
     }
   }
 
@@ -100,14 +102,16 @@ class Game extends React.Component<GameProps, GameState> {
     this.setState({
       deckState: cardDebuggingMode ? DeckState.FRONT : DeckState.BACK,
       player_idx: (this.state.player_idx + 1) % this.state.players.length,
-      deck_idx: (this.state.deck_idx + 1) % this.state.deck.length
-    })
+      deck_idx: (this.state.deck_idx + 1) % this.state.deck.length,
+    });
   }
 
   handlePlayerClicked = (idx: number) => {
     var current_card = this.state.deck[this.state.deck_idx];
-    if (this.state.deckState == DeckState.BACK ||
-        current_card.type != CardType.STATUS) {
+    if (
+      this.state.deckState === DeckState.BACK ||
+      current_card.type !== CardType.STATUS
+    ) {
       return;
     }
     let players = [...this.state.players];
@@ -116,162 +120,150 @@ class Game extends React.Component<GameProps, GameState> {
     players[idx] = player;
     this.setState({players: players});
     this.advanceToNextPlayer();
-  }
+  };
 
   handleButtonClick = (pos: CardPosition) => {
     switch (this.state.deckState) {
       case DeckState.BACK:
-        this.setState({deckState: DeckState.FRONT})
+        this.setState({deckState: DeckState.FRONT});
         break;
 
       case DeckState.FRONT:
         this.advanceToNextPlayer();
         break;
-      
+
       default:
         break;
     }
 
     this.setState({
       pos: cardDebuggingMode ? CardPosition.RIGHT : pos,
-    })
-  }
+    });
+  };
 
   buttonText() {
     switch (this.state.deckState) {
       case DeckState.BACK:
-        return "Flip card"
+        return 'Flip card';
 
       case DeckState.FRONT:
-        return "Next player"
-      
+        return 'Next player';
+
       default:
         break;
-    } 
+    }
   }
 
   getBannerText() {
     var current_player = this.state.players[this.state.player_idx];
     switch (this.state.deckState) {
       case DeckState.BACK:
-        return "It's " + current_player.name + "'s turn, pick which card to flip!"
+        return (
+          "It's " + current_player.name + "'s turn, pick which card to flip!"
+        );
 
       case DeckState.FRONT: {
         var current_card = this.state.deck[this.state.deck_idx];
         switch (current_card.type) {
           case CardType.ACTION:
-            return current_player.name + ", carry out the action on the card, then press the 'Next Player' button."
+            return (
+              current_player.name +
+              ", carry out the action on the card, then press the 'Next Player' button."
+            );
           case CardType.INTERRUPT:
-            return "All players! Everyone follow the directions on the card, then press the 'Next Player' button."
+            return "All players! Everyone follow the directions on the card, then press the 'Next Player' button.";
           case CardType.STATUS:
-            return "Status card! " + current_player.name + ", click on a player to place this status on"
+            return (
+              'Status card! ' +
+              current_player.name +
+              ', click on a player to place this status on'
+            );
+          default:
+            break;
         }
+        break;
       }
-      
+
       default:
         break;
-    } 
+    }
   }
 
   showNextPlayerButton() {
     var current_card = this.state.deck[this.state.deck_idx];
-    return this.state.deckState == DeckState.FRONT && current_card.type != CardType.STATUS;
+    return (
+      this.state.deckState === DeckState.FRONT &&
+      current_card.type !== CardType.STATUS
+    );
   }
 
-
   render() {
-    console.log("Game.render()");
-    var current_player = this.state.players[this.state.player_idx];
+    console.log('Game.render()');
+    var playerSlots =
+      this.state.players.length > 8
+        ? 12
+        : this.state.players.length > 4
+        ? 8
+        : 4;
     return (
-      <div className="app-container">
+      <div className="app-shell">
         <GameHeader />
-        <div id="mainContainer" className="game-container-color container rounded">
-          <div id="gameBoard" className="container">
-            <div className="row">
-              <div className="col-3">
-                {this.renderPlayer(0)}
-              </div>
-              <div className="col-3">
-                {this.renderPlayer(1)}
-              </div>
-              <div className="col-3">
-                {this.renderPlayer(2)}
-              </div>
-              <div className="col-3">
-                {this.renderPlayer(3)}
-              </div>
+        <main className="page-frame game-frame">
+          <section className="game-dashboard">
+            <div className="player-grid" aria-label="Players">
+              {Array.from(Array(playerSlots).keys()).map(idx => (
+                <div className="player-grid-cell" key={idx}>
+                  {this.renderPlayer(idx)}
+                </div>
+              ))}
             </div>
-            {this.state.players.length > 4 &&
-              <div className="row">
-                <div className="col-3">
-                  {this.renderPlayer(4)}
-                </div>
-                <div className="col-3">
-                  {this.renderPlayer(5)}
-                </div>
-                <div className="col-3">
-                  {this.renderPlayer(6)}
-                </div>
-                <div className="col-3">
-                  {this.renderPlayer(7)}
-                </div>
-              </div>
-            }
-            {this.state.players.length > 8 &&
-              <div className="row">
-                <div className="col-3">
-                  {this.renderPlayer(8)}
-                </div>
-                <div className="col-3">
-                  {this.renderPlayer(9)}
-                </div>
-                <div className="col-3">
-                  {this.renderPlayer(10)}
-                </div>
-                <div className="col-3">
-                  {this.renderPlayer(11)}
-                </div>
-              </div>
-            }
-            <div className="row">
-              <div className="col">
-                <div id="headerContainer1" className="orange3 container rounded">
-                <div id="headerContainer2" className="orange2 container rounded">
-                  {this.getBannerText()}
-                </div>
-                </div>
-              </div>
+
+            <div className="turn-banner">
+              <p className="eyebrow">Current turn</p>
+              <h1>{this.getBannerText()}</h1>
             </div>
-            <div className="row">
-              <div className="col">
-        				<div id="cardContainer" className="container">
+
+            <div className="card-table">
+              <section className="card-choice" aria-label="Card A">
+                <div className="card-choice-inner">
                   {this.renderCard(CardPosition.LEFT)}
-        				</div>
-                {this.state.deckState != DeckState.FRONT &&
-                  <a onClick={() => this.handleButtonClick(CardPosition.LEFT)}
-                     className="btn game-btn">Flip card A</a>
-                }
-              </div>
-              <div className="col">
-                <div id="cardContainer" className="container">
+                </div>
+                {this.state.deckState !== DeckState.FRONT && (
+                  <button
+                    onClick={() => this.handleButtonClick(CardPosition.LEFT)}
+                    className="pill-button pill-button-primary game-btn"
+                  >
+                    Flip card A
+                  </button>
+                )}
+              </section>
+              <section className="card-choice" aria-label="Card B">
+                <div className="card-choice-inner">
                   {this.renderCard(CardPosition.RIGHT)}
                 </div>
-                {this.state.deckState != DeckState.FRONT &&
-                  <a onClick={() => this.handleButtonClick(CardPosition.RIGHT)}
-                     className="btn game-btn">Flip card B</a>
-                }
-              </div>
+                {this.state.deckState !== DeckState.FRONT && (
+                  <button
+                    onClick={() => this.handleButtonClick(CardPosition.RIGHT)}
+                    className="pill-button pill-button-primary game-btn"
+                  >
+                    Flip card B
+                  </button>
+                )}
+              </section>
             </div>
-            <div className="row">
-              <div className="col">
-                {this.showNextPlayerButton() &&
-                  <a onClick={() => this.handleButtonClick(CardPosition.UNSET)}
-                     className="btn next-player-btn">Next Player</a>
-                }
+
+            {this.showNextPlayerButton() && (
+              <div className="next-player-panel">
+                <button
+                  onClick={() => this.handleButtonClick(CardPosition.UNSET)}
+                  className="pill-button pill-button-magenta next-player-btn"
+                >
+                  Next Player
+                </button>
               </div>
-            </div>
-          </div>
-        </div>
+            )}
+          </section>
+        </main>
       </div>
     );
   }

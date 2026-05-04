@@ -1,14 +1,14 @@
-import GameOpts, { VirtualMode } from "./GameOpts";
-import React, { useState } from 'react';
-import { Tooltip } from 'reactstrap';
-import back from './assets/back.png'
+import {VirtualMode} from './GameOpts';
+import React, {useState} from 'react';
+import {Tooltip} from 'reactstrap';
+import back from './assets/back.png';
 
 export enum CardType {
-  ACTION = "Action",
-  STATUS = "Status",
-  INTERRUPT = "Everyone",
+  ACTION = 'Action',
+  STATUS = 'Status',
+  INTERRUPT = 'Everyone',
 }
- 
+
 export class CardData {
   title: string;
   body: string;
@@ -16,104 +16,99 @@ export class CardData {
   tips: string[];
   mode: VirtualMode;
   type: CardType;
-  constructor(title: string, body: string, img: any, type?: CardType, tips?: string[], mode?: VirtualMode) {
+  constructor(
+    title: string,
+    body: string,
+    img: any,
+    type?: CardType,
+    tips?: string[],
+    mode?: VirtualMode
+  ) {
     this.title = title;
     this.body = body;
     this.img = img;
-    this.tips = tips && tips || [];
-    this.mode = mode && mode || VirtualMode.UNSET;
-    this.type = type && type || CardType.ACTION;
+    this.tips = (tips && tips) || [];
+    this.mode = (mode && mode) || VirtualMode.UNSET;
+    this.type = (type && type) || CardType.ACTION;
   }
 }
 
 function ColorForCardType(type: CardType): string {
   switch (type) {
     case CardType.ACTION:
-      return "blue"
+      return 'card-accent-lilac';
     case CardType.STATUS:
-      return "green"
+      return 'card-accent-mint';
     case CardType.INTERRUPT:
-      return "red"
+      return 'card-accent-coral';
   }
 }
 
-type CardProps = {
-  data: CardData
+function TooltipIdForTitle(title: string): string {
+  return 'ExampleTooltip-' + title.replace(/[^A-Za-z0-9]/g, '-');
 }
+
+type CardProps = {
+  data: CardData;
+};
 function Card(props: CardProps) {
   const color = ColorForCardType(props.data.type);
+  const tooltipId = TooltipIdForTitle(props.data.title);
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const toggle = () => setTooltipOpen(!tooltipOpen);
   return (
-    <div id="deck1" className={color + "4 container rounded"}>
-    <div id="deck2" className={color + "3 container rounded"}>
-    <div id="deck3" className={color + "2 container rounded"}>
-      <div id="card" className={color + "1 card"}>
-        <div className="card-body-holder1 rounded">
-        <div className="card-body-holder2 rounded">
-          <div className="card-title-holder rounded">
-            <h4 className="card-title">{props.data.title}</h4>
-          </div>
-          <div className="card-img-holder rounded">
-          <img className="card-img-top" src={props.data.img} alt="Card image"/>
-          </div>
-          <div className="card-type-holder rounded">
-            <div className="row">
-              <div className="col">
-                <p className="card-type">{props.data.type}</p>
-              </div>
-                {props.data.tips.length > 0 &&
-                  <div className="col">
-                    <span id="ExampleTooltip" className={color + "2 btn card-tooltip"}>{tooltipOpen ? "hide" : "show"} examples</span>
-                    <Tooltip  trigger="hover"
-                            placement="right-end"
-                            isOpen={tooltipOpen}
-                            target="ExampleTooltip"
-                            toggle={toggle}>
-                    {props.data.tips.map((text, index) => (
-                      <div id={"tooltip-row-" + index} className="row">
-                      <div id={"tooltip-col-" + index} className="col tooltip-content">
-                      {text}
-                      <br/>
-                      <br/>
-                      </div>
-                      </div>
-                    ))}
-                  </Tooltip>
+    <article className={'zingg-card ' + color}>
+      <div className="card-topline">
+        <span className="card-type">{props.data.type}</span>
+        {props.data.tips.length > 0 && (
+          <>
+            <span id={tooltipId} className="card-tooltip-trigger">
+              {tooltipOpen ? 'Hide' : 'Show'} examples
+            </span>
+            <Tooltip
+              trigger="hover"
+              placement="right-end"
+              isOpen={tooltipOpen}
+              target={tooltipId}
+              toggle={toggle}
+            >
+              {props.data.tips.map((text, index) => (
+                <div key={index} className="tooltip-content">
+                  {text}
+                  <br />
+                  <br />
                 </div>
-              }
-            </div>
-          </div>
-          <div className="card-text-holder rounded">
-          <p className="card-text">{props.data.body}</p>
-          </div>
-        </div>
-        </div>
+              ))}
+            </Tooltip>
+          </>
+        )}
       </div>
-    </div>
-    </div>
-    </div>
-    );
+      <h2 className="card-title">{props.data.title}</h2>
+      <div className="card-img-holder">
+        <img className="card-img-top" src={props.data.img} alt="" />
+      </div>
+      <p className="card-text">{props.data.body}</p>
+    </article>
+  );
 }
-
 
 export function BackOfCard() {
   return (
-    <div id="deck1" className="purple4 container rounded">
-    <div id="deck2" className="purple3 container rounded">
-    <div id="deck3" className="purple2 container rounded">
-      <div id="card" className="purple1 card">
-        <div className="card-back-holder1 rounded">
-        <div className="card-body-holder2 rounded">
-          <h4 className="card-back-title">Zingg</h4>
-          <img className="card-img-top back-img-centered" src={back} alt="Card image"/>
-        </div>
-        </div>
+    <article className="zingg-card zingg-card-back">
+      <div className="card-back-topline">
+        <span>Zingg</span>
+        <span>Pick a side</span>
       </div>
-    </div>
-    </div>
-    </div>
-    );
+      <div className="card-back-mark">
+        <h2>Zingg</h2>
+        <img
+          className="card-img-top back-img-centered"
+          src={back}
+          alt="Card back"
+        />
+      </div>
+    </article>
+  );
 }
 
 export default Card;

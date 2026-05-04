@@ -1,6 +1,6 @@
 import React from 'react';
 import Game from './Game';
-import GameOpts, { VirtualMode } from "./GameOpts";
+import GameOpts, {VirtualMode} from './GameOpts';
 import Lobby from './Lobby';
 import './App.css';
 import './Colors.css';
@@ -8,70 +8,73 @@ import './Colors.css';
 const gameDebuggingMode = false;
 
 type HomeProps = {
-  handleHomeToLobby: () => void
+  handleHomeToLobby: () => void;
 };
 function Home(Props: HomeProps) {
-  console.log("Home.render()");
+  console.log('Home.render()');
   return (
-     <div className="app-container">
-        <div className="app-header">
-        <div className="app-header2">
-        <div className="app-header3">
-          <h2 className="app-header-text">Welcome to the Zingg Web!</h2>
-        </div>
-        </div>
-        </div>
-        <div id="mainContainer" className="game-container-color container rounded">
-          <div id="gameBoard" className="container">
-            <div className="row">
-              <div className="col">
-                <div id="appHeaderContainer" className="magenta2 container rounded">
-                <div id="headerContainer2" className="magenta1 container rounded">
-                <p className="app-text">
-                  Welcome! This site allows playing <i>Zingg</i> on the web.
-                  It is optimized for using Zoom, Hangouts, or Meet to
-                  video conference and play. Only <b>one</b> person should load
-                  this site and then present it to everyone else. They will
-                  do all of the clicking for everyone. For certain cards that
-                  involve everyone, it is nice to stop presenting so everyone 
-                  can see each other well.
-                </p>
-                <p className="app-text">
-                  Never heard of Zingg?? What the hell, how did you hear about
-                  this site... Anyway, check out a summary and the original
-                  rules at <a href="http://www.getzingg.com" target="_">getzingg.com</a>.
-                </p>
-                <p className="app-text">
-                  This version of <i>Zingg</i> is a little simpler than the paper
-                  version. There are no hands, you simply draw cards and carry
-                  out the actions! Some actions apply only to the player who
-                  drew it. Others apply to everyone.
-                </p>
-                <p className="app-text">
-                  This site was created quickly and it is full of dirty hacks,
-                  so please <b>don't refresh or you will lose all of the game
-                  state</b>!
-                </p>
-                </div>
-                </div>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col">
-                  <a className="btn start-button green2" onClick={Props.handleHomeToLobby}>Start!</a>
-              </div>
-            </div>
+    <div className="app-shell home-shell">
+      <header className="site-header site-header-home">
+        <a className="brand-mark" href="http://www.getzingg.com" target="_">
+          Zingg
+        </a>
+        <span className="header-kicker">Living-room chaos, online</span>
+      </header>
+      <main className="home-hero">
+        <section className="home-copy-panel">
+          <p className="eyebrow">Play from the couch or the call</p>
+          <h1>Welcome to the Zingg Web!</h1>
+          <p className="hero-subhead">
+            A warm little trouble machine for friends, drinks, bad ideas, and
+            the sacred art of laughing at each other.
+          </p>
+          <button
+            className="pill-button pill-button-primary"
+            onClick={Props.handleHomeToLobby}
+          >
+            Start game
+          </button>
+        </section>
+        <section className="home-notes-panel" aria-label="How Zingg Web works">
+          <div className="note-block note-block-lilac">
+            <span className="note-number">01</span>
+            <p>
+              One host drives the tab. Everyone else heckles, negotiates, and
+              acts innocent.
+            </p>
           </div>
-        </div>
-      </div>
+          <div className="note-block note-block-lime">
+            <span className="note-number">02</span>
+            <p>
+              No hands, no setup sermon. Flip cards, do the thing, blame the
+              deck.
+            </p>
+          </div>
+          <div className="note-block note-block-cream">
+            <span className="note-number">03</span>
+            <p>
+              New here? The original paper-game lore lives at{' '}
+              <a href="http://www.getzingg.com" target="_">
+                getzingg.com
+              </a>
+              .
+            </p>
+          </div>
+          <div className="note-block note-block-pink">
+            <span className="note-number">04</span>
+            <p>No refreshing. The tab is holding the brain cell.</p>
+          </div>
+        </section>
+      </main>
+    </div>
   );
 }
 
 enum AppStateEnum {
   HOME,
   LOBBY,
-  GAME
-};
+  GAME,
+}
 
 type AppProps = {};
 type AppState = {
@@ -81,77 +84,79 @@ type AppState = {
   opts: GameOpts;
 };
 class App extends React.Component<AppProps, AppState> {
-    state = {
-        value: '',
-        names: gameDebuggingMode ? ["Noah", "Sarah"] : new Array<string>(),
-        state: gameDebuggingMode ? AppStateEnum.GAME : AppStateEnum.HOME,
-        opts: { virtualMode: gameDebuggingMode ? VirtualMode.LIVE : VirtualMode.UNSET }
-    }
+  state = {
+    value: '',
+    names: gameDebuggingMode ? ['Noah', 'Sarah'] : new Array<string>(),
+    state: gameDebuggingMode ? AppStateEnum.GAME : AppStateEnum.HOME,
+    opts: {
+      virtualMode: gameDebuggingMode ? VirtualMode.LIVE : VirtualMode.UNSET,
+    },
+  };
 
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (this.state.names.length >= 12) {
-      alert("Twelve players max!!")
+      alert('Twelve players max!!');
       return;
     }
-    if (this.state.value.length == 0) {
-      alert("Empty name!")
+    if (this.state.value.length === 0) {
+      alert('Empty name!');
       return;
     }
     if (this.state.names.includes(this.state.value)) {
-      alert("Duplicate name!")
+      alert('Duplicate name!');
       return;
     }
     this.setState({
       names: this.state.names.concat(this.state.value),
-      value: ''
-    })
-
-  }
+      value: '',
+    });
+  };
 
   handleHomeToLobby = () => {
     this.setState({state: AppStateEnum.LOBBY});
-  }
+  };
 
   handleLobbyToGame = () => {
     this.setState({state: AppStateEnum.GAME});
-  }
+  };
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({value: event.target.value});
-  }
+  };
 
   handleVirtualClick = (virtualMode: VirtualMode) => {
     this.setState(prevState => {
-      let opts = Object.assign({}, prevState.opts);  
-      opts.virtualMode = virtualMode;                
-      return { opts };
-    })
-  }
+      let opts = Object.assign({}, prevState.opts);
+      opts.virtualMode = virtualMode;
+      return {opts};
+    });
+  };
 
   renderHome() {
-    return <Home handleHomeToLobby={this.handleHomeToLobby}/>;
+    return <Home handleHomeToLobby={this.handleHomeToLobby} />;
   }
 
   renderLobby() {
     return (
-      <Lobby names={this.state.names}
-             value={this.state.value}
-             gameOpts={this.state.opts}
-             handleSubmit={this.handleSubmit}
-             handleChange={this.handleChange}
-             handleVirtualClick={this.handleVirtualClick}
-             handleLobbyToGame={this.handleLobbyToGame} />
+      <Lobby
+        names={this.state.names}
+        value={this.state.value}
+        gameOpts={this.state.opts}
+        handleSubmit={this.handleSubmit}
+        handleChange={this.handleChange}
+        handleVirtualClick={this.handleVirtualClick}
+        handleLobbyToGame={this.handleLobbyToGame}
+      />
     );
   }
 
   renderGame() {
-    return <Game player_names={this.state.names}
-                 gameOpts={this.state.opts} />
+    return <Game player_names={this.state.names} gameOpts={this.state.opts} />;
   }
 
   render() {
-    console.log("App.render()");
+    console.log('App.render()');
     switch (this.state.state) {
       case AppStateEnum.HOME:
         return this.renderHome();
@@ -160,7 +165,7 @@ class App extends React.Component<AppProps, AppState> {
       case AppStateEnum.GAME:
         return this.renderGame();
       default:
-        return <h1>404 : Not Found</h1>
+        return <h1>404 : Not Found</h1>;
     }
   }
 }
