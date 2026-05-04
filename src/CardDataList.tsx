@@ -1,5 +1,4 @@
-import React from 'react';
-import GameOpts, { VirtualMode } from "./GameOpts";
+import { VirtualMode } from "./GameOpts";
 import beer1 from './assets/beer1.png'
 import drink1 from './assets/drink1.png'
 import shot1 from './assets/shot1.png'
@@ -33,7 +32,6 @@ import name from './assets/name.png'
 import lovehate from './assets/lovehate.png'
 import noah from './assets/noah.png'
 import question from './assets/question.png'
-import alcoholic from './assets/alcoholic.png'
 import nickname from './assets/nickname.png'
 import viking from './assets/viking.png'
 import force from './assets/force.png'
@@ -45,7 +43,7 @@ import coin from './assets/coin.png'
 import sobriety from './assets/sobriety.png'
 import waterfall from './assets/waterfall.png'
 
-import Card, { CardData, CardType } from "./Card";
+import { CardData, CardType } from "./Card";
 
 function MakeCard(title: string, body: string, img: any, type: CardType) {
  return new CardData(title, body, img, type, [], VirtualMode.UNSET);

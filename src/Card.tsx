@@ -1,6 +1,5 @@
 import {VirtualMode} from './GameOpts';
 import React, {useState} from 'react';
-import {Tooltip} from 'reactstrap';
 import back from './assets/back.png';
 
 export enum CardType {
@@ -55,34 +54,34 @@ function Card(props: CardProps) {
   const color = ColorForCardType(props.data.type);
   const tooltipId = TooltipIdForTitle(props.data.title);
   const [tooltipOpen, setTooltipOpen] = useState(false);
-  const toggle = () => setTooltipOpen(!tooltipOpen);
+  const toggle = () => setTooltipOpen(open => !open);
   return (
     <article className={'zingg-card ' + color}>
       <div className="card-topline">
         <span className="card-type">{props.data.type}</span>
         {props.data.tips.length > 0 && (
           <>
-            <span id={tooltipId} className="card-tooltip-trigger">
-              {tooltipOpen ? 'Hide' : 'Show'} examples
-            </span>
-            <Tooltip
-              trigger="hover"
-              placement="right-end"
-              isOpen={tooltipOpen}
-              target={tooltipId}
-              toggle={toggle}
+            <button
+              aria-controls={tooltipId}
+              aria-expanded={tooltipOpen}
+              className="card-tooltip-trigger"
+              onClick={toggle}
+              type="button"
             >
-              {props.data.tips.map((text, index) => (
-                <div key={index} className="tooltip-content">
-                  {text}
-                  <br />
-                  <br />
-                </div>
-              ))}
-            </Tooltip>
+              {tooltipOpen ? 'Hide' : 'Show'} examples
+            </button>
           </>
         )}
       </div>
+      {props.data.tips.length > 0 && tooltipOpen && (
+        <div id={tooltipId} className="tooltip-panel">
+          {props.data.tips.map((text, index) => (
+            <p key={index} className="tooltip-content">
+              {text}
+            </p>
+          ))}
+        </div>
+      )}
       <h2 className="card-title">{props.data.title}</h2>
       <div className="card-img-holder">
         <img className="card-img-top" src={props.data.img} alt="" />

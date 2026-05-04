@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-import {Tooltip} from 'reactstrap';
+import React from 'react';
 
 export class PlayerData {
   name: string;
@@ -18,9 +17,6 @@ type PlayerProps = {
   onClick: () => void;
 };
 function Player(props: PlayerProps) {
-  const [tooltipOpen, setTooltipOpen] = useState(false);
-  const toggle = () => setTooltipOpen(!tooltipOpen);
-
   let name = props.data.name;
   if (name.length > 12) {
     name = name.slice(0, 9) + '...';
@@ -36,20 +32,13 @@ function Player(props: PlayerProps) {
       <span className="player-token-index">{props.data.idx + 1}</span>
       <span className="player-token-name">{name}</span>
       {props.data.status.length > 0 && (
-        <>
-          <span id={'StatusTooltip' + props.data.idx} className="status-badge">
-            S
-          </span>
-          <Tooltip
-            trigger="hover"
-            placement="right-end"
-            isOpen={tooltipOpen}
-            target={'StatusTooltip' + props.data.idx}
-            toggle={toggle}
-          >
-            {props.data.status}
-          </Tooltip>
-        </>
+        <span
+          aria-label={'Status: ' + props.data.status}
+          className="status-badge"
+          title={props.data.status}
+        >
+          S
+        </span>
       )}
     </button>
   );

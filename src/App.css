@@ -706,14 +706,30 @@ a {
   border: 2px solid var(--ink-brown);
   border-radius: var(--radius-md);
   color: var(--ink-brown);
-  cursor: help;
+  cursor: pointer;
   font-size: 12px;
   font-weight: 900;
   padding: 5px 8px;
 }
 
+.tooltip-panel {
+  background: #fffdf7;
+  border: 2px dashed var(--coffee-line);
+  border-radius: var(--radius-md);
+  margin: 12px 0 0;
+  padding: 10px 12px;
+}
+
 .tooltip-content {
+  color: var(--soft-cocoa);
+  font-size: 13px;
+  line-height: 1.4;
+  margin: 0 0 8px;
   text-align: left;
+}
+
+.tooltip-content:last-child {
+  margin-bottom: 0;
 }
 
 .card-text {
