@@ -588,7 +588,7 @@ a {
 .turn-banner h1 {
   color: var(--ink-brown);
   font-family: var(--font-display);
-  font-size: 34px;
+  font-size: 30px;
   font-weight: 700;
   letter-spacing: 0;
   line-height: 1.15;
@@ -800,6 +800,10 @@ a {
   min-width: 176px;
 }
 
+.game-btn {
+  justify-self: center;
+}
+
 .next-player-panel {
   display: flex;
   justify-content: center;
@@ -848,7 +852,7 @@ a {
   }
 
   .turn-banner h1 {
-    font-size: 28px;
+    font-size: 25px;
   }
 
   .home-notes-panel,
