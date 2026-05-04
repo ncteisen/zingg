@@ -14,7 +14,6 @@ export class PlayerData {
 type PlayerProps = {
   data: PlayerData;
   isTurn: boolean;
-  onClick: () => void;
 };
 function Player(props: PlayerProps) {
   let name = props.data.name;
@@ -23,11 +22,10 @@ function Player(props: PlayerProps) {
   }
 
   return (
-    <button
+    <div
       className={
         props.isTurn ? 'player-token player-token-current' : 'player-token'
       }
-      onClick={props.onClick}
     >
       <span className="player-token-index">{props.data.idx + 1}</span>
       <span className="player-token-name">{name}</span>
@@ -40,7 +38,7 @@ function Player(props: PlayerProps) {
           S
         </span>
       )}
-    </button>
+    </div>
   );
 }
 

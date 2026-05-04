@@ -118,7 +118,6 @@ class Game extends React.Component<GameProps, GameState> {
         <Player
           isTurn={idx === this.state.player_idx}
           data={this.state.players[idx]}
-          onClick={() => this.handlePlayerClicked(idx)}
         />
       );
     } else {
@@ -150,22 +149,6 @@ class Game extends React.Component<GameProps, GameState> {
       deck_idx: (this.state.deck_idx + 1) % this.state.deck.length,
     });
   }
-
-  handlePlayerClicked = (idx: number) => {
-    var current_card = this.currentCard();
-    if (
-      this.state.deckState === DeckState.BACK ||
-      current_card.type !== CardType.STATUS
-    ) {
-      return;
-    }
-    let players = [...this.state.players];
-    let player = {...players[idx]};
-    player.status = current_card.body;
-    players[idx] = player;
-    this.setState({players: players});
-    this.advanceToNextPlayer();
-  };
 
   handleButtonClick = (pos: CardPosition) => {
     switch (this.state.deckState) {
@@ -213,15 +196,14 @@ class Game extends React.Component<GameProps, GameState> {
           case CardType.ACTION:
             return (
               current_player.name +
-              ", carry out the action on the card, then press the 'Next Player' button."
+              ", carry out the action, then press 'Next Player'."
             );
           case CardType.INTERRUPT:
-            return "All players! Everyone follow the directions on the card, then press the 'Next Player' button.";
+            return "All players! Follow the directions, then press 'Next Player'.";
           case CardType.STATUS:
             return (
-              'Status card! ' +
               current_player.name +
-              ', click on a player to place this status on'
+              ", keep track of this status, then press 'Next Player'."
             );
           default:
             break;
@@ -235,11 +217,7 @@ class Game extends React.Component<GameProps, GameState> {
   }
 
   showNextPlayerButton() {
-    var current_card = this.currentCard();
-    return (
-      this.state.deckState === DeckState.FRONT &&
-      current_card.type !== CardType.STATUS
-    );
+    return this.state.deckState === DeckState.FRONT;
   }
 
   render() {

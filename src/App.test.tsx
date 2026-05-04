@@ -40,7 +40,7 @@ function saveState(state: object) {
 test('renders the home screen with empty storage', () => {
   render(<App />);
 
-  expect(screen.getByText(/Welcome to the Zingg Web!/i)).toBeInTheDocument();
+  expect(screen.getByText(/Welcome to Web Zingg!/i)).toBeInTheDocument();
   expect(
     screen.queryByRole('button', {name: /reset game/i})
   ).not.toBeInTheDocument();
@@ -119,7 +119,7 @@ test('restores player statuses from saved game state', () => {
   expect(screen.getByLabelText('Status: ' + savedStatus)).toBeInTheDocument();
 });
 
-test('persists status assignment during a game', async () => {
+test('status cards advance without assigning player status', async () => {
   var deck = playableDeck(VirtualMode.LIVE);
   var statusIdx =
     deck.find(function (idx) {
@@ -130,8 +130,6 @@ test('persists status assignment during a game', async () => {
       return idx !== statusIdx;
     })
   );
-  var statusCard = CardDataList[statusIdx];
-
   saveState({
     version: 1,
     screen: 'GAME',
@@ -152,11 +150,19 @@ test('persists status assignment during a game', async () => {
   });
 
   render(<App />);
-  fireEvent.click(screen.getByRole('button', {name: /Sarah/i}));
+  expect(
+    screen.getByRole('button', {name: /next player/i})
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText(/keep track of this status, then press 'Next Player'/i)
+  ).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole('button', {name: /next player/i}));
 
   await waitFor(function () {
     var saved = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '{}');
-    expect(saved.gameState.players[1].status).toBe(statusCard.body);
+    expect(saved.gameState.players[0].status).toBe('');
+    expect(saved.gameState.players[1].status).toBe('');
     expect(saved.gameState.deck_idx).toBe(1);
   });
 });
@@ -180,7 +186,7 @@ test('reset modal can cancel or clear saved state', async () => {
   );
 
   await waitFor(function () {
-    expect(screen.getByText(/Welcome to the Zingg Web!/i)).toBeInTheDocument();
+    expect(screen.getByText(/Welcome to Web Zingg!/i)).toBeInTheDocument();
     expect(window.localStorage.getItem(STORAGE_KEY)).toBeNull();
   });
 });
@@ -190,7 +196,7 @@ test('ignores malformed saved state without crashing', () => {
 
   render(<App />);
 
-  expect(screen.getByText(/Welcome to the Zingg Web!/i)).toBeInTheDocument();
+  expect(screen.getByText(/Welcome to Web Zingg!/i)).toBeInTheDocument();
 });
 
 test('ignores incompatible saved game state without crashing', () => {
@@ -215,5 +221,5 @@ test('ignores incompatible saved game state without crashing', () => {
 
   render(<App />);
 
-  expect(screen.getByText(/Welcome to the Zingg Web!/i)).toBeInTheDocument();
+  expect(screen.getByText(/Welcome to Web Zingg!/i)).toBeInTheDocument();
 });
