@@ -43,6 +43,20 @@ import coin from './assets/coin.png'
 import sobriety from './assets/sobriety.png'
 import waterfall from './assets/waterfall.png'
 import sandwich from './assets/sandwich.png'
+import coins from './assets/coins.png'
+import copyMachine from './assets/copy-machine.png'
+import handshake from './assets/handshake.png'
+import microphone from './assets/microphone.png'
+import dancer from './assets/dancer.png'
+import ruleBook from './assets/rule-book.png'
+import hockey from './assets/hockey.png'
+import bullseye from './assets/bullseye.png'
+import warning from './assets/warning.png'
+import eye from './assets/eye.png'
+import bartender from './assets/bartender.png'
+import people from './assets/people.png'
+import racingFlags from './assets/racing-flags.png'
+import molotov from './assets/molotov.png'
 
 import { CardData, CardType } from "./Card";
 
@@ -90,32 +104,28 @@ let CardDataList = [
 		"Let's Play a Game",
 		`Selected player must flip a coin until they get two heads in a row. 
 		They must drink for every tails.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
+		coins,
 		CardType.ACTION),
 
 	MakeLiveCard(
 		"Copy Me",
 		`Start by doing a motion. The next player repeats yours then add 
 		one of their own. First player to forget the pattern must drink.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
+		copyMachine,
 		CardType.ACTION),
 
 	MakeLiveCard(
 		"Suave",
 		`Chose two players to ad-lib a cool handshake. If it gets awkward 
 		or clumsy, they both drink.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
+		handshake,
 		CardType.ACTION),
 
 	MakeLiveCard(
 		"Comedian",
 		`Choose a player to tell a joke. If everyone agrees it is funny, 
 		everyone drinks. If not, the teller drinks.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
+		microphone,
 		CardType.ACTION),
 
 	MakeLiveCard(
@@ -130,15 +140,13 @@ let CardDataList = [
 		`Select one or two players to dance in front of everyone else. If 
 		the group decides they did a good job, everyone drinks. If not the 
 		dancer(s) must drink.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
+		dancer,
 		CardType.ACTION),
 
 	MakeCard(
 		"The Rule Book",
 		`Make some new rule. But don't be a dick about it. Also drink.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
+		ruleBook,
 		CardType.ACTION),
 
 	MakeLiveCard(
@@ -146,8 +154,7 @@ let CardDataList = [
 		`Spin a coin and call out a player’s name. That player may flick the 
 		coin. Anyone whose drink is hit (rebounds count!) must drink for the 
 		duration of another coin spin.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
+		hockey,
 		CardType.ACTION),
 
 	MakeLiveCard(
@@ -155,31 +162,27 @@ let CardDataList = [
 		`Pick a reasonable projectile and target. Selected player must toss or 
 		throw the projectile in or onto the target. If they hit everyone cheers 
 		and drinks. If they miss everyone boos and they drink.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
+		bullseye,
 		CardType.ACTION),
 
 	MakeLiveCard(
 		"Boner Alert",
 		`This player may make a finger-boner at any time. First player to see 
 		it and yell out "boner alert!" chooses a losing player to drink.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
+		warning,
 		CardType.STATUS),
 
 	MakeLiveCard(
 		"Made You Look",
 		`If this player is able to make anyone look at the ceiling, that 
 		person must drink.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
+		eye,
 		CardType.STATUS),
 
 	MakeLiveCard(
 		"Bartender",
 		`If anyone needs a new drink, this player must get it for them.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
+		bartender,
 		CardType.STATUS),
 
 	MakeCardWithTips(
@@ -187,8 +190,7 @@ let CardDataList = [
 		`Announce a "Perfect Person, But..." Everyone goes around and says 
 		if it is a dealbreaker for them. You go last, everyone drinks if 
 		they didn’t match your response.`,
-		// TODO(ncteisen): update photo
-		shot1,
+		people,
 		CardType.ACTION,
 		[
 			"Perfect person, but they have credit card debt",
@@ -422,8 +424,7 @@ let CardDataList = [
 		"Race to the Bottom",
 		`Everyone must finish their drink. Last two players get everyone 
 		new drinks.`,
-		// TODO(ncteisen): add new photo.
-		races,
+		racingFlags,
 		CardType.INTERRUPT),
 
 	MakeCard(
@@ -574,8 +575,7 @@ let CardDataList = [
 		"Molotov Cocktail",
 		`Selected player must take a shot. The players to their right and 
 		left must take a drink.`,
-		// TODO(ncteisen): add a new photo.
-		shot1,
+		molotov,
 		CardType.ACTION),
 
 	MakeCard(
