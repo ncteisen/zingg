@@ -4,6 +4,7 @@ import CardDataList from './CardDataList';
 import Card from './Card';
 import GameOpts, {VirtualMode} from './GameOpts';
 import GameHeader from './GameHeader';
+import {trackEvent} from './analytics';
 import {
   CardPosition,
   DeckState,
@@ -77,7 +78,24 @@ class MobileGame extends React.Component<MobileGameProps, MobileGameState> {
     return CardDataList[this.state.deck[this.state.deck_idx]];
   }
 
+  cardPositionToAnalyticsValue(pos: CardPosition) {
+    switch (pos) {
+      case CardPosition.LEFT:
+        return 'left';
+      case CardPosition.RIGHT:
+        return 'right';
+      case CardPosition.UNSET:
+        return 'unset';
+    }
+  }
+
   handleCardChoice = (pos: CardPosition) => {
+    trackEvent('card_revealed', {
+      play_mode: 'mobile',
+      position: this.cardPositionToAnalyticsValue(pos),
+      card_type: this.currentCard().type,
+      card_title: this.currentCard().title,
+    });
     this.setState({
       deckState: DeckState.FRONT,
       pos: pos,
@@ -85,6 +103,9 @@ class MobileGame extends React.Component<MobileGameProps, MobileGameState> {
   };
 
   handleNextPlayer = () => {
+    trackEvent('next_player', {
+      play_mode: 'mobile',
+    });
     this.setState({
       deck_idx: (this.state.deck_idx + 1) % this.state.deck.length,
       deckState: DeckState.BACK,

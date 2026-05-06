@@ -10,6 +10,7 @@ const desktopWidth = 1024;
 
 afterEach(() => {
   cleanup();
+  delete window.umami;
   window.localStorage.clear();
   window.history.pushState({}, '', '/');
   setViewportWidth(desktopWidth);
@@ -66,6 +67,15 @@ function saveState(state: object) {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
+function trackedEvents(track: ReturnType<typeof vi.fn>) {
+  return track.mock.calls.map(function (call) {
+    return {
+      name: call[0],
+      data: call[1],
+    };
+  });
+}
+
 test('renders the home screen with empty storage', () => {
   render(<App />);
 
@@ -77,6 +87,48 @@ test('renders the home screen with empty storage', () => {
   expect(
     screen.queryByRole('button', {name: /reset game/i})
   ).not.toBeInTheDocument();
+});
+
+test('tracks the classic gameplay funnel without player names', () => {
+  var track = vi.fn();
+  window.umami = {track};
+
+  openLobby();
+  addPlayer('Noah');
+  addPlayer('Sarah');
+  fireEvent.click(screen.getByRole('button', {name: 'No'}));
+  fireEvent.click(screen.getByRole('button', {name: /start game/i}));
+  fireEvent.click(screen.getByRole('button', {name: /flip card a/i}));
+  fireEvent.click(screen.getByRole('button', {name: /next player/i}));
+  fireEvent.click(screen.getByRole('button', {name: /reset game/i}));
+  fireEvent.click(
+    screen.getByRole('dialog').querySelectorAll('button')[1]
+  );
+
+  var events = trackedEvents(track);
+  expect(events.map(function (event) {
+    return event.name;
+  })).toEqual([
+    'classic_mode_selected',
+    'player_added',
+    'player_added',
+    'game_format_selected',
+    'classic_game_started',
+    'card_revealed',
+    'next_player',
+    'game_reset_confirmed',
+  ]);
+  expect(events[1].data).toEqual({player_count: 1});
+  expect(events[2].data).toEqual({player_count: 2});
+  expect(events[3].data).toEqual({virtual_mode: 'live'});
+  expect(events[4].data).toEqual({player_count: 2, virtual_mode: 'live'});
+  expect(events[5].data).toMatchObject({
+    play_mode: 'classic',
+    position: 'left',
+  });
+  expect(events[6].data).toEqual({play_mode: 'classic'});
+  expect(JSON.stringify(events)).not.toContain('Noah');
+  expect(JSON.stringify(events)).not.toContain('Sarah');
 });
 
 test('phone viewport opens the mobile landing instead of classic home', () => {

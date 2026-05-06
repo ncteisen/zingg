@@ -5,6 +5,7 @@ import Card, {CardType, BackOfCard} from './Card';
 import GameOpts from './GameOpts';
 import Player, {PlaceholderPlayer, PlayerData} from './Player';
 import GameHeader from './GameHeader';
+import {trackEvent} from './analytics';
 import {
   CardPosition,
   DeckState,
@@ -102,6 +103,17 @@ class Game extends React.Component<GameProps, GameState> {
     return CardDataList[this.state.deck[this.state.deck_idx]];
   }
 
+  cardPositionToAnalyticsValue(pos: CardPosition) {
+    switch (pos) {
+      case CardPosition.LEFT:
+        return 'left';
+      case CardPosition.RIGHT:
+        return 'right';
+      case CardPosition.UNSET:
+        return 'unset';
+    }
+  }
+
   renderPlayer(idx: number) {
     if (idx < this.state.players.length) {
       return (
@@ -143,10 +155,19 @@ class Game extends React.Component<GameProps, GameState> {
   handleButtonClick = (pos: CardPosition) => {
     switch (this.state.deckState) {
       case DeckState.BACK:
+        trackEvent('card_revealed', {
+          play_mode: 'classic',
+          position: this.cardPositionToAnalyticsValue(pos),
+          card_type: this.currentCard().type,
+          card_title: this.currentCard().title,
+        });
         this.setState({deckState: DeckState.FRONT});
         break;
 
       case DeckState.FRONT:
+        trackEvent('next_player', {
+          play_mode: 'classic',
+        });
         this.advanceToNextPlayer();
         break;
 

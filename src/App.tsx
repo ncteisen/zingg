@@ -13,6 +13,7 @@ import {
 import GameOpts, {VirtualMode} from './GameOpts';
 import Lobby from './Lobby';
 import MobileGame, {mobileGameOpts} from './MobileGame';
+import {trackEvent} from './analytics';
 import './App.css';
 import './Colors.css';
 
@@ -253,6 +254,17 @@ function isPhoneViewport() {
     return window.matchMedia('(max-width: 767px)').matches;
   }
   return window.innerWidth <= 767;
+}
+
+function virtualModeToAnalyticsValue(virtualMode: VirtualMode) {
+  switch (virtualMode) {
+    case VirtualMode.VIRTUAL:
+      return 'virtual';
+    case VirtualMode.LIVE:
+      return 'live';
+    case VirtualMode.UNSET:
+      return 'unset';
+  }
 }
 
 function getDebugCardTitle() {
@@ -506,6 +518,9 @@ class App extends React.Component<AppProps, AppState> {
       alert('Duplicate name!');
       return;
     }
+    trackEvent('player_added', {
+      player_count: this.state.names.length + 1,
+    });
     this.setState({
       names: this.state.names.concat(this.state.value),
       value: '',
@@ -513,10 +528,12 @@ class App extends React.Component<AppProps, AppState> {
   };
 
   handleHomeToLobby = () => {
+    trackEvent('classic_mode_selected');
     this.setState({state: AppStateEnum.LOBBY, playMode: 'classic'});
   };
 
   handleHomeToMobile = () => {
+    trackEvent('mobile_mode_selected');
     this.setState({
       state: AppStateEnum.MOBILE_HOME,
       playMode: 'mobile',
@@ -528,6 +545,10 @@ class App extends React.Component<AppProps, AppState> {
   };
 
   handleLobbyToGame = () => {
+    trackEvent('classic_game_started', {
+      player_count: this.state.names.length,
+      virtual_mode: virtualModeToAnalyticsValue(this.state.opts.virtualMode),
+    });
     this.setState({
       state: AppStateEnum.GAME,
       playMode: 'classic',
@@ -536,6 +557,7 @@ class App extends React.Component<AppProps, AppState> {
   };
 
   handleMobileToGame = () => {
+    trackEvent('mobile_game_started');
     this.setState({
       state: AppStateEnum.MOBILE_GAME,
       playMode: 'mobile',
@@ -551,6 +573,9 @@ class App extends React.Component<AppProps, AppState> {
   };
 
   handleVirtualClick = (virtualMode: VirtualMode) => {
+    trackEvent('game_format_selected', {
+      virtual_mode: virtualModeToAnalyticsValue(virtualMode),
+    });
     this.setState(prevState => {
       let opts = Object.assign({}, prevState.opts);
       opts.virtualMode = virtualMode;
@@ -575,6 +600,7 @@ class App extends React.Component<AppProps, AppState> {
   };
 
   handleResetConfirm = () => {
+    trackEvent('game_reset_confirmed');
     if (typeof window !== 'undefined') {
       window.localStorage.removeItem(STORAGE_KEY);
     }
