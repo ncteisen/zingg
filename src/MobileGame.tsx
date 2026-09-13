@@ -1,5 +1,6 @@
 import React from 'react';
 
+import DeckExhausted from './DeckExhausted';
 import CardDataList from './CardDataList';
 import Card from './Card';
 import GameOpts, {VirtualMode} from './GameOpts';
@@ -21,6 +22,7 @@ type MobileGameProps = {
   initialGameState?: SerializedMobileGameState;
   onGameStateChange: (state: SerializedMobileGameState) => void;
   onResetRequest: () => void;
+  onSwitchMode?: () => void;
 };
 
 type MobileGameState = {
@@ -90,6 +92,7 @@ class MobileGame extends React.Component<MobileGameProps, MobileGameState> {
   }
 
   handleCardChoice = (pos: CardPosition) => {
+    if (this.state.deckState !== DeckState.BACK) return;
     trackEvent('card_revealed', {
       play_mode: 'mobile',
       position: this.cardPositionToAnalyticsValue(pos),
@@ -103,14 +106,20 @@ class MobileGame extends React.Component<MobileGameProps, MobileGameState> {
   };
 
   handleNextPlayer = () => {
+    if (this.state.deckState !== DeckState.FRONT) return;
     trackEvent('next_player', {
       play_mode: 'mobile',
     });
-    this.setState({
-      deck_idx: (this.state.deck_idx + 1) % this.state.deck.length,
-      deckState: DeckState.BACK,
+    this.setState(state => ({
+      deck_idx: Math.min(state.deck_idx + 1, state.deck.length - 1),
+      deckState: state.deck_idx === state.deck.length - 1 ? DeckState.EXHAUSTED : DeckState.BACK,
       pos: CardPosition.UNSET,
-    });
+    }));
+  };
+
+  handleRestart = () => {
+    this.setState({deck: createPlayableDeck(mobileGameOpts), deck_idx: 0,
+      deckState: DeckState.BACK, pos: CardPosition.UNSET});
   };
 
   renderChoiceButton(label: string, pos: CardPosition) {
@@ -166,13 +175,13 @@ class MobileGame extends React.Component<MobileGameProps, MobileGameState> {
     console.log('MobileGame.render()');
     return (
       <div className="app-shell mobile-game-shell">
-        <GameHeader onResetRequest={this.props.onResetRequest} />
+        <GameHeader onResetRequest={this.props.onResetRequest} onSwitchMode={this.props.onSwitchMode} />
         <div className="mobile-landscape-guard" role="status">
           <h1>Turn your phone upright.</h1>
           <p>Zingg mobile is built for passing the phone in portrait mode.</p>
         </div>
         <main className="mobile-game-frame">
-          {this.state.deckState === DeckState.FRONT
+          {this.state.deckState === DeckState.EXHAUSTED ? <DeckExhausted onRestart={this.handleRestart} /> : this.state.deckState === DeckState.FRONT
             ? this.renderCardScreen()
             : this.renderChoiceScreen()}
         </main>

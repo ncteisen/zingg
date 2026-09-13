@@ -82,6 +82,7 @@ a {
   border-bottom: 3px solid var(--coffee-line);
   display: flex;
   justify-content: space-between;
+  gap: 16px;
   min-height: 72px;
   padding: 16px 32px;
 }
@@ -94,6 +95,7 @@ a {
   letter-spacing: 0;
   line-height: 1;
   text-decoration: none;
+  white-space: nowrap;
   transform: rotate(-2deg);
 }
 
@@ -1138,4 +1140,26 @@ a {
   .mobile-landscape-guard {
     display: grid;
   }
+}
+
+/* Mode navigation, recoverable storage errors, and editable lobby seats. */
+.header-actions, .roster-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.header-actions { margin-left: auto; justify-content: flex-end; }
+.storage-notice { background: #fff3d8; color: #33251c; padding: 12px 20px; margin: 0; border-bottom: 2px solid currentColor; }
+.roster-player { flex-wrap: wrap; }
+.roster-name { overflow-wrap: anywhere; min-width: 0; flex: 1; }
+.roster-actions { width: 100%; }
+.roster-edit { flex: 1; min-width: 0; }
+.roster-edit .roster-actions { margin-top: 8px; }
+.form-error { color: #922b20; margin: 8px 0 0; }
+.deck-exhausted { background: var(--paper-warm); border: 3px solid var(--ink-brown); border-radius: var(--radius-xl); padding: 32px; text-align: center; margin: 24px 0; }
+.deck-exhausted h1 { font-family: var(--font-display); font-size: 40px; }
+.deck-exhausted p { line-height: 1.5; }
+.modal-backdrop { overflow-y: auto; }
+.reset-modal { max-height: calc(100dvh - 48px); overflow-y: auto; }
+@media (max-width: 767px) {
+  .site-header { gap: 8px; }
+  .header-kicker { display: none; }
+  .header-actions { max-width: 65%; }
+  .header-actions .reset-link-button { font-size: 12px; padding: 8px 9px; }
 }

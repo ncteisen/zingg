@@ -1,6 +1,7 @@
 import React from 'react';
 
 type GameHeaderProps = {
+  onSwitchMode?: () => void;
   onResetRequest?: () => void;
 };
 
@@ -11,6 +12,8 @@ function GameHeader(props: GameHeaderProps) {
         Zingg
       </a>
       <span className="header-kicker">Living-room chaos, online</span>
+      <div className="header-actions">
+      {props.onSwitchMode && <button className="reset-link-button" onClick={props.onSwitchMode} type="button">Switch mode</button>}
       {props.onResetRequest && (
         <button
           className="reset-link-button"
@@ -20,6 +23,7 @@ function GameHeader(props: GameHeaderProps) {
           Reset game
         </button>
       )}
+      </div>
     </header>
   );
 }

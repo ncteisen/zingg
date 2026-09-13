@@ -12,6 +12,7 @@ export enum DeckState {
   BACK,
   // Front of a card.
   FRONT,
+  EXHAUSTED,
 }
 
 export type SerializedPlayerState = {
@@ -63,7 +64,7 @@ export function createPlayableDeck(gameOpts: GameOpts) {
 }
 
 function isDeckState(value: unknown): value is DeckState {
-  return value === DeckState.BACK || value === DeckState.FRONT;
+  return value === DeckState.BACK || value === DeckState.FRONT || value === DeckState.EXHAUSTED;
 }
 
 function isCardPosition(value: unknown): value is CardPosition {
@@ -102,10 +103,12 @@ export function isValidSerializedGameState(
     state.deck_idx >= 0 &&
     state.deck_idx < state.deck.length &&
     isDeckState(state.deckState) &&
+    (state.deckState !== DeckState.EXHAUSTED || state.deck_idx === state.deck.length - 1) &&
     Array.isArray(state.players) &&
     state.players.length === playerNames.length &&
     state.players.every(function (player, idx) {
       return (
+        typeof player === 'object' && player !== null &&
         typeof player.name === 'string' &&
         player.name === playerNames[idx] &&
         typeof player.status === 'string' &&
@@ -147,6 +150,7 @@ export function isValidSerializedMobileGameState(
     state.deck_idx >= 0 &&
     state.deck_idx < state.deck.length &&
     isDeckState(state.deckState) &&
+    (state.deckState !== DeckState.EXHAUSTED || state.deck_idx === state.deck.length - 1) &&
     isCardPosition(state.pos) &&
     (state.deckState !== DeckState.FRONT || state.pos !== CardPosition.UNSET)
   );

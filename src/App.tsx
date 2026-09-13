@@ -1,4 +1,6 @@
 import React from 'react';
+import ResetModal from './ResetModal';
+import {validatePlayerName} from './PlayerName';
 import Game from './Game';
 import CardDataList from './CardDataList';
 import {
@@ -23,6 +25,8 @@ const STORAGE_KEY = 'zingg-game-state-v1';
 type HomeProps = {
   handleHomeToLobby: () => void;
   handleHomeToMobile: () => void;
+  hasClassicGame: boolean;
+  hasMobileGame: boolean;
 };
 function Home(Props: HomeProps) {
   console.log('Home.render()');
@@ -46,13 +50,13 @@ function Home(Props: HomeProps) {
               className="pill-button pill-button-primary"
               onClick={Props.handleHomeToLobby}
             >
-              Classic game
+              {Props.hasClassicGame ? 'Resume classic game' : 'Classic game'}
             </button>
             <button
               className="pill-button pill-button-secondary"
               onClick={Props.handleHomeToMobile}
             >
-              Pass-the-phone game
+              {Props.hasMobileGame ? 'Resume pass-the-phone game' : 'Pass-the-phone game'}
             </button>
           </div>
         </section>
@@ -91,6 +95,7 @@ function Home(Props: HomeProps) {
 
 type MobileLandingProps = {
   handleMobileToGame: () => void;
+  onSwitchMode: () => void;
 };
 function MobileLanding(Props: MobileLandingProps) {
   console.log('MobileLanding.render()');
@@ -121,6 +126,9 @@ function MobileLanding(Props: MobileLandingProps) {
           >
             Start mobile game
           </button>
+          <button className="pill-button pill-button-secondary mobile-start-button" onClick={Props.onSwitchMode}>
+            Choose game mode
+          </button>
         </section>
       </main>
     </div>
@@ -138,7 +146,7 @@ enum AppStateEnum {
 type PlayMode = 'classic' | 'mobile';
 type SavedScreen = 'HOME' | 'LOBBY' | 'GAME' | 'MOBILE_HOME' | 'MOBILE_GAME';
 type SavedAppState = {
-  version: 2;
+  version: 3;
   playMode: PlayMode;
   screen: SavedScreen;
   value: string;
@@ -158,6 +166,8 @@ type AppState = {
   gameState?: SerializedGameState;
   mobileGameState?: SerializedMobileGameState;
   showResetModal: boolean;
+  storageError?: boolean;
+  nameError?: string;
 };
 
 function createInitialAppState(): AppState {
@@ -168,7 +178,7 @@ function createInitialAppState(): AppState {
       state: AppStateEnum.MOBILE_HOME,
       playMode: 'mobile',
       opts: {
-        virtualMode: VirtualMode.LIVE,
+        virtualMode: VirtualMode.UNSET,
       },
       gameState: undefined,
       mobileGameState: undefined,
@@ -310,8 +320,9 @@ function buildDebugCardAppState(cardTitle: string): AppState | null {
 function savedNamesAreValid(value: unknown): value is string[] {
   return (
     Array.isArray(value) &&
+    value.length <= 12 &&
     value.every(function (name) {
-      return typeof name === 'string';
+      return typeof name === 'string' && name.trim().length > 0;
     })
   );
 }
@@ -325,6 +336,8 @@ function buildClassicAppState(
   mobileGameState?: SerializedMobileGameState
 ): AppState {
   var state = screenToState(screen);
+  var validGameState = names.length >= 2 && opts.virtualMode !== VirtualMode.UNSET &&
+    isValidSerializedGameState(gameState, names, opts) ? gameState : undefined;
 
   if (
     state === AppStateEnum.GAME &&
@@ -344,8 +357,7 @@ function buildClassicAppState(
         ? 'mobile'
         : 'classic',
     opts: opts,
-    gameState:
-      state === AppStateEnum.GAME ? (gameState as SerializedGameState) : undefined,
+    gameState: validGameState,
     mobileGameState: mobileGameState,
     showResetModal: false,
   };
@@ -364,7 +376,12 @@ function loadInitialAppState(): AppState {
     }
   }
 
-  var rawState = window.localStorage.getItem(STORAGE_KEY);
+  var rawState: string | null;
+  try {
+    rawState = window.localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return {...createInitialAppState(), storageError: true};
+  }
   if (!rawState) {
     return createInitialAppState();
   }
@@ -374,7 +391,7 @@ function loadInitialAppState(): AppState {
 
     if (
       !isRecord(saved) ||
-      (saved.version !== 1 && saved.version !== 2) ||
+      (saved.version !== 1 && saved.version !== 2 && saved.version !== 3) ||
       !isSavedScreen(saved.screen) ||
       typeof saved.value !== 'string' ||
       !savedNamesAreValid(saved.names) ||
@@ -389,23 +406,7 @@ function loadInitialAppState(): AppState {
         ? (saved.mobileGameState as SerializedMobileGameState)
         : undefined;
 
-    if (isPhoneViewport()) {
-      if (mobileGameState) {
-        return {
-          value: '',
-          names: new Array<string>(),
-          state: AppStateEnum.MOBILE_GAME,
-          playMode: 'mobile',
-          opts: mobileGameOpts,
-          gameState: undefined,
-          mobileGameState: mobileGameState,
-          showResetModal: false,
-        };
-      }
-      return createInitialAppState();
-    }
-
-    if (saved.version === 2 && !isPlayMode(saved.playMode)) {
+    if (saved.version !== 1 && !isPlayMode(saved.playMode)) {
       return createInitialAppState();
     }
 
@@ -439,7 +440,7 @@ function saveAppState(state: AppState) {
   }
 
   var savedState: SavedAppState = {
-    version: 2,
+    version: 3,
     playMode: state.playMode,
     screen: stateToScreen(state.state),
     value: state.value,
@@ -448,99 +449,64 @@ function saveAppState(state: AppState) {
     gameState: state.gameState,
     mobileGameState: state.mobileGameState,
   };
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(savedState));
-}
-
-type ResetModalProps = {
-  onCancel: () => void;
-  onConfirm: () => void;
-};
-function ResetModal(props: ResetModalProps) {
-  return (
-    <div
-      aria-labelledby="reset-modal-title"
-      aria-modal="true"
-      className="modal-backdrop"
-      role="dialog"
-    >
-      <section className="reset-modal">
-        <p className="eyebrow">Careful now</p>
-        <h2 id="reset-modal-title">Reset game?</h2>
-        <p>
-          This will clear all players, turns, cards, statuses, and mobile
-          progress. Everyone goes back to the beginning.
-        </p>
-        <div className="modal-actions">
-          <button
-            className="pill-button pill-button-secondary"
-            onClick={props.onCancel}
-            type="button"
-          >
-            Cancel
-          </button>
-          <button
-            className="pill-button pill-button-danger"
-            onClick={props.onConfirm}
-            type="button"
-          >
-            Reset game
-          </button>
-        </div>
-      </section>
-    </div>
-  );
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(savedState));
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 class App extends React.Component<AppProps, AppState> {
   private skipNextPersist = false;
+  private resetTrigger: HTMLElement | null = null;
 
   state = loadInitialAppState();
 
-  componentDidUpdate() {
+  componentDidUpdate(_prevProps: AppProps, prevState: AppState) {
     if (this.skipNextPersist) {
       this.skipNextPersist = false;
       return;
     }
-    saveAppState(this.state);
+    if (prevState.value === this.state.value && prevState.names === this.state.names &&
+        prevState.opts === this.state.opts && prevState.state === this.state.state &&
+        prevState.gameState === this.state.gameState &&
+        prevState.mobileGameState === this.state.mobileGameState) {
+      return;
+    }
+    const storageError = !saveAppState(this.state);
+    if (storageError !== !!this.state.storageError) this.setState({storageError});
   }
 
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (this.state.names.length >= 12) {
-      alert('Twelve players max!!');
-      return;
-    }
-    if (this.state.value.length === 0) {
-      alert('Empty name!');
-      return;
-    }
-    if (this.state.names.includes(this.state.value)) {
-      alert('Duplicate name!');
+    const name = this.state.value.trim();
+    const error = this.state.names.length >= 12 ? 'Twelve players max!' :
+      validatePlayerName(name, this.state.names);
+    if (error) {
+      this.setState({nameError: error});
       return;
     }
     trackEvent('player_added', {
       player_count: this.state.names.length + 1,
     });
     this.setState({
-      names: this.state.names.concat(this.state.value),
+      names: this.state.names.concat(name),
+      nameError: undefined,
       value: '',
     });
   };
 
   handleHomeToLobby = () => {
     trackEvent('classic_mode_selected');
-    this.setState({state: AppStateEnum.LOBBY, playMode: 'classic'});
+    this.setState({state: this.state.gameState ? AppStateEnum.GAME : AppStateEnum.LOBBY, playMode: 'classic'});
   };
 
   handleHomeToMobile = () => {
     trackEvent('mobile_mode_selected');
     this.setState({
-      state: AppStateEnum.MOBILE_HOME,
+      state: this.state.mobileGameState ? AppStateEnum.MOBILE_GAME : AppStateEnum.MOBILE_HOME,
       playMode: 'mobile',
-      names: new Array<string>(),
-      opts: mobileGameOpts,
-      gameState: undefined,
-      mobileGameState: undefined,
     });
   };
 
@@ -561,15 +527,27 @@ class App extends React.Component<AppProps, AppState> {
     this.setState({
       state: AppStateEnum.MOBILE_GAME,
       playMode: 'mobile',
-      names: new Array<string>(),
-      opts: mobileGameOpts,
-      gameState: undefined,
       mobileGameState: undefined,
     });
   };
 
+  handleSwitchMode = () => {
+    this.setState({state: AppStateEnum.HOME});
+  };
+
+  handleRenamePlayer = (index: number, value: string) => {
+    const name = value.trim();
+    const error = validatePlayerName(name, this.state.names, index);
+    if (!error) this.setState({names: this.state.names.map((oldName, idx) => idx === index ? name : oldName)});
+    return error;
+  };
+
+  handleRemovePlayer = (index: number) => {
+    this.setState({names: this.state.names.filter((_name, idx) => idx !== index), nameError: undefined});
+  };
+
   handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({value: event.target.value});
+    this.setState({value: event.target.value, nameError: undefined});
   };
 
   handleVirtualClick = (virtualMode: VirtualMode) => {
@@ -592,6 +570,7 @@ class App extends React.Component<AppProps, AppState> {
   };
 
   handleResetRequest = () => {
+    this.resetTrigger = document.activeElement as HTMLElement | null;
     this.setState({showResetModal: true});
   };
 
@@ -601,11 +580,14 @@ class App extends React.Component<AppProps, AppState> {
 
   handleResetConfirm = () => {
     trackEvent('game_reset_confirmed');
-    if (typeof window !== 'undefined') {
+    let storageError = false;
+    try {
       window.localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      storageError = true;
     }
     this.skipNextPersist = true;
-    this.setState(createInitialAppState());
+    this.setState({...createInitialAppState(), storageError, nameError: undefined});
   };
 
   renderHome() {
@@ -613,12 +595,14 @@ class App extends React.Component<AppProps, AppState> {
       <Home
         handleHomeToLobby={this.handleHomeToLobby}
         handleHomeToMobile={this.handleHomeToMobile}
+        hasClassicGame={!!this.state.gameState}
+        hasMobileGame={!!this.state.mobileGameState}
       />
     );
   }
 
   renderMobileLanding() {
-    return <MobileLanding handleMobileToGame={this.handleMobileToGame} />;
+    return <MobileLanding handleMobileToGame={this.handleMobileToGame} onSwitchMode={this.handleSwitchMode} />;
   }
 
   renderLobby() {
@@ -632,6 +616,10 @@ class App extends React.Component<AppProps, AppState> {
         handleVirtualClick={this.handleVirtualClick}
         handleLobbyToGame={this.handleLobbyToGame}
         handleResetRequest={this.handleResetRequest}
+        onSwitchMode={this.handleSwitchMode}
+        onRenamePlayer={this.handleRenamePlayer}
+        onRemovePlayer={this.handleRemovePlayer}
+        nameError={this.state.nameError}
       />
     );
   }
@@ -644,6 +632,7 @@ class App extends React.Component<AppProps, AppState> {
         initialGameState={this.state.gameState}
         onGameStateChange={this.handleGameStateChange}
         onResetRequest={this.handleResetRequest}
+        onSwitchMode={this.handleSwitchMode}
       />
     );
   }
@@ -654,6 +643,7 @@ class App extends React.Component<AppProps, AppState> {
         initialGameState={this.state.mobileGameState}
         onGameStateChange={this.handleMobileGameStateChange}
         onResetRequest={this.handleResetRequest}
+        onSwitchMode={this.handleSwitchMode}
       />
     );
   }
@@ -683,9 +673,13 @@ class App extends React.Component<AppProps, AppState> {
 
     return (
       <>
-        {content}
+        <div inert={this.state.showResetModal}>
+          {this.state.storageError && <p className="storage-notice" role="status">Saving is unavailable. You can keep playing, but changes may be lost when you reload or close this tab.</p>}
+          {content}
+        </div>
         {this.state.showResetModal && (
           <ResetModal
+            returnFocus={this.resetTrigger}
             onCancel={this.handleResetCancel}
             onConfirm={this.handleResetConfirm}
           />

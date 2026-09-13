@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import GameOpts, {VirtualMode} from './GameOpts';
 import GameHeader from './GameHeader';
 
@@ -11,6 +11,10 @@ type LobbyProps = {
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleVirtualClick: (virtualMode: VirtualMode) => void;
   handleResetRequest: () => void;
+  onSwitchMode: () => void;
+  onRenamePlayer: (index: number, name: string) => string;
+  onRemovePlayer: (index: number) => void;
+  nameError?: string;
 };
 function Lobby(Props: LobbyProps) {
   console.log('Lobby.render()');
@@ -36,7 +40,7 @@ function Lobby(Props: LobbyProps) {
   }
   return (
     <div className="app-shell">
-      <GameHeader onResetRequest={Props.handleResetRequest} />
+      <GameHeader onResetRequest={Props.handleResetRequest} onSwitchMode={Props.onSwitchMode} />
       <main className="page-frame lobby-frame">
         <section className="section-intro section-intro-lime">
           <p className="eyebrow">Lobby</p>
@@ -63,6 +67,8 @@ function Lobby(Props: LobbyProps) {
                   value={Props.value}
                   onChange={Props.handleChange}
                   placeholder="Add a player"
+                  aria-invalid={!!Props.nameError}
+                  aria-describedby={Props.nameError ? 'name-error' : undefined}
                 />
                 <input
                   type="submit"
@@ -70,18 +76,15 @@ function Lobby(Props: LobbyProps) {
                   className="pill-button pill-button-secondary lobby-btn-add"
                 />
               </div>
+              {Props.nameError && <p id="name-error" className="form-error" role="alert">{Props.nameError}</p>}
             </form>
             <div className="player-roster" aria-label="Players">
               {Props.names.length === 0 && (
                 <p className="empty-state">No players yet.</p>
               )}
               {Props.names.map((name, index) => (
-                <div className="roster-player" key={index}>
-                  <span className="roster-number">{index + 1}</span>
-                  <span>
-                    {name.length < 12 ? name : name.slice(0, 9) + '...'}
-                  </span>
-                </div>
+                <RosterPlayer key={name} name={name} index={index}
+                  onRename={Props.onRenamePlayer} onRemove={Props.onRemovePlayer} />
               ))}
             </div>
           </div>
@@ -92,33 +95,34 @@ function Lobby(Props: LobbyProps) {
               <h2>Choose your chaos format</h2>
             </div>
             <p className="option-copy">
-              Is this happening through a screen, or are you all wedged onto the
-              same suspicious couch?
+              Choose cards for a video call or for everyone in the same room.
             </p>
             <div
               className="segmented-control"
               role="group"
-              aria-label="Virtual game mode"
+              aria-label="Game format"
             >
               <button
                 onClick={() => Props.handleVirtualClick(VirtualMode.VIRTUAL)}
+                aria-pressed={Props.gameOpts.virtualMode === VirtualMode.VIRTUAL}
                 className={
                   Props.gameOpts.virtualMode === VirtualMode.VIRTUAL
                     ? 'segment-option selected'
                     : 'segment-option'
                 }
               >
-                Yes
+                Over video
               </button>
               <button
                 onClick={() => Props.handleVirtualClick(VirtualMode.LIVE)}
+                aria-pressed={Props.gameOpts.virtualMode === VirtualMode.LIVE}
                 className={
                   Props.gameOpts.virtualMode === VirtualMode.LIVE
                     ? 'segment-option selected'
                     : 'segment-option'
                 }
               >
-                No
+                In person
               </button>
             </div>
             <div className="start-game-holder">
@@ -138,6 +142,37 @@ function Lobby(Props: LobbyProps) {
       </main>
     </div>
   );
+}
+
+function RosterPlayer(props: {name: string; index: number;
+  onRename: (index: number, name: string) => string; onRemove: (index: number) => void}) {
+  const [editing, setEditing] = useState(false);
+  const [value, setValue] = useState(props.name);
+  const [error, setError] = useState('');
+  return <div className="roster-player">
+    <span className="roster-number">{props.index + 1}</span>
+    {editing ? <form className="roster-edit" onSubmit={event => {
+      event.preventDefault();
+      const message = props.onRename(props.index, value);
+      setError(message);
+      if (!message) setEditing(false);
+    }}>
+      <input autoFocus className="text-input" aria-label={'Rename ' + props.name}
+        aria-invalid={!!error} aria-describedby={error ? 'rename-error-' + props.index : undefined}
+        value={value} onChange={event => setValue(event.target.value)} />
+      <div className="roster-actions">
+        <button type="submit" className="reset-link-button">Save name</button>
+        <button type="button" className="reset-link-button" onClick={() => {setEditing(false); setValue(props.name); setError('');}}>Cancel</button>
+      </div>
+      {error && <p id={'rename-error-' + props.index} className="form-error" role="alert">{error}</p>}
+    </form> : <>
+      <span className="roster-name">{props.name}</span>
+      <div className="roster-actions">
+        <button className="reset-link-button" type="button" aria-label={'Edit ' + props.name} onClick={() => setEditing(true)}>Edit</button>
+        <button className="reset-link-button" type="button" aria-label={'Remove ' + props.name} onClick={() => props.onRemove(props.index)}>Remove</button>
+      </div>
+    </>}
+  </div>;
 }
 
 export default Lobby;

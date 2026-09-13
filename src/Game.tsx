@@ -1,5 +1,6 @@
 import React from 'react';
 
+import DeckExhausted from './DeckExhausted';
 import CardDataList from './CardDataList';
 import Card, {CardType, BackOfCard} from './Card';
 import GameOpts from './GameOpts';
@@ -23,6 +24,7 @@ type GameProps = {
   initialGameState?: SerializedGameState;
   onGameStateChange: (state: SerializedGameState) => void;
   onResetRequest: () => void;
+  onSwitchMode?: () => void;
 };
 type GameState = {
   deck: number[];
@@ -145,12 +147,18 @@ class Game extends React.Component<GameProps, GameState> {
   }
 
   advanceToNextPlayer() {
-    this.setState({
-      deckState: cardDebuggingMode ? DeckState.FRONT : DeckState.BACK,
-      player_idx: (this.state.player_idx + 1) % this.state.players.length,
-      deck_idx: (this.state.deck_idx + 1) % this.state.deck.length,
-    });
+    this.setState(state => ({
+      deckState: state.deck_idx === state.deck.length - 1 ? DeckState.EXHAUSTED :
+        cardDebuggingMode ? DeckState.FRONT : DeckState.BACK,
+      player_idx: (state.player_idx + 1) % state.players.length,
+      deck_idx: Math.min(state.deck_idx + 1, state.deck.length - 1),
+    }));
   }
+
+  handleRestart = () => {
+    this.setState({deck: createPlayableDeck(this.props.gameOpts), deck_idx: 0,
+      deckState: DeckState.BACK, pos: CardPosition.UNSET});
+  };
 
   handleButtonClick = (pos: CardPosition) => {
     switch (this.state.deckState) {
@@ -241,7 +249,7 @@ class Game extends React.Component<GameProps, GameState> {
         : 4;
     return (
       <div className="app-shell">
-        <GameHeader onResetRequest={this.props.onResetRequest} />
+        <GameHeader onResetRequest={this.props.onResetRequest} onSwitchMode={this.props.onSwitchMode} />
         <main className="page-frame game-frame">
           <section className="game-dashboard">
             <div className="player-grid" aria-label="Players">
@@ -252,6 +260,7 @@ class Game extends React.Component<GameProps, GameState> {
               ))}
             </div>
 
+            {this.state.deckState === DeckState.EXHAUSTED ? <DeckExhausted onRestart={this.handleRestart} /> : <>
             <div className="turn-banner">
               <p className="eyebrow">Current turn</p>
               <h1>{this.getBannerText()}</h1>
@@ -296,6 +305,7 @@ class Game extends React.Component<GameProps, GameState> {
                 </button>
               </div>
             )}
+            </>}
           </section>
         </main>
       </div>
