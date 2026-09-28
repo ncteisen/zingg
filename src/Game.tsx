@@ -14,6 +14,7 @@ import {
   createPlayableDeck,
   isValidSerializedGameState,
   playableCardIndexes,
+  skipElephant,
 } from './GamePersistence';
 
 const cardDebuggingMode = false;
@@ -46,7 +47,7 @@ class Game extends React.Component<GameProps, GameState> {
         props.gameOpts
       )
     ) {
-      this.state = {
+      this.state = skipElephant({
         deck: props.initialGameState.deck,
         deck_idx: props.initialGameState.deck_idx,
         deckState: props.initialGameState.deckState,
@@ -55,7 +56,7 @@ class Game extends React.Component<GameProps, GameState> {
         }),
         player_idx: props.initialGameState.player_idx,
         pos: props.initialGameState.pos,
-      };
+      }, props.gameOpts.removeElephant);
       return;
     }
 
@@ -64,14 +65,14 @@ class Game extends React.Component<GameProps, GameState> {
       players.push(new PlayerData(name, '', i));
     });
     var deck = playableCardIndexes(props.gameOpts);
-    this.state = {
+    this.state = skipElephant({
       deck: cardDebuggingMode ? deck : createPlayableDeck(props.gameOpts),
       deck_idx: 0,
       deckState: cardDebuggingMode ? DeckState.FRONT : DeckState.BACK,
       players: players,
       player_idx: 0,
       pos: cardDebuggingMode ? CardPosition.RIGHT : CardPosition.UNSET,
-    };
+    }, props.gameOpts.removeElephant);
   }
 
   componentDidMount() {
@@ -147,17 +148,18 @@ class Game extends React.Component<GameProps, GameState> {
   }
 
   advanceToNextPlayer() {
-    this.setState(state => ({
+    this.setState(state => skipElephant({
+      ...state,
       deckState: state.deck_idx === state.deck.length - 1 ? DeckState.EXHAUSTED :
         cardDebuggingMode ? DeckState.FRONT : DeckState.BACK,
       player_idx: (state.player_idx + 1) % state.players.length,
       deck_idx: Math.min(state.deck_idx + 1, state.deck.length - 1),
-    }));
+    }, this.props.gameOpts.removeElephant));
   }
 
   handleRestart = () => {
-    this.setState({deck: createPlayableDeck(this.props.gameOpts), deck_idx: 0,
-      deckState: DeckState.BACK, pos: CardPosition.UNSET});
+    this.setState(skipElephant({deck: createPlayableDeck(this.props.gameOpts), deck_idx: 0,
+      deckState: DeckState.BACK, pos: CardPosition.UNSET}, this.props.gameOpts.removeElephant));
   };
 
   handleButtonClick = (pos: CardPosition) => {

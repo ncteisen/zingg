@@ -60,6 +60,8 @@ import molotov from './assets/molotov.png'
 
 import { CardData, CardType } from "./Card";
 
+export const ELEPHANT_CARD_TITLE = 'Elephant in the Room';
+
 function MakeCard(title: string, body: string, img: any, type: CardType) {
  return new CardData(title, body, img, type, [], VirtualMode.UNSET);
 }
@@ -376,7 +378,7 @@ let CardDataList = [
 		CardType.INTERRUPT),
 
 	MakeCard(
-		"Elephant in the Room",
+		ELEPHANT_CARD_TITLE,
 		`If two players in the game have hooked up in the past, they must 
 		both drink and silently recall the last time it happened.`,
 		elephant,

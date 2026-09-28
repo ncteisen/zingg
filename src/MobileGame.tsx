@@ -12,6 +12,7 @@ import {
   SerializedMobileGameState,
   createPlayableDeck,
   isValidSerializedMobileGameState,
+  skipElephant,
 } from './GamePersistence';
 
 const mobileGameOpts: GameOpts = {
@@ -19,6 +20,7 @@ const mobileGameOpts: GameOpts = {
 };
 
 type MobileGameProps = {
+  removeElephant?: boolean;
   initialGameState?: SerializedMobileGameState;
   onGameStateChange: (state: SerializedMobileGameState) => void;
   onResetRequest: () => void;
@@ -40,21 +42,21 @@ class MobileGame extends React.Component<MobileGameProps, MobileGameState> {
       props.initialGameState &&
       isValidSerializedMobileGameState(props.initialGameState, mobileGameOpts)
     ) {
-      this.state = {
+      this.state = skipElephant({
         deck: props.initialGameState.deck,
         deck_idx: props.initialGameState.deck_idx,
         deckState: props.initialGameState.deckState,
         pos: props.initialGameState.pos,
-      };
+      }, props.removeElephant);
       return;
     }
 
-    this.state = {
+    this.state = skipElephant({
       deck: createPlayableDeck(mobileGameOpts),
       deck_idx: 0,
       deckState: DeckState.BACK,
       pos: CardPosition.UNSET,
-    };
+    }, props.removeElephant);
   }
 
   componentDidMount() {
@@ -110,16 +112,17 @@ class MobileGame extends React.Component<MobileGameProps, MobileGameState> {
     trackEvent('next_player', {
       play_mode: 'mobile',
     });
-    this.setState(state => ({
+    this.setState(state => skipElephant({
+      ...state,
       deck_idx: Math.min(state.deck_idx + 1, state.deck.length - 1),
       deckState: state.deck_idx === state.deck.length - 1 ? DeckState.EXHAUSTED : DeckState.BACK,
       pos: CardPosition.UNSET,
-    }));
+    }, this.props.removeElephant));
   };
 
   handleRestart = () => {
-    this.setState({deck: createPlayableDeck(mobileGameOpts), deck_idx: 0,
-      deckState: DeckState.BACK, pos: CardPosition.UNSET});
+    this.setState(skipElephant({deck: createPlayableDeck(mobileGameOpts), deck_idx: 0,
+      deckState: DeckState.BACK, pos: CardPosition.UNSET}, this.props.removeElephant));
   };
 
   renderChoiceButton(label: string, pos: CardPosition) {

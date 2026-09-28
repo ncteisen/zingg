@@ -1,4 +1,4 @@
-import CardDataList from './CardDataList';
+import CardDataList, {ELEPHANT_CARD_TITLE} from './CardDataList';
 import GameOpts, {VirtualMode} from './GameOpts';
 
 export enum CardPosition {
@@ -36,6 +36,22 @@ export type SerializedMobileGameState = {
   deckState: DeckState;
   pos: CardPosition;
 };
+
+// Keep the saved deck intact so changing settings preserves its order and older saves.
+// Call before presenting a new or resumed turn, including after a reshuffle.
+export function skipElephant<T extends SerializedMobileGameState>(state: T, removeElephant?: boolean): T {
+  if (!removeElephant || state.deckState === DeckState.EXHAUSTED ||
+      CardDataList[state.deck[state.deck_idx]].title !== ELEPHANT_CARD_TITLE) {
+    return state;
+  }
+  const exhausted = state.deck_idx === state.deck.length - 1;
+  return {
+    ...state,
+    deck_idx: exhausted ? state.deck_idx : state.deck_idx + 1,
+    deckState: exhausted ? DeckState.EXHAUSTED : DeckState.BACK,
+    pos: CardPosition.UNSET,
+  };
+}
 
 export function playableCardIndexes(gameOpts: GameOpts) {
   return CardDataList.map(function (_card, idx) {

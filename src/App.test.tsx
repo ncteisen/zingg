@@ -2,7 +2,7 @@ import {cleanup, fireEvent, render, screen, waitFor} from '@testing-library/reac
 import App from './App';
 import CardDataList from './CardDataList';
 import {CardType} from './Card';
-import {VirtualMode} from './GameOpts';
+import GameOpts, {VirtualMode} from './GameOpts';
 import {CardPosition, DeckState} from './GamePersistence';
 
 const STORAGE_KEY = 'zingg-game-state-v1';
@@ -438,7 +438,7 @@ test('phone viewport restores classic saved state', () => {
 
 function classicSave(mode = VirtualMode.LIVE) {
   return {version: 3, playMode: 'classic', screen: 'GAME', value: '', names: ['Alex', 'Sam'],
-    opts: {virtualMode: mode}, gameState: {
+    opts: {virtualMode: mode} as GameOpts, gameState: {
       deck: playableDeck(mode), deck_idx: 0, deckState: DeckState.BACK,
       players: [{name: 'Alex', status: '', idx: 0}, {name: 'Sam', status: '', idx: 1}],
       player_idx: 0, pos: CardPosition.UNSET,
@@ -447,7 +447,7 @@ function classicSave(mode = VirtualMode.LIVE) {
 
 function mobileSave() {
   return {version: 3, playMode: 'mobile', screen: 'MOBILE_GAME', value: '', names: [],
-    opts: {virtualMode: VirtualMode.UNSET}, mobileGameState: {
+    opts: {virtualMode: VirtualMode.UNSET} as GameOpts, mobileGameState: {
       deck: playableDeck(VirtualMode.LIVE), deck_idx: 0, deckState: DeckState.BACK,
       pos: CardPosition.UNSET,
     }};
@@ -618,4 +618,134 @@ test('lobby trims, validates, edits, removes names and keeps the player limit', 
   render(<App />);
   expect(screen.getByText('New Alex')).toBeInTheDocument();
   expect(screen.queryByText('Player 2')).not.toBeInTheDocument();
+});
+
+test.each([1024, 390])('elephant setting is shared and survives reloads and game reset at %spx', width => {
+  setViewportWidth(width);
+  render(<App />);
+  const checkbox = screen.getByRole('checkbox', {name: 'remove the elephant'});
+  expect(checkbox).not.toBeChecked();
+  fireEvent.click(checkbox);
+  cleanup();
+  render(<App />);
+  expect(screen.getByRole('checkbox', {name: 'remove the elephant'})).toBeChecked();
+  if (width === 1024) {
+    fireEvent.click(screen.getByRole('button', {name: 'Pass-the-phone game'}));
+    expect(screen.getByRole('checkbox', {name: 'remove the elephant'})).toBeChecked();
+  }
+  fireEvent.click(screen.getByRole('button', {name: /start mobile game/i}));
+  fireEvent.click(screen.getByRole('button', {name: /reset game/i}));
+  fireEvent.click(screen.getByRole('dialog').querySelectorAll('button')[1]);
+  cleanup();
+  render(<App />);
+  expect(screen.getByRole('checkbox', {name: 'remove the elephant'})).toBeChecked();
+  const saved = JSON.parse(window.localStorage.getItem(STORAGE_KEY)!);
+  expect(saved.gameState).toBeUndefined();
+  expect(saved.mobileGameState).toBeUndefined();
+  fireEvent.click(screen.getByRole('checkbox', {name: 'remove the elephant'}));
+  cleanup();
+  render(<App />);
+  expect(screen.getByRole('checkbox', {name: 'remove the elephant'})).not.toBeChecked();
+});
+
+const elephantIndex = CardDataList.findIndex(card => card.title === 'Elephant in the Room');
+const gameModes = ['classic live', 'classic virtual', 'mobile'];
+
+function saveForMode(mode: string) {
+  return mode === 'mobile' ? mobileSave() : classicSave(mode === 'classic virtual' ? VirtualMode.VIRTUAL : VirtualMode.LIVE);
+}
+
+test.each(gameModes)('%s skips an already revealed elephant on resume without losing either game', mode => {
+  const saved = saveForMode(mode);
+  const state = 'gameState' in saved ? saved.gameState : saved.mobileGameState;
+  state.deck = [elephantIndex, ...state.deck.filter(idx => idx !== elephantIndex)];
+  state.deckState = DeckState.FRONT;
+  state.pos = CardPosition.RIGHT;
+  const otherGame = mode === 'mobile' ? {gameState: classicSave().gameState} : {mobileGameState: mobileSave().mobileGameState};
+  if (mode === 'mobile') {
+    saved.names = classicSave().names;
+    saved.opts.virtualMode = VirtualMode.LIVE;
+  }
+  saveState({...saved, ...otherGame});
+  render(<App />);
+  expect(screen.getByRole('heading', {name: 'Elephant in the Room'})).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', {name: /switch mode/i}));
+  fireEvent.click(screen.getByRole('checkbox', {name: 'remove the elephant'}));
+  cleanup();
+  render(<App />);
+  fireEvent.click(screen.getByRole('button', {name: mode === 'mobile' ? /resume pass-the-phone/i : /resume classic/i}));
+  expect(screen.queryByRole('heading', {name: 'Elephant in the Room'})).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', {name: mode === 'mobile' ? 'Card B' : 'Flip card B'}));
+  expect(screen.getByRole('heading', {name: CardDataList[state.deck[1]].title})).toBeInTheDocument();
+  const result = JSON.parse(window.localStorage.getItem(STORAGE_KEY)!);
+  const resumed = mode === 'mobile' ? result.mobileGameState : result.gameState;
+  expect(resumed.deck).toEqual(state.deck);
+  expect(resumed.deck_idx).toBe(1);
+  expect(result).toMatchObject(otherGame);
+  if (mode !== 'mobile') {
+    expect(resumed.players).toEqual(classicSave().gameState.players);
+    expect(resumed.player_idx).toBe(0);
+    expect(result.opts.virtualMode).toBe(saved.opts.virtualMode);
+  }
+});
+
+test.each(gameModes)('%s skips an upcoming elephant without using an extra player turn', mode => {
+  const saved = saveForMode(mode);
+  const state = 'gameState' in saved ? saved.gameState : saved.mobileGameState;
+  saved.opts.removeElephant = true;
+  state.deck = state.deck.filter(idx => idx !== elephantIndex);
+  state.deck.splice(1, 0, elephantIndex);
+  state.deckState = DeckState.FRONT;
+  state.pos = CardPosition.LEFT;
+  saveState(saved);
+  render(<App />);
+  fireEvent.click(screen.getByRole('button', {name: /next player/i}));
+  if (mode !== 'mobile') expect(screen.getByText(/It's Sam's turn/i)).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', {name: mode === 'mobile' ? 'Card A' : 'Flip card A'}));
+  expect(screen.getByRole('heading', {name: CardDataList[state.deck[2]].title})).toBeInTheDocument();
+  const result = JSON.parse(window.localStorage.getItem(STORAGE_KEY)!);
+  expect((mode === 'mobile' ? result.mobileGameState : result.gameState).deck_idx).toBe(2);
+});
+
+test.each(gameModes)('%s exhausts when the only remaining card is the elephant and skips it after reshuffle', mode => {
+  const saved = saveForMode(mode);
+  const state = 'gameState' in saved ? saved.gameState : saved.mobileGameState;
+  saved.opts.removeElephant = true;
+  state.deck = [...state.deck.filter(idx => idx !== elephantIndex), elephantIndex];
+  state.deck_idx = state.deck.length - 2;
+  state.deckState = DeckState.FRONT;
+  state.pos = CardPosition.LEFT;
+  saveState(saved);
+  render(<App />);
+  fireEvent.click(screen.getByRole('button', {name: /next player/i}));
+  expect(screen.getByRole('heading', {name: /deck exhausted/i})).toBeInTheDocument();
+  cleanup();
+  render(<App />);
+  expect(screen.getByRole('heading', {name: /deck exhausted/i})).toBeInTheDocument();
+  // Arrange a valid shuffle with the elephant first to exercise the restart path.
+  const deck = playableDeck(mode === 'classic virtual' ? VirtualMode.VIRTUAL : VirtualMode.LIVE);
+  let shuffleIndex = deck.length;
+  vi.spyOn(Math, 'random').mockImplementation(() => --shuffleIndex === deck.indexOf(elephantIndex) ? 0 : 0.99999);
+  fireEvent.click(screen.getByRole('button', {name: /reshuffle and continue/i}));
+  const result = JSON.parse(window.localStorage.getItem(STORAGE_KEY)!);
+  const restarted = mode === 'mobile' ? result.mobileGameState : result.gameState;
+  expect(restarted.deck[0]).toBe(elephantIndex);
+  expect(restarted.deck_idx).toBe(1);
+  if (mode !== 'mobile') expect(restarted.player_idx).toBe(1);
+  fireEvent.click(screen.getByRole('button', {name: mode === 'mobile' ? 'Card A' : 'Flip card A'}));
+  expect(screen.queryByRole('heading', {name: 'Elephant in the Room'})).not.toBeInTheDocument();
+});
+
+test('elephant setting still skips cards when storage is unavailable', () => {
+  const saved = mobileSave();
+  saved.mobileGameState.deck = [elephantIndex, ...saved.mobileGameState.deck.filter(idx => idx !== elephantIndex)];
+  saveState(saved);
+  render(<App />);
+  fireEvent.click(screen.getByRole('button', {name: /switch mode/i}));
+  vi.spyOn(window.localStorage, 'setItem').mockImplementation(() => {throw new Error('full');});
+  fireEvent.click(screen.getByRole('checkbox', {name: 'remove the elephant'}));
+  expect(screen.getByText(/saving is unavailable/i)).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', {name: /resume pass-the-phone/i}));
+  fireEvent.click(screen.getByRole('button', {name: 'Card A'}));
+  expect(screen.getByRole('heading', {name: CardDataList[saved.mobileGameState.deck[1]].title})).toBeInTheDocument();
 });

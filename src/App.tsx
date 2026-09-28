@@ -1,5 +1,6 @@
 import React from 'react';
 import ResetModal from './ResetModal';
+import Settings from './Settings';
 import {validatePlayerName} from './PlayerName';
 import Game from './Game';
 import CardDataList from './CardDataList';
@@ -23,6 +24,8 @@ const gameDebuggingMode = false;
 const STORAGE_KEY = 'zingg-game-state-v1';
 
 type HomeProps = {
+  removeElephant: boolean;
+  onRemoveElephantChange: (checked: boolean) => void;
   handleHomeToLobby: () => void;
   handleHomeToMobile: () => void;
   hasClassicGame: boolean;
@@ -59,6 +62,7 @@ function Home(Props: HomeProps) {
               {Props.hasMobileGame ? 'Resume pass-the-phone game' : 'Pass-the-phone game'}
             </button>
           </div>
+          <Settings removeElephant={Props.removeElephant} onRemoveElephantChange={Props.onRemoveElephantChange} />
         </section>
         <section className="home-notes-panel" aria-label="How Zingg Web works">
           <div className="note-block note-block-lilac">
@@ -94,6 +98,8 @@ function Home(Props: HomeProps) {
 }
 
 type MobileLandingProps = {
+  removeElephant: boolean;
+  onRemoveElephantChange: (checked: boolean) => void;
   handleMobileToGame: () => void;
   onSwitchMode: () => void;
 };
@@ -129,6 +135,7 @@ function MobileLanding(Props: MobileLandingProps) {
           <button className="pill-button pill-button-secondary mobile-start-button" onClick={Props.onSwitchMode}>
             Choose game mode
           </button>
+          <Settings removeElephant={Props.removeElephant} onRemoveElephantChange={Props.onRemoveElephantChange} />
         </section>
       </main>
     </div>
@@ -410,7 +417,7 @@ function loadInitialAppState(): AppState {
       return createInitialAppState();
     }
 
-    var opts = {virtualMode: saved.opts.virtualMode};
+    var opts = {virtualMode: saved.opts.virtualMode, removeElephant: saved.opts.removeElephant === true};
     var state = screenToState(saved.screen);
     var gameState = saved.gameState;
 
@@ -535,6 +542,10 @@ class App extends React.Component<AppProps, AppState> {
     this.setState({state: AppStateEnum.HOME});
   };
 
+  handleRemoveElephantChange = (removeElephant: boolean) => {
+    this.setState(state => ({opts: {...state.opts, removeElephant}}));
+  };
+
   handleRenamePlayer = (index: number, value: string) => {
     const name = value.trim();
     const error = validatePlayerName(name, this.state.names, index);
@@ -580,19 +591,27 @@ class App extends React.Component<AppProps, AppState> {
 
   handleResetConfirm = () => {
     trackEvent('game_reset_confirmed');
+    const initialState = createInitialAppState();
+    initialState.opts.removeElephant = !!this.state.opts.removeElephant;
     let storageError = false;
-    try {
-      window.localStorage.removeItem(STORAGE_KEY);
-    } catch {
-      storageError = true;
+    if (initialState.opts.removeElephant) {
+      storageError = !saveAppState(initialState);
+    } else {
+      try {
+        window.localStorage.removeItem(STORAGE_KEY);
+      } catch {
+        storageError = true;
+      }
     }
     this.skipNextPersist = true;
-    this.setState({...createInitialAppState(), storageError, nameError: undefined});
+    this.setState({...initialState, storageError, nameError: undefined});
   };
 
   renderHome() {
     return (
       <Home
+        removeElephant={!!this.state.opts.removeElephant}
+        onRemoveElephantChange={this.handleRemoveElephantChange}
         handleHomeToLobby={this.handleHomeToLobby}
         handleHomeToMobile={this.handleHomeToMobile}
         hasClassicGame={!!this.state.gameState}
@@ -602,7 +621,8 @@ class App extends React.Component<AppProps, AppState> {
   }
 
   renderMobileLanding() {
-    return <MobileLanding handleMobileToGame={this.handleMobileToGame} onSwitchMode={this.handleSwitchMode} />;
+    return <MobileLanding handleMobileToGame={this.handleMobileToGame} onSwitchMode={this.handleSwitchMode}
+      removeElephant={!!this.state.opts.removeElephant} onRemoveElephantChange={this.handleRemoveElephantChange} />;
   }
 
   renderLobby() {
@@ -640,6 +660,7 @@ class App extends React.Component<AppProps, AppState> {
   renderMobileGame() {
     return (
       <MobileGame
+        removeElephant={this.state.opts.removeElephant}
         initialGameState={this.state.mobileGameState}
         onGameStateChange={this.handleMobileGameStateChange}
         onResetRequest={this.handleResetRequest}
