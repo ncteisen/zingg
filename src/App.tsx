@@ -96,7 +96,6 @@ function MobileLanding(Props: MobileLandingProps) {
           <p className="eyebrow">Pass the phone</p>
           <h1>Questionable decisions. <br /><em>Excellent company.</em></h1>
           <img className="mobile-landing-art" src={vikingArt} alt="A deadpan Viking with one drooping helmet horn" width="640" height="480" />
-          <p>One phone. Around the table. Pick A or B, read the card aloud, then pass it on.</p>
           <button className="pill-button pill-button-primary mobile-start-button" onClick={Props.handleMobileToGame}>Start mobile game <span aria-hidden="true">↗</span></button>
           <button className="pill-button pill-button-secondary mobile-start-button" onClick={Props.onSwitchMode}>Choose game mode</button>
           <Settings removeElephant={Props.removeElephant} onRemoveElephantChange={Props.onRemoveElephantChange} />

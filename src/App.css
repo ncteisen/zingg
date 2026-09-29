@@ -135,7 +135,7 @@ button.brand-mark { cursor: pointer; }
 .card-text { border-top: 1px solid var(--coffee-line); color: var(--ink-brown); font-size: 16px; line-height: 1.55; margin: 0; padding-top: 16px; }
 .card-hint-trigger { background: transparent; border: 1px solid var(--coffee-line); border-radius: 6px; color: var(--ink-brown); cursor: pointer; font-size: 12px; font-weight: 600; min-height: 44px; padding: 8px 14px; }
 .card-hint-trigger:hover { border-color: var(--ink-brown); }
-.card-hint-popover { background: var(--paper); border: 2px solid var(--ink-brown); border-radius: 10px; box-shadow: var(--shadow-paper), var(--shadow-table); color: var(--ink-brown); inset: 0; margin: auto; max-height: calc(100dvh - 48px); overflow-y: auto; overscroll-behavior: contain; padding: 20px; position: fixed; width: min(360px, calc(100vw - 40px)); }
+.card-hint-popover { background: var(--paper); border: 2px solid var(--ink-brown); border-radius: 10px; box-shadow: var(--shadow-paper), var(--shadow-table); color: var(--ink-brown); inset: 0; margin: auto; max-height: calc(100dvh - 48px); overflow-y: auto; overscroll-behavior: contain; padding: 20px; position: fixed; width: min(320px, calc(100vw - 80px)); }
 .card-hint-popover::backdrop { background: #2f211848; }
 .card-hint-header { align-items: center; display: flex; gap: 12px; justify-content: space-between; margin-bottom: 12px; }
 .card-hint-header h3 { font: 700 26px/1.1 var(--font-display); margin: 0; }
@@ -154,7 +154,7 @@ button.brand-mark { cursor: pointer; }
 .mobile-landing-frame, .mobile-game-frame { margin: 0 auto; max-width: 480px; padding: 28px 20px 32px; width: 100%; }
 .mobile-landing-panel h1, .mobile-turn-copy h1, .mobile-landscape-guard h1 { font: 700 42px/1.04 var(--font-display); letter-spacing: -1.1px; margin: 12px 0 18px; }
 .mobile-landing-panel > p:not(.eyebrow), .mobile-turn-copy > p:not(.eyebrow), .mobile-landscape-guard p { color: var(--soft-cocoa); font-size: 16px; line-height: 1.55; margin: 18px 0 24px; }
-.mobile-landing-art { display: block; height: 170px; margin: 12px auto 0; max-width: 100%; object-fit: contain; width: 230px; }
+.mobile-landing-art { display: block; height: 170px; margin: 12px auto 24px; max-width: 100%; object-fit: contain; width: 230px; }
 .mobile-start-button, .mobile-next-button { width: 100%; }
 .mobile-start-button + .mobile-start-button { margin-top: 14px; }
 .mobile-landing-panel .home-settings { max-width: none; }
