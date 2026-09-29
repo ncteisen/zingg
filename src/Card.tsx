@@ -1,6 +1,5 @@
 import {VirtualMode} from './GameOpts';
-import React, {useState} from 'react';
-import back from './assets/back.png';
+import React, {useId, useRef} from 'react';
 
 export enum CardType {
   ACTION = 'Action',
@@ -43,18 +42,13 @@ function ColorForCardType(type: CardType): string {
   }
 }
 
-function TooltipIdForTitle(title: string): string {
-  return 'ExampleTooltip-' + title.replace(/[^A-Za-z0-9]/g, '-');
-}
-
 type CardProps = {
   data: CardData;
 };
 function Card(props: CardProps) {
   const color = ColorForCardType(props.data.type);
-  const tooltipId = TooltipIdForTitle(props.data.title);
-  const [tooltipOpen, setTooltipOpen] = useState(false);
-  const toggle = () => setTooltipOpen(open => !open);
+  const hintId = useId();
+  const closeHint = useRef<HTMLButtonElement>(null);
   return (
     <article className={'zingg-card ' + color}>
       <div className="card-topline">
@@ -62,26 +56,45 @@ function Card(props: CardProps) {
         {props.data.tips.length > 0 && (
           <>
             <button
-              aria-controls={tooltipId}
-              aria-expanded={tooltipOpen}
-              className="card-tooltip-trigger"
-              onClick={toggle}
+              aria-controls={hintId}
+              aria-haspopup="dialog"
+              className="card-hint-trigger"
+              popoverTarget={hintId}
               type="button"
             >
-              {tooltipOpen ? 'Hide' : 'Show'} examples
+              Hint
             </button>
+            <div
+              key={props.data.title}
+              aria-labelledby={hintId + '-title'}
+              className="card-hint-popover"
+              id={hintId}
+              onToggle={event => {
+                if (event.newState === 'open') closeHint.current?.focus();
+              }}
+              popover="auto"
+              role="dialog"
+            >
+              <div className="card-hint-header">
+                <h3 id={hintId + '-title'}>Examples</h3>
+                <button
+                  aria-label="Close hint"
+                  className="card-hint-close"
+                  popoverTarget={hintId}
+                  popoverTargetAction="hide"
+                  ref={closeHint}
+                  type="button"
+                >
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              {props.data.tips.map((text, index) => (
+                <p key={index} className="card-hint-text">{text}</p>
+              ))}
+            </div>
           </>
         )}
       </div>
-      {props.data.tips.length > 0 && tooltipOpen && (
-        <div id={tooltipId} className="tooltip-panel">
-          {props.data.tips.map((text, index) => (
-            <p key={index} className="tooltip-content">
-              {text}
-            </p>
-          ))}
-        </div>
-      )}
       <h2 className="card-title">{props.data.title}</h2>
       <div className="card-img-holder">
         <img className="card-img-top" src={props.data.img} alt="" />
@@ -94,18 +107,12 @@ function Card(props: CardProps) {
 export function BackOfCard() {
   return (
     <article className="zingg-card zingg-card-back">
-      <div className="card-back-topline">
-        <span>Zingg</span>
-        <span>Pick a side</span>
-      </div>
+      <div className="card-back-topline"><span>Good company required.</span></div>
       <div className="card-back-mark">
-        <h2>Zingg</h2>
-        <img
-          className="card-img-top back-img-centered"
-          src={back}
-          alt="Card back"
-        />
+        <h2>zingg<span>.</span></h2>
+        <p>A little out of line.</p>
       </div>
+      <span className="card-back-bottom">Pick a side.</span>
     </article>
   );
 }

@@ -23,6 +23,8 @@ function Player(props: PlayerProps) {
 
   return (
     <div
+      aria-current={props.isTurn ? 'step' : undefined}
+      title={props.data.name}
       className={
         props.isTurn ? 'player-token player-token-current' : 'player-token'
       }

@@ -1,4 +1,4 @@
-import CardDataList, {ELEPHANT_CARD_TITLE} from './CardDataList';
+import CardDataList, {ELEPHANT_CARD_TITLE, LEGACY_CARD_COUNTS} from './CardDataList';
 import GameOpts, {VirtualMode} from './GameOpts';
 
 export enum CardPosition {
@@ -91,6 +91,19 @@ function isCardPosition(value: unknown): value is CardPosition {
   );
 }
 
+function isValidSavedDeck(deck: unknown, gameOpts: GameOpts): deck is number[] {
+  if (!Array.isArray(deck) || new Set(deck).size !== deck.length) {
+    return false;
+  }
+  const playableIndexes = playableCardIndexes(gameOpts);
+  // Finish older decks in their saved order; new cards join on the next shuffle.
+  return [...LEGACY_CARD_COUNTS, CardDataList.length].some(cardCount => {
+    const playableSet = new Set(playableIndexes.filter(idx => idx < cardCount));
+    return deck.length === playableSet.size && deck.every(idx =>
+      Number.isInteger(idx) && playableSet.has(idx));
+  });
+}
+
 export function isValidSerializedGameState(
   value: unknown,
   playerNames: string[],
@@ -100,21 +113,9 @@ export function isValidSerializedGameState(
     return false;
   }
   var state = value as SerializedGameState;
-  var playableIndexes = playableCardIndexes(gameOpts);
-  var playableSet = new Set(playableIndexes);
 
   return (
-    Array.isArray(state.deck) &&
-    state.deck.length === playableIndexes.length &&
-    new Set(state.deck).size === playableIndexes.length &&
-    state.deck.every(function (idx) {
-      return (
-        Number.isInteger(idx) &&
-        idx >= 0 &&
-        idx < CardDataList.length &&
-        playableSet.has(idx)
-      );
-    }) &&
+    isValidSavedDeck(state.deck, gameOpts) &&
     Number.isInteger(state.deck_idx) &&
     state.deck_idx >= 0 &&
     state.deck_idx < state.deck.length &&
@@ -147,21 +148,9 @@ export function isValidSerializedMobileGameState(
     return false;
   }
   var state = value as SerializedMobileGameState;
-  var playableIndexes = playableCardIndexes(gameOpts);
-  var playableSet = new Set(playableIndexes);
 
   return (
-    Array.isArray(state.deck) &&
-    state.deck.length === playableIndexes.length &&
-    new Set(state.deck).size === playableIndexes.length &&
-    state.deck.every(function (idx) {
-      return (
-        Number.isInteger(idx) &&
-        idx >= 0 &&
-        idx < CardDataList.length &&
-        playableSet.has(idx)
-      );
-    }) &&
+    isValidSavedDeck(state.deck, gameOpts) &&
     Number.isInteger(state.deck_idx) &&
     state.deck_idx >= 0 &&
     state.deck_idx < state.deck.length &&

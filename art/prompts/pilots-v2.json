@@ -1,0 +1,22 @@
+{
+  "status": "Revision requested by user: stranger and more expressive",
+  "tool": "Built-in image_gen",
+  "basePrompt": "base-v2.txt",
+  "pilots": [
+    {
+      "card": "Mind Meld",
+      "slug": "mind-meld-v2",
+      "subject": "Two living brain characters are trying absurdly hard to share one thought. A short broad pink brain and a tall skinny blue brain lean into each other until their foreheads visibly squash at the contact point. Give them exaggerated adult faces tucked into the brain lobes: the pink one is bug-eyed with a strained, crooked little mouth; the blue one has intensely narrowed eyes and enormous eyebrows, completely convinced this is working. A single tiny, crooked golden lightbulb floats immediately above their pressed-together foreheads. Draw just a few oversized brain folds. Their unequal shapes and intense expressions make this a comedy double act. No human heads, realistic anatomy, arms, legs, speech bubbles, lightning, or extra decoration. The two brains and one little lightbulb are the entire image."
+    },
+    {
+      "card": "Compliment Sandwich",
+      "slug": "compliment-sandwich-v2",
+      "subject": "A comically overstuffed sandwich with three very different personalities stacked together. The two thick, soft, golden bread slices above and below have tiny, overly sweet closed-eye smiles, looking almost offensively pleased with themselves. Wedged between them is one large red chili pepper with an enormous sideways smirk, a single raised eyebrow, and a little tongue sticking out: the rude comment hidden between compliments. The red pepper's face should be the clear focal point. A single green lettuce frill peeks from the stack. Let the soft bread squash around the smug pepper. All three expressions are simple and readable with just a few ink strokes. Three-quarter view of this one sandwich, no plate, no toothpick, no limbs, no words, no other objects."
+    },
+    {
+      "card": "Viking Master",
+      "slug": "viking-master-v2",
+      "subject": "A ridiculously self-important adult Viking shown as one compact chest-up caricature, leaning backward with his chin and enormous lopsided orange mustache thrust forward. His horned helmet is far too big, slipping over one eye; the two horns point at unequal angles. His visible eye gives a smug side-eye and his small pursed mouth looks as if he is issuing a very important decree. He raises a comically tiny golden tankard, holding the handle with one big simple hand and an absurdly dignified extended pinky. A plain green tunic. The joke is the grandiose pose versus the tiny drink and badly fitting helmet. Show the complete horns and hand. No weapons, extra people, floating decoration, detailed costume, long beard, or background."
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "status": "Draft art direction for review; not yet approved for the full deck",
+  "tool": "Built-in image_gen",
+  "basePrompt": "base-v1.txt",
+  "pilots": [
+    {
+      "card": "Mind Meld",
+      "slug": "mind-meld-v1",
+      "subject": "Two plump, simplified brains, one dusty pink and one muted blue, tilt toward one another like two co-conspirators suddenly having the same thought. They nearly touch, with one small beer-gold four-point spark in the gap above them. Give each brain only a few bold, rounded lobe lines so both read as brains at thumbnail size. Their asymmetric lean is the joke: two separate minds are clearly in sync. No faces, eyes, arms, legs, heads, speech bubbles, or anatomical realism. The two brains and single spark are the complete composition."
+    },
+    {
+      "card": "Compliment Sandwich",
+      "slug": "compliment-sandwich-v1",
+      "subject": "A single slightly wonky triangular toasted sandwich in a close three-quarter view. The top and bottom golden bread slices look inviting, while a single bright red cartoon chili pepper pokes out from the middle filling: a little sting hidden between two nice things. Include one broad couch-green lettuce ruffle and one tiny toothpick to hold the sandwich together. Make the pepper's curved pointed shape obvious, not a smear of red sauce. Use beer gold, rug red, and couch green. No faces, eyes, arms, plate, cutlery, extra sandwiches, or decorative floating objects. Keep the illustration appetizing and comically overstuffed, with very few texture marks."
+    },
+    {
+      "card": "Viking Master",
+      "slug": "viking-master-v1",
+      "subject": "A single adult cartoon Viking, shown from the chest up: a broad simple horned helmet, large orange mustache, tiny skeptical eyes, and one raised eyebrow. He holds one modest golden tankard beside his face as if pompously declaring himself master of the room. His unimpressed expression and overly dignified posture carry the joke. A couch-green tunic, hot-sauce-orange facial hair, and beer-gold tankard; use warm cream for helmet and a small foam shape. Draw one simple, believable hand wrapped around the handle. No weapons, long beard details, body below the chest, extra people, scenery, lettering, or elaborate armor. The complete helmet, horns, tankard, and hand fit within the canvas."
+    }
+  ]
+}

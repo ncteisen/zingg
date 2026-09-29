@@ -1,4 +1,5 @@
 import React from 'react';
+import Brand from './Brand';
 
 type GameHeaderProps = {
   onSwitchMode?: () => void;
@@ -8,19 +9,17 @@ type GameHeaderProps = {
 function GameHeader(props: GameHeaderProps) {
   return (
     <header className="site-header">
-      <a className="brand-mark" href="http://www.getzingg.com" target="_">
-        Zingg
-      </a>
-      <span className="header-kicker">Living-room chaos, online</span>
+      <Brand onHome={props.onSwitchMode} />
+      <span className="header-kicker">Good company required.</span>
       <div className="header-actions">
-      {props.onSwitchMode && <button className="reset-link-button" onClick={props.onSwitchMode} type="button">Switch mode</button>}
       {props.onResetRequest && (
         <button
-          className="reset-link-button"
+          aria-label="Reset game"
+          className="reset-link-button header-reset-button"
           onClick={props.onResetRequest}
           type="button"
         >
-          Reset game
+          Reset
         </button>
       )}
       </div>

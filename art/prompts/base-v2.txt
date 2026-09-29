@@ -1,0 +1,15 @@
+Use case: illustration-story
+Asset type: a standalone transparent spot illustration for Zingg, an adult party card game. It will be displayed about 130 pixels tall on a cream card. One absurd visual joke must read instantly at thumbnail size.
+
+Art direction: expressive, slightly surreal late-night party cartoons drawn by one distinctive human illustrator. Give ordinary things unreasonable personalities. The humor is affectionate, deadpan, and a little unhinged: a character taking something ridiculous far too seriously. Build the joke into the silhouette, posture, eyes, and mouth. Use deliberately uneven proportions, asymmetry, compressed or stretched shapes, huge confident eyebrows, and small sharply observed expressions. Faces should look like odd adult personalities: squints, side-eye, crooked grins, smugness, or heroic concentration. Keep each expression unmistakable.
+
+Drawing: warm dark-brown brush-pen contours, with noticeable but controlled changes of thickness and a few blunt interior strokes. Shapes should feel loose, hand-drawn, and physically squishy, not geometrically perfect. Keep the execution intentional and legible. Use flat spot color with a little irregular dry-ink texture in broad patches. Most color areas stay quiet. The character acting is the star; texture is secondary.
+
+Palette: dark ink brown #2f2118, with three main accents chosen from beer gold #f6b33f, hot sauce orange #e4572e, couch green #6f9b63, rug red #b9413a, dusty pink #f3a7b5, and muted blue #6ca6c9. Warm cream details and warm peach skin are allowed. No background fill.
+
+Composition: one compact, connected subject group centered on a genuinely transparent 4:3 canvas. Occupy approximately 75–80% of the canvas width and height. Keep every horn, finger, prop, and line safely inside the frame. One clear silhouette and a maximum of three major shapes. Favor broad readable gestures over little decorative bits. The image must still be funny as a small flat silhouette with a face.
+
+Avoid cute baby proportions, sparkling eyes, emoji conventions, perfectly smooth vector outlines, generic sticker mascots, wholesome corporate illustration, polished stock clip art, gradients, glossy shading, 3D, photorealism, excessive grain, busy scenes, and intricate hatching. Weirdness should be funny, not gruesome. No writing, lettering, numbers, logos, card frame, badge, white sticker border, paper rectangle, tabletop, backdrop, or extra props. Return only the illustration on actual alpha transparency.
+
+SUBJECT BRIEF:
+{{subject}}

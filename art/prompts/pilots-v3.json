@@ -1,0 +1,33 @@
+{
+  "status": "User prefers warm ink; requests clever subtle visual gags and understated raunch",
+  "tool": "Built-in image_gen",
+  "basePrompt": "base-v3.txt",
+  "reference": "../pilots/mind-meld-v1.png",
+  "referenceInstruction": "Input image 1 is a STYLE REFERENCE ONLY. Match its warm brown contour weight, broad shapes, restrained grain, and color treatment. Do not copy the spark, original pose, or composition. Draw only the subject specified in the new brief. Keep faces, if any, tiny and deadpan rather than expressive caricatures.",
+  "pilots": [
+    {
+      "card": "Mind Meld",
+      "slug": "mind-meld-v3",
+      "gag": "Both ends of the conversation are listening.",
+      "subject": "Two simple brains are using a tin-can telephone. One brain is dusty pink, the other muted blue, and each has one tiny plain mitten-like hand. Both are pressing their own cream-colored can against the SIDE of their brain, in the listening position. Neither is speaking into a can. A single thin golden string joins the two cans in a loose shallow curve. Give each brain just one small, patient, half-lidded eye directed toward the other, with no mouth or big eyebrows. They are politely waiting for the other one to have a thought. Draw a few broad brain-lobe lines. No legs, arms with joints, heads, lightbulb, sparks, speech bubbles, ground, or other objects. The joke is their identical listening posture, not a silly face."
+    },
+    {
+      "card": "Compliment Sandwich",
+      "slug": "compliment-sandwich-v3",
+      "gag": "A politely presented sandwich with a rude filling.",
+      "subject": "A neat triangular toasted sandwich in three-quarter view, two warm golden bread slices with a little green lettuce. A small natural peach-colored cartoon hand is tucked into the filling, and sticks out from the front edge giving a discreet but unmistakable middle finger. Show the curled knuckles and ONE raised middle finger clearly enough that it reads as the rude hand gesture, not a sausage. The hand is an absurd ingredient, not attached to any person. Its scale is modest, about one third of the sandwich height. Everything else about the sandwich is perfectly ordinary and appetizing. No faces on the food, no mouths, no eyes, no tongues, no toothpick, no plate, no ketchup, no extra hands or props."
+    },
+    {
+      "card": "Viking Master",
+      "slug": "viking-master-v3",
+      "gag": "All the dignity in the world cannot fix that one horn.",
+      "subject": "One stocky adult Viking shown from the chest up, with a plain green tunic, simple cream horned helmet, a broad orange mustache, and a completely deadpan dignified expression. His helmet has two horns: one stands normally proud and upright; the other droops limply downward in an unmistakable soft curve, like a deflated party balloon. The drooping horn is the single visual joke and should be clearly visible without exaggerating anything else. He seems determined to pretend nothing is wrong. Ordinary small eyes, no manic expression, no huge raised eyebrows. No beer, hands, weapons, extra costume detail, symbols, or background. Keep the horns the same material and color; the contrast is entirely in their posture."
+    },
+    {
+      "card": "Elephant in the Room",
+      "slug": "elephant-in-the-room-v3",
+      "gag": "Trying very hard to look as if nothing happened.",
+      "subject": "One large adult elephant sits upright on its haunches with immaculate, slightly awkward composure. Simple muted-blue body, cream tusks, little folded forefeet, trunk resting neatly in its lap, small eyes looking straight ahead. A tiny dusty-pink bra is accidentally hanging from ONE tusk by its strap. Make the bra recognizable as two small cups and a thin strap, fully separate from the elephant's body. The elephant is visibly pretending not to notice this incriminating detail; its expression stays almost blank. This is a quiet morning-after joke, not a sexy pose. No other animal, person, room, bed, drink, hearts, blush marks, text, or explicit anatomy. Keep the whole elephant and the bra in frame."
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+Use case: illustration-story
+Asset type: one transparent spot illustration for Zingg, an adult party card game. The finished art appears about 130 pixels tall on a warm cream card, so the visual joke must read immediately at that size.
+
+Art direction: a mischievous illustration from a lovingly made independent tabletop game. Warm, funny, and a little odd; affectionate adult humor. Draw with confident, slightly irregular dark brown ink. Use chunky, economical contours, rounded but distinctive silhouettes, and a few purposeful interior marks. Simplify anatomy and objects into expressive shapes without making them babyish. Flat areas of color have a very light, dry screenprint grain contained inside the shapes. The overall finish is clean and deliberate; the line has a human hand, not a distressed or scribbled look.
+
+Palette: ink brown #2f2118 for outlines; use only three subject-appropriate accents from beer gold #f6b33f, hot sauce orange #e4572e, couch green #6f9b63, rug red #b9413a, dusty pink #f3a7b5, and muted blue #6ca6c9. Small warm cream #fffaf0 details are allowed. Keep the colors muted and warm. Do not fill the background with cream.
+
+Composition: one compact visual idea, isolated and centered on a genuinely transparent canvas, approximately 4:3 landscape. The subject group occupies roughly 75% of the width and height with clear breathing room on every side. All parts remain inside the frame. Favor a bold silhouette, strong separation of overlapping forms, and few details. Make the main subjects equally readable when reduced. Use at most one small accent mark if the brief calls for it.
+
+Do not draw the card itself, a frame, badge, sticker outline, paper rectangle, room, tabletop, or a surrounding scene. No words, lettering, numbers, logos, or watermarks. No white halo or background texture. No gradients, glossy shading, 3D rendering, photorealism, emoji styling, stock clip art, or intricate crosshatching. Do not add drinks or party props unless the subject brief includes them. Produce only the standalone illustration with actual alpha transparency.
+
+SUBJECT BRIEF:
+{{subject}}

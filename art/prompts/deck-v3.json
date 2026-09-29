@@ -1,0 +1,339 @@
+{
+  "status": "Approved warm-ink dry-joke direction; full-deck extension",
+  "tool": "Built-in image_gen",
+  "basePrompt": "base-v3.txt",
+  "reference": "../pilots/mind-meld-v1.png",
+  "referenceInstruction": "Input image 1 is a STYLE REFERENCE ONLY. Match its warm brown contour weight, broad shapes, restrained grain, and color treatment. Draw only the new subject. Keep the acting quiet and deadpan. Close all exterior contours with warm brown ink, including the bottom edge; no colored edge fringe. No borrowed characters. Preserve genuine alpha transparency.",
+  "pilots": [
+    {
+      "key": "sobriety",
+      "slug": "sobriety-test",
+      "card": "Sobriety Test",
+      "subject": "A composed adult party guest in a green shirt stands on one leg with eyes closed, supposedly balancing perfectly. One extended little finger secretly rests on the edge of a small plain stool beside him. His other leg is neatly tucked up. No drink. The cheating finger is the one quiet joke. Full body, clearly adult, normal proportions, calm face."
+    },
+    {
+      "key": "waterfall",
+      "slug": "waterfall",
+      "card": "Waterfall",
+      "subject": "Three simple beer glasses form a compact cascading stack: two glasses at the upper left pour a modest golden stream toward one glass below. The lower glass has deployed a tiny cocktail umbrella over its rim to keep the incoming beer out. No faces. Keep this to three glasses and the umbrella, with one clearly visible stream. The umbrella is stubbornly doing its job."
+    },
+    {
+      "key": "coins",
+      "slug": "lets-play-a-game",
+      "card": "Let's Play a Game",
+      "subject": "One gold coin is descending under its own tiny cream parachute, as if determined to make a coin toss last forever. Three fine brown suspension lines join the little parachute to the coin. The coin has a simple embossed profile of a nose and no text. A compact vertical arrangement, no person, ground or extra coins."
+    },
+    {
+      "key": "copyMachine",
+      "slug": "copy-me",
+      "card": "Copy Me",
+      "subject": "A squat, mundane muted-blue photocopier spits out one cream sheet. The sole photocopied object on that sheet is a large pair of plain men's boxer shorts with little red hearts. The lid is shut, the machine is expressionless. One absurdly personal office document, no people or anatomy, no text or other papers."
+    },
+    {
+      "key": "handshake",
+      "slug": "suave",
+      "card": "Suave",
+      "subject": "Two forearms in ordinary shirt cuffs attempt a formal handshake. The left bare hand offers a normal handshake; the right sleeve ends in a limp golden rubber chicken instead of a hand. The normal hand politely grasps the chicken's little wing. Crop only at the forearm ends, keep the complete hands and chicken in frame. No people or faces except the tiny toy chicken's dot eye."
+    },
+    {
+      "key": "microphone",
+      "slug": "comedian",
+      "card": "Comedian",
+      "subject": "A large old-fashioned stand-up microphone on a short stand, with one tiny cricket sitting primly on the microphone head. The cricket has folded little legs, plain eyes, and looks like the only audience member. Gold and muted blue. No human, spotlight, sound marks, stage or other props. Let the empty silence be the joke."
+    },
+    {
+      "key": "dancer",
+      "slug": "think-you-can-dance",
+      "card": "Think You Can Dance?",
+      "subject": "A mirrored disco ball has two bare, hairy adult legs wearing sensible black socks and cream sandals. The legs attempt a cautious disco pose: one knee slightly bent, one foot pointed sideways. No face, torso, hands or dance floor. The painfully practical sandals are the joke. Large flat facets, no sparkling effects."
+    },
+    {
+      "key": "ruleBook",
+      "slug": "the-rule-book",
+      "card": "The Rule Book",
+      "subject": "A thick cream rule book, bound in faded green, with a tiny gold crown sitting squarely on top. Its single ribbon bookmark is an absurdly long red tape-measure that unrolls into a loose loop beside the book, but carries no measurements, numbers or text. It is a petty little authority. No face, paper stacks or other props. Clear book silhouette, crown and red ribbon only."
+    },
+    {
+      "key": "hockey",
+      "slug": "hockey",
+      "card": "Hockey",
+      "subject": "A very small wooden hockey stick rests beside a gold coin used as a puck. The coin wears an absurdly oversized cream goalie mask with three simple dark eye/vent holes. No figure or limbs. The humble coin is treating this table game extremely seriously. No rink or extra equipment."
+    },
+    {
+      "key": "bullseye",
+      "slug": "sharpshooter",
+      "card": "Sharpshooter",
+      "subject": "A round cream archery target with only three broad brick-red rings. A plunger is perfectly stuck to the bullseye, its short wooden handle pointing diagonally outward. No arrows, numerals, stand, hands or setting. Treat the absurd projectile as a proud sporting achievement. A compact three-quarter view with the plunger clearly legible."
+    },
+    {
+      "key": "warning",
+      "slug": "boner-alert",
+      "card": "Boner Alert",
+      "subject": "A plain yellow triangular caution sign on a tiny brown base. From directly behind the sign a natural peach cartoon hand rises with one single index finger held stiffly upright, peeking over the sign's top. The sign itself has a simple brown exclamation mark only, no words. This is an innocent finger trying to be discreet and failing. No explicit anatomy or people."
+    },
+    {
+      "key": "eye",
+      "slug": "made-you-look",
+      "card": "Made You Look",
+      "subject": "A large, ordinary blue eye is looking straight upward. Directly above it dangles a gold fishing hook with a tiny pair of pink underpants as bait. A short line ends within the canvas. The eye has simple lashes and a raised upper lid but no cartoon face or head. Three objects only: eye, hook and underpants. Quietly ridiculous curiosity, no scenery."
+    },
+    {
+      "key": "bartender",
+      "slug": "bartender",
+      "card": "Bartender",
+      "subject": "A plain green serving tray carries a single little golden drink with an umbrella. The tray is being held up by a natural peach cartoon hand from below, but the tray is so wide that the server's tiny white cuff is almost swallowed by it. On the tray, a little hotel desk bell sits right beside the drink as if customers still need more service. No torso, text or faces."
+    },
+    {
+      "key": "people",
+      "slug": "perfect-person-but",
+      "card": "Perfect Person, But...",
+      "subject": "A classical cream marble bust of a handsome adult, dignified and expressionless, wearing one bright red clown nose. Broad clean sculptural shapes, short curled hair, tiny empty marble eyes. The bust ends at a plain little plinth. The clown nose is the one flaw in an otherwise respectable display. No inscriptions or extra props."
+    },
+    {
+      "key": "coin",
+      "slug": "feeling-lucky",
+      "card": "Feeling Lucky?",
+      "subject": "A single gold coin stands upright beside a green four-leaf clover. One clover leaf has been repaired with a conspicuously large cream adhesive bandage. No faces, words, numerals or other lucky charms. The coin has a simple star embossed in its center. The clover is trying to remain lucky despite recent events."
+    },
+    {
+      "key": "force",
+      "slug": "force-field",
+      "card": "Force Field",
+      "subject": "A calm little adult in a green shirt stands under an elegant cream umbrella, with feet visible. The umbrella handle is the only thing outside a transparent blue bubble enclosing the adult. Three tiny golden droplets bounce off the bubble. The umbrella is completely redundant. No scenery, no weapons, no magic symbols; deadpan preparedness taken one step too far."
+    },
+    {
+      "key": "spy",
+      "slug": "i-spy",
+      "card": "I Spy",
+      "subject": "A pair of large muted-blue binoculars is wearing a tiny orange fake mustache just below the lenses, and small cream nose between them like an inept disguise. The lenses remain plain dark brown circles. No eyes behind the lenses, hands or person. The supposedly inconspicuous spy is an obvious pair of binoculars in a disguise."
+    },
+    {
+      "key": "sleuth",
+      "slug": "seekers-delight",
+      "card": "Seeker's Delight",
+      "subject": "A very serious magnifying glass examines a small gold key that is already tied to its own handle by a short green string. The lens enlarges just the key's head. No detective, face, text or extra clues. The missing object has never left the search equipment. Keep the looped string and key visually clear."
+    },
+    {
+      "key": "sponge",
+      "slug": "we-cant-hear-you",
+      "card": "We Can't Hear You!",
+      "subject": "An old-fashioned gold megaphone has a plain cream sock firmly stuffed into its wide opening, with the sock's cuff hanging out. The handle is blue. No face, text, sound lines or extra objects. It is trying to make an announcement with a sock in its mouth."
+    },
+    {
+      "key": "quiet",
+      "slug": "shut-the-fuck-up",
+      "card": "Shut the Fuck Up",
+      "subject": "An old-fashioned gold megaphone has been fitted with a tiny brass zipper across its flared mouth. The zipper is almost completely closed, leaving one small gap. Blue handle, cream rim, brown zipper teeth drawn as simple dashes. No face, words, sound marks or other props. It has finally been persuaded to stop talking."
+    },
+    {
+      "key": "nickname",
+      "slug": "my-name-is-my-name",
+      "card": "My Name is My Name",
+      "subject": "A small stack of three blank cream adhesive name badges, offset slightly. The top badge wears a large orange fake mustache and black disguise glasses, even though the badge has no face or name. One corner is peeling up. Dusty-blue border on the badges. No lettering at all. A new identity with no actual identity."
+    },
+    {
+      "key": "question",
+      "slug": "question-master",
+      "card": "Question Master",
+      "subject": "A dignified adult goose stands facing front, with a tiny quizmaster bow tie and a microphone. Its long neck bends naturally into a question-mark curve and the microphone's round base sits below like the dot. The goose looks blankly at the viewer. Cream body, orange bill, green tie. No literal punctuation or other text; the posture suggests the symbol."
+    },
+    {
+      "key": "categories",
+      "slug": "categories",
+      "card": "Categories",
+      "subject": "Three simple cream filing folders stand in a neat row with tabs. A single red tomato has wedged itself exactly between the first two folders as if unable to decide which category it belongs in. No writing on tabs, no faces or vegetables besides the one tomato. Folders have muted blue, green and gold small tab accents."
+    },
+    {
+      "key": "survey",
+      "slug": "survey",
+      "card": "Survey",
+      "subject": "A serious cream clipboard with three large empty checkboxes, held by a small peach hand. A second tiny hand emerging from behind the clipboard is visibly crossing its fingers. No words, numerals, checked marks or extra lines. The whole sheet is just three boxes. A completely trustworthy questionnaire, apparently."
+    },
+    {
+      "key": "noah",
+      "slug": "the-noah",
+      "card": "The Noah",
+      "subject": "A tiny wooden ark floats inside a normal golden beer mug. A little golden crown sits on the ark's roof, much too big for it. The ark is a broad, simple brown boat with a cream roof; no animals, rain, flooding or people. The mug has a handle and a restrained cream foam line. A humble creator has somehow crowned his own boat."
+    },
+    {
+      "key": "lovehate",
+      "slug": "love-it-or-hate-it",
+      "card": "Love it or Hate it",
+      "subject": "Two matching heart-shaped chocolates sit side by side. One is neatly wrapped in dusty pink foil; the other is unwrapped and has one unmistakable green pickle slice embedded in the chocolate. No faces, labels or packaging boxes. A sincere romantic treat with a highly divisive filling."
+    },
+    {
+      "key": "name",
+      "slug": "name-game",
+      "card": "Name Game",
+      "subject": "A natural peach adult hand holds a small fan of three identical blank name badges. Each badge bears the same simple brown mustache silhouette and no writing. The hand has paused, unable to tell anyone apart. Cream badges with muted blue, pink and green little top borders. No bodies, labels or extra hands."
+    },
+    {
+      "key": "rps",
+      "slug": "rps",
+      "card": "RPS",
+      "subject": "A small rounded stone and a pair of ordinary cream-handled scissors face a single sheet of paper. The sheet has folded itself into an absurdly smug little paper crown, suggesting it has won. No faces or characters. Three readable objects in a compact triangular arrangement: stone, scissors, paper crown. Warm ink, green scissor handles, cream paper."
+    },
+    {
+      "key": "chug",
+      "slug": "chug",
+      "card": "Chug",
+      "subject": "A large ordinary gold beer mug with a tiny narrow cocktail straw poking out of the foam. The straw is absurdly delicate and pink, with one modest bend. No human, face or gulping. All the mug's self-importance is undermined by the tiny straw. One clean silhouette, simple handle, little foam."
+    },
+    {
+      "key": "yenta",
+      "slug": "yenta",
+      "card": "Yenta",
+      "subject": "Two gold rings are held together by an oversized old-fashioned wooden clothespin with a green-painted end. The two rings are trying to be a romantic pair; the practical clothespin insists on helping. No hearts, text, people or other props. The matchmaking is heavy-handed in a very literal way."
+    },
+    {
+      "key": "never",
+      "slug": "never-have-i-ever",
+      "card": "Never Have I Ever",
+      "subject": "A natural peach adult hand holds up three fingers, a familiar party-game gesture. The other two fingers behind the palm are conspicuously crossed, visible peeking out on the right. Five fingers total including thumb, anatomically coherent stylized hand. No person, wrist jewelry, text or symbols. This oath is not entirely honest."
+    },
+    {
+      "key": "tune",
+      "slug": "name-that-tune",
+      "card": "Name that Tune",
+      "subject": "An ordinary cream kazoo lies proudly in an open velvet-lined instrument case shaped for an enormous violin. The case is compact, muted blue, with a simple mustard interior, and the tiny kazoo occupies almost none of it. No musical notes, labels or hands. A deeply unimpressive instrument receiving concert-level respect."
+    },
+    {
+      "key": "single",
+      "slug": "single",
+      "card": "Single",
+      "subject": "One very ordinary cream sock sits at a tiny romantic dinner place setting: a single gold candle and a single little plate. The sock is folded upright like a slumped seated guest, with no face or limbs. The missing partner is the joke. No tablecloth, scenery, second sock, hearts or other food. Three subject groups only."
+    },
+    {
+      "key": "love",
+      "slug": "love-yourself",
+      "card": "Love Yourself",
+      "subject": "A small cream hand mirror with a dusty-pink handle reflects only its own back, which also has a tiny heart motif. The mirror's frame wraps two small mitten arms around itself in a very earnest hug. No humans or anatomy. It is completely self-absorbed. Keep it clear and restrained, one object with two simple arms, no face."
+    },
+    {
+      "key": "dare",
+      "slug": "dare-or-dare",
+      "card": "Dare or Dare",
+      "subject": "A neat gold party whistle is chained by a very short brown chain to a large cream chicken egg. The whistle seems to be attempting bravado while visibly carrying its own chicken-out option. The egg has two little orange chicken feet protruding underneath but no cracks or face. No other objects or scenery."
+    },
+    {
+      "key": "cake",
+      "slug": "birthday-party",
+      "card": "Birthday Party",
+      "subject": "A tiny single slice of birthday cake with pink icing supports one enormously thick half-melted candle, almost the same width as the cake. The cake is sagging just slightly under the candle's dignity. One small calm flame. No numbers, writing, faces or other candles. Getting older has become structurally inconvenient."
+    },
+    {
+      "key": "marriage",
+      "slug": "mawwiage",
+      "card": "Mawwiage",
+      "subject": "Two simple gold wedding rings lie side by side. Each ring has one small felt slipper attached below, as if this grand union has already settled in for the evening. One slipper is green, one dusty pink. No people, faces, hearts or ceremonial props. The joke is romance in sensible house slippers."
+    },
+    {
+      "key": "races",
+      "slug": "day-at-the-races",
+      "card": "Day at the Races",
+      "subject": "Two ordinary garden snails face right in a starting-line stance. Their cream and muted-blue shells each have one tiny racing spoiler at the rear. They look completely deadpan, with little upright eye stalks. No actual track, flags, numerals, motion blur or other subjects. Much engineering, very little speed."
+    },
+    {
+      "key": "racingFlags",
+      "slug": "race-to-the-bottom",
+      "card": "Race to the Bottom",
+      "subject": "A black-and-cream checkered race flag is planted at the bottom of a nearly empty ordinary gold beer glass. The tiny flag pole stands crookedly inside the glass, with a single small puddle remaining. No hands, people or background. The finish line is embarrassingly literal. Broad simple checks, no tiny detail."
+    },
+    {
+      "key": "hotseat2",
+      "slug": "burning-throne",
+      "card": "Burning Throne",
+      "subject": "A miniature pompous gold throne with a brick-red cushion. One tiny, completely ordinary electric desk fan is clamped to the throne arm, pointed squarely at the cushion. Three small flame shapes peek from under the seat, with no smoke. No person, danger scene, text or other props. Royal dignity has met an extremely inadequate cooling system."
+    },
+    {
+      "key": "hotseat",
+      "slug": "hot-seat",
+      "card": "Hot Seat",
+      "subject": "A plain wooden kitchen chair wears a tiny cream oven mitt on each of its two front legs. The seat is brick red and has just two small warm squiggles rising from it. No flames, person, faces or scenery. The chair has taken precautions for everyone except whoever sits down."
+    },
+    {
+      "key": "ketchup",
+      "slug": "catch-up",
+      "card": "Catch Up",
+      "subject": "A little red ketchup bottle with a cream cap has two tiny running-shoe feet. It leans slightly forward but its long blob of ketchup trails behind like a dragging shoelace. No label, face, arms, speed lines or background. This condiment is trying very hard to catch up. Keep the shoes and one continuous ketchup trail legible."
+    },
+    {
+      "key": "alcoholism",
+      "slug": "alcoholism-is-funny",
+      "card": "Alcoholism is Funny",
+      "subject": "An empty ordinary gold beer mug wears a little paper party crown that has slipped down over its rim. Its handle droops slightly like the limb of a tired party guest. No face, human, spills or bodily detail. The party crown is perfectly earnest; the mug has clearly run out of material. A restrained visual aftermath joke, not a drinking scene."
+    },
+    {
+      "key": "superlatives",
+      "slug": "superlatives",
+      "card": "Superlatives",
+      "subject": "An ornate little gold winner's trophy with two handles. The object proudly mounted on top is one plain cream toilet-paper roll, with a single square hanging down. No numerals, names, text, faces or confetti. The undeserved prize is the entire joke. A compact dignified award silhouette."
+    },
+    {
+      "key": "think",
+      "slug": "think-or-drink",
+      "card": "Think or Drink",
+      "subject": "A simple dusty-pink brain is nestled inside a cream egg cup. A tiny gold spoon leans against the cup as if breakfast is about to be served. The brain has broad lobe lines, no face, limbs, eyes or smile. No plate or additional props. Thinking has been reduced to a soft-boiled breakfast."
+    },
+    {
+      "key": "jeop",
+      "slug": "quiz-bowl",
+      "card": "Quiz Bowl",
+      "subject": "A dignified gold quiz-show buzzer sits in the center of a plain cream cereal bowl. A little spoon rests inside the bowl beside it. No text, numbers, lights, sound marks or people. A literal quiz bowl, treated as a completely ordinary meal. Muted-blue bowl rim, big simple red buzzer."
+    },
+    {
+      "key": "male",
+      "slug": "fuck-guys",
+      "card": "Fuck Guys",
+      "subject": "An ordinary dark-brown mustache is wearing a small, very proper blue necktie directly underneath. Its two ends droop with quiet self-importance, and a single pink lipstick kiss mark sits on one mustache tip. No face, body, skin, explicit anatomy or other symbols. Formal respectability with one incriminating mark."
+    },
+    {
+      "key": "female",
+      "slug": "fuck-girls",
+      "card": "Fuck Girls",
+      "subject": "A pair of sensible cream high heels with muted red insoles. One shoe's heel has been replaced by an ordinary green bottle opener, while the other heel is normal. No feet, legs, body, faces or text. The shoes are remarkably well prepared for an evening out. The opener must read clearly as a flat tool with an oval notch."
+    },
+    {
+      "key": "confess",
+      "slug": "last-person-to",
+      "card": "Last Person To",
+      "subject": "A very proper gold pocket watch has its chain tangled around a pair of small pink underpants. The watch face has simple tick marks but no hands or numbers, as if refusing to provide a precise alibi. No person, text or other props. A modest morning-after double meaning."
+    },
+    {
+      "key": "beer1",
+      "slug": "drink",
+      "card": "Drink",
+      "subject": "An ordinary gold beer mug with cream foam, wearing one tiny elegant cocktail umbrella above the rim like an absurdly formal hat. The mug has no face. A single little pink straw sticks out at a polite angle. No beach, fruit, letters or other objects. A humble beer trying to pass as a fancy vacation drink."
+    },
+    {
+      "key": "drink1",
+      "slug": "big-drink",
+      "card": "Big Drink",
+      "subject": "A huge gold tankard beside one comically tiny cream-handled teaspoon standing inside it. The tankard is wide, simple, with a large handle and a modest cream foam line. No face, text, measurement markings or person. Its excessive size is conveyed solely by the impossibly inadequate teaspoon."
+    },
+    {
+      "key": "orator",
+      "slug": "the-orator",
+      "card": "The Orator",
+      "subject": "A dignified slice of toasted bread with a tiny blue bow tie stands behind a little brown lectern. The lectern has a microphone bent toward the toast. The toast has no face or limbs; its two rounded bread lobes form the head. No writing, papers, audience or background. A literal toast making a speech with great seriousness."
+    },
+    {
+      "key": "shot1",
+      "slug": "shot",
+      "card": "Shot",
+      "subject": "One small clear shot glass with a little golden liquid. It wears a tiny cream hospital-style gown tied with one bow at the back, leaving the glass's bare transparent rear humorously visible from a three-quarter angle. No human or anatomy, no needle or medical equipment, no text. The little glass looks shy solely through its posture, without a face."
+    },
+    {
+      "key": "molotov",
+      "slug": "molotov-cocktail",
+      "card": "Molotov Cocktail",
+      "subject": "An ordinary green cocktail shaker with a neatly folded cream napkin tucked into its top. The napkin is shaped like a little flame but is unmistakably cloth. A tiny pink cocktail umbrella sits beside it. No actual fire, weapons, fuse, label or instructional details. A grandly named cocktail with very mild ambitions."
+    },
+    {
+      "key": "movie1",
+      "slug": "movie-buff",
+      "card": "Movie Buff",
+      "subject": "A tub of popcorn wears black 3D glasses. One single popped kernel has escaped over the rim and is holding a tiny cream handkerchief as though deeply moved by the film. No faces on other kernels, no text on the muted-red tub, no film screen or setting. The only emotion is a tiny restrained tear on the one kernel."
+    }
+  ]
+}

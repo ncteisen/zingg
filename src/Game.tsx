@@ -4,7 +4,7 @@ import DeckExhausted from './DeckExhausted';
 import CardDataList from './CardDataList';
 import Card, {CardType, BackOfCard} from './Card';
 import GameOpts from './GameOpts';
-import Player, {PlaceholderPlayer, PlayerData} from './Player';
+import Player, {PlayerData} from './Player';
 import GameHeader from './GameHeader';
 import {trackEvent} from './analytics';
 import {
@@ -125,9 +125,8 @@ class Game extends React.Component<GameProps, GameState> {
           data={this.state.players[idx]}
         />
       );
-    } else {
-      return <PlaceholderPlayer />;
     }
+    return null;
   }
 
   renderCard(pos: CardPosition) {
@@ -243,19 +242,13 @@ class Game extends React.Component<GameProps, GameState> {
 
   render() {
     console.log('Game.render()');
-    var playerSlots =
-      this.state.players.length > 8
-        ? 12
-        : this.state.players.length > 4
-        ? 8
-        : 4;
     return (
       <div className="app-shell">
         <GameHeader onResetRequest={this.props.onResetRequest} onSwitchMode={this.props.onSwitchMode} />
         <main className="page-frame game-frame">
           <section className="game-dashboard">
             <div className="player-grid" aria-label="Players">
-              {Array.from(Array(playerSlots).keys()).map(idx => (
+              {this.state.players.map((_player, idx) => (
                 <div className="player-grid-cell" key={idx}>
                   {this.renderPlayer(idx)}
                 </div>
@@ -265,11 +258,12 @@ class Game extends React.Component<GameProps, GameState> {
             {this.state.deckState === DeckState.EXHAUSTED ? <DeckExhausted onRestart={this.handleRestart} /> : <>
             <div className="turn-banner">
               <p className="eyebrow">Current turn</p>
-              <h1>{this.getBannerText()}</h1>
+              <h1>{this.state.players[this.state.player_idx].name}’s turn.</h1>
+              <p>{this.state.deckState === DeckState.BACK ? 'Pick A or B. Trust your instincts.' : this.getBannerText()}</p>
             </div>
 
-            <div className="card-table">
-              <section className="card-choice" aria-label="Card A">
+            <div className={'card-table' + (this.state.deckState === DeckState.FRONT ? ' card-table-revealed' : '')}>
+              <section className={'card-choice' + (this.state.deckState === DeckState.FRONT && this.state.pos !== CardPosition.LEFT ? ' card-choice-hidden' : '')} aria-label="Card A">
                 <div className="card-choice-inner">
                   {this.renderCard(CardPosition.LEFT)}
                 </div>
@@ -282,7 +276,7 @@ class Game extends React.Component<GameProps, GameState> {
                   </button>
                 )}
               </section>
-              <section className="card-choice" aria-label="Card B">
+              <section className={'card-choice' + (this.state.deckState === DeckState.FRONT && this.state.pos !== CardPosition.RIGHT ? ' card-choice-hidden' : '')} aria-label="Card B">
                 <div className="card-choice-inner">
                   {this.renderCard(CardPosition.RIGHT)}
                 </div>

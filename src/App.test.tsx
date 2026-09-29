@@ -43,9 +43,14 @@ function setViewportWidth(width: number) {
   });
 }
 
+function chooseMode(mode: 'classic' | 'mobile') {
+  fireEvent.click(screen.getByRole('radio', {name: mode === 'classic' ? /shared screen/i : /pass the phone/i}));
+  fireEvent.click(screen.getByRole('button', {name: /^(start|resume) game/i}));
+}
+
 function openLobby() {
   render(<App />);
-  fireEvent.click(screen.getByRole('button', {name: /classic game/i}));
+  chooseMode('classic');
 }
 
 function addPlayer(name: string) {
@@ -80,10 +85,10 @@ function trackedEvents(track: ReturnType<typeof vi.fn>) {
 test('renders the home screen with empty storage', () => {
   render(<App />);
 
-  expect(screen.getByText(/Welcome to Web Zingg!/i)).toBeInTheDocument();
-  expect(screen.getByRole('button', {name: /classic game/i})).toBeInTheDocument();
+  expect(screen.getByRole('heading', {name: /Questionable/})).toBeInTheDocument();
+  expect(screen.getByRole('radio', {name: /shared screen/i})).toBeInTheDocument();
   expect(
-    screen.getByRole('button', {name: /pass-the-phone game/i})
+    screen.getByRole('radio', {name: /pass the phone/i})
   ).toBeInTheDocument();
   expect(
     screen.queryByRole('button', {name: /reset game/i})
@@ -137,12 +142,12 @@ test('phone viewport opens the mobile landing instead of classic home', () => {
 
   render(<App />);
 
-  expect(screen.getByText(/Mobile mode/i)).toBeInTheDocument();
+  expect(screen.getAllByText(/Pass the phone/i)[0]).toBeInTheDocument();
   expect(
     screen.getByRole('button', {name: /start mobile game/i})
   ).toBeInTheDocument();
   expect(
-    screen.queryByRole('button', {name: /classic game/i})
+    screen.queryByRole('radio', {name: /shared screen/i})
   ).not.toBeInTheDocument();
 });
 
@@ -350,7 +355,7 @@ test('reset modal can cancel or clear saved state', async () => {
   );
 
   await waitFor(function () {
-    expect(screen.getByText(/Welcome to Web Zingg!/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', {name: /Questionable/})).toBeInTheDocument();
     expect(window.localStorage.getItem(STORAGE_KEY)).toBeNull();
   });
 });
@@ -360,7 +365,7 @@ test('ignores malformed saved state without crashing', () => {
 
   render(<App />);
 
-  expect(screen.getByText(/Welcome to Web Zingg!/i)).toBeInTheDocument();
+  expect(screen.getByRole('heading', {name: /Questionable/})).toBeInTheDocument();
 });
 
 test('ignores incompatible saved game state without crashing', () => {
@@ -385,7 +390,7 @@ test('ignores incompatible saved game state without crashing', () => {
 
   render(<App />);
 
-  expect(screen.getByText(/Welcome to Web Zingg!/i)).toBeInTheDocument();
+  expect(screen.getByRole('heading', {name: /Questionable/})).toBeInTheDocument();
 });
 
 test('ignores incompatible saved mobile game state without crashing', () => {
@@ -406,7 +411,7 @@ test('ignores incompatible saved mobile game state without crashing', () => {
 
   render(<App />);
 
-  expect(screen.getByText(/Welcome to Web Zingg!/i)).toBeInTheDocument();
+  expect(screen.getByRole('heading', {name: /Questionable/})).toBeInTheDocument();
 });
 
 test('phone viewport restores classic saved state', () => {
@@ -432,7 +437,7 @@ test('phone viewport restores classic saved state', () => {
 
   render(<App />);
 
-  expect(screen.getByText(/It's Noah's turn/i)).toBeInTheDocument();
+  expect(screen.getByRole('heading', {name: 'Noah’s turn.'})).toBeInTheDocument();
   expect(screen.getByRole('button', {name: /flip card a/i})).toBeInTheDocument();
 });
 
@@ -452,6 +457,43 @@ function mobileSave() {
       pos: CardPosition.UNSET,
     }};
 }
+
+test.each(['classic live', 'classic virtual', 'mobile'])('%s preserves pre-expansion saves and adds Mind Meld on reshuffle', mode => {
+  for (const version of [1, 2, 3]) {
+    const saved = mode === 'mobile' ? mobileSave() : classicSave(mode === 'classic virtual' ? VirtualMode.VIRTUAL : VirtualMode.LIVE);
+    saved.version = version;
+    const key = 'gameState' in saved ? 'gameState' : 'mobileGameState';
+    const state = 'gameState' in saved ? saved.gameState : saved.mobileGameState;
+    // The original release had 64 cards. Use its exact index range as a fixture.
+    state.deck = state.deck.filter(idx => idx < 64).reverse();
+    state.deck_idx = state.deck.length - 2;
+    state.deckState = DeckState.FRONT;
+    state.pos = CardPosition.RIGHT;
+    saveState(saved);
+    render(<App />);
+    expect(screen.getByRole('heading', {name: CardDataList[state.deck[state.deck_idx]].title})).toBeInTheDocument();
+    expect(JSON.parse(window.localStorage.getItem(STORAGE_KEY)!)[key]).toEqual(state);
+
+    fireEvent.click(screen.getByRole('button', {name: /next player/i}));
+    fireEvent.click(screen.getByRole('button', {name: mode === 'mobile' ? 'Card A' : 'Flip card A'}));
+    expect(screen.getByRole('heading', {name: CardDataList[state.deck[state.deck.length - 1]].title})).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', {name: /next player/i}));
+    cleanup();
+    render(<App />);
+    expect(screen.getByRole('heading', {name: /deck exhausted/i})).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', {name: /reshuffle and continue/i}));
+    const restarted = JSON.parse(window.localStorage.getItem(STORAGE_KEY)!)[key];
+    expect(restarted.deck).toContain(CardDataList.findIndex(card => card.title === 'Mind Meld'));
+    expect([...restarted.deck].sort()).toEqual(playableDeck(mode === 'classic virtual' ? VirtualMode.VIRTUAL : VirtualMode.LIVE).sort());
+    expect(restarted.deckState).toBe(DeckState.BACK);
+    if ('gameState' in saved) {
+      expect(restarted.players).toEqual(saved.gameState.players);
+      expect(restarted.player_idx).toBe(0);
+    }
+    cleanup();
+  }
+});
 
 test.each(['classic live', 'classic virtual', 'mobile'])('%s pauses at deck exhaustion, resumes, and reshuffles', mode => {
   const saved = mode === 'mobile' ? mobileSave() : classicSave(mode === 'classic virtual' ? VirtualMode.VIRTUAL : VirtualMode.LIVE);
@@ -478,7 +520,7 @@ test.each(['classic live', 'classic virtual', 'mobile'])('%s pauses at deck exha
   expect([...restarted.deck].sort()).toEqual([...state.deck].sort());
   if (mode !== 'mobile') {
     expect(restarted.player_idx).toBe(1);
-    expect(screen.getByText(/It's Sam's turn/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', {name: 'Sam’s turn.'})).toBeInTheDocument();
   }
 });
 
@@ -500,16 +542,16 @@ test('switching modes and widths preserves both games and classic options', () =
   render(<App />);
   fireEvent.click(screen.getByRole('button', {name: /flip card a/i}));
   const classic = JSON.parse(window.localStorage.getItem(STORAGE_KEY)!).gameState;
-  fireEvent.click(screen.getByRole('button', {name: /switch mode/i}));
-  fireEvent.click(screen.getByRole('button', {name: /pass-the-phone game/i}));
+  fireEvent.click(screen.getByRole('button', {name: /zingg home/i}));
+  chooseMode('mobile');
   fireEvent.click(screen.getByRole('button', {name: /start mobile game/i}));
   fireEvent.click(screen.getByRole('button', {name: 'Card B'}));
   const mobile = JSON.parse(window.localStorage.getItem(STORAGE_KEY)!).mobileGameState;
   cleanup();
   setViewportWidth(390);
   render(<App />);
-  fireEvent.click(screen.getByRole('button', {name: /switch mode/i}));
-  fireEvent.click(screen.getByRole('button', {name: /resume classic game/i}));
+  fireEvent.click(screen.getByRole('button', {name: /zingg home/i}));
+  chooseMode('classic');
   let saved = JSON.parse(window.localStorage.getItem(STORAGE_KEY)!);
   expect(saved.gameState).toEqual(classic);
   expect(saved.opts.virtualMode).toBe(VirtualMode.VIRTUAL);
@@ -517,8 +559,8 @@ test('switching modes and widths preserves both games and classic options', () =
   cleanup();
   setViewportWidth(desktopWidth);
   render(<App />);
-  fireEvent.click(screen.getByRole('button', {name: /switch mode/i}));
-  fireEvent.click(screen.getByRole('button', {name: /resume pass-the-phone/i}));
+  fireEvent.click(screen.getByRole('button', {name: /zingg home/i}));
+  chooseMode('mobile');
   saved = JSON.parse(window.localStorage.getItem(STORAGE_KEY)!);
   expect(saved.mobileGameState).toEqual(mobile);
   expect(saved.gameState).toEqual(classic);
@@ -528,13 +570,13 @@ test('switching modes preserves unfinished lobby setup', () => {
   openLobby();
   addPlayer('Alex');
   fireEvent.change(screen.getByLabelText(/^name$/i), {target: {value: 'Sam'}});
-  fireEvent.click(screen.getByRole('button', {name: /switch mode/i}));
-  fireEvent.click(screen.getByRole('button', {name: /pass-the-phone game/i}));
+  fireEvent.click(screen.getByRole('button', {name: /zingg home/i}));
+  chooseMode('mobile');
   fireEvent.click(screen.getByRole('button', {name: /start mobile game/i}));
   cleanup();
   render(<App />);
-  fireEvent.click(screen.getByRole('button', {name: /switch mode/i}));
-  fireEvent.click(screen.getByRole('button', {name: /classic game/i}));
+  fireEvent.click(screen.getByRole('button', {name: /zingg home/i}));
+  chooseMode('classic');
   expect(screen.getByLabelText(/^name$/i)).toHaveValue('Sam');
   expect(screen.getByText('Alex')).toBeInTheDocument();
 });
@@ -571,7 +613,7 @@ test('failed storage deletion still resets the in-memory game', () => {
   vi.spyOn(window.localStorage, 'removeItem').mockImplementation(() => {throw new Error('denied');});
   fireEvent.click(screen.getByRole('button', {name: /reset game/i}));
   fireEvent.click(screen.getByRole('dialog').querySelectorAll('button')[1]);
-  expect(screen.getByText(/Welcome to Web Zingg/i)).toBeInTheDocument();
+  expect(screen.getByRole('heading', {name: /Questionable/})).toBeInTheDocument();
   expect(screen.getByRole('status')).toHaveTextContent(/saving is unavailable/i);
 });
 
@@ -630,7 +672,7 @@ test.each([1024, 390])('elephant setting is shared and survives reloads and game
   render(<App />);
   expect(screen.getByRole('checkbox', {name: 'remove the elephant'})).toBeChecked();
   if (width === 1024) {
-    fireEvent.click(screen.getByRole('button', {name: 'Pass-the-phone game'}));
+    chooseMode('mobile');
     expect(screen.getByRole('checkbox', {name: 'remove the elephant'})).toBeChecked();
   }
   fireEvent.click(screen.getByRole('button', {name: /start mobile game/i}));
@@ -669,11 +711,11 @@ test.each(gameModes)('%s skips an already revealed elephant on resume without lo
   saveState({...saved, ...otherGame});
   render(<App />);
   expect(screen.getByRole('heading', {name: 'Elephant in the Room'})).toBeInTheDocument();
-  fireEvent.click(screen.getByRole('button', {name: /switch mode/i}));
+  fireEvent.click(screen.getByRole('button', {name: /zingg home/i}));
   fireEvent.click(screen.getByRole('checkbox', {name: 'remove the elephant'}));
   cleanup();
   render(<App />);
-  fireEvent.click(screen.getByRole('button', {name: mode === 'mobile' ? /resume pass-the-phone/i : /resume classic/i}));
+  chooseMode(mode === 'mobile' ? 'mobile' : 'classic');
   expect(screen.queryByRole('heading', {name: 'Elephant in the Room'})).not.toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', {name: mode === 'mobile' ? 'Card B' : 'Flip card B'}));
   expect(screen.getByRole('heading', {name: CardDataList[state.deck[1]].title})).toBeInTheDocument();
@@ -700,7 +742,7 @@ test.each(gameModes)('%s skips an upcoming elephant without using an extra playe
   saveState(saved);
   render(<App />);
   fireEvent.click(screen.getByRole('button', {name: /next player/i}));
-  if (mode !== 'mobile') expect(screen.getByText(/It's Sam's turn/i)).toBeInTheDocument();
+  if (mode !== 'mobile') expect(screen.getByRole('heading', {name: 'Sam’s turn.'})).toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', {name: mode === 'mobile' ? 'Card A' : 'Flip card A'}));
   expect(screen.getByRole('heading', {name: CardDataList[state.deck[2]].title})).toBeInTheDocument();
   const result = JSON.parse(window.localStorage.getItem(STORAGE_KEY)!);
@@ -741,11 +783,45 @@ test('elephant setting still skips cards when storage is unavailable', () => {
   saved.mobileGameState.deck = [elephantIndex, ...saved.mobileGameState.deck.filter(idx => idx !== elephantIndex)];
   saveState(saved);
   render(<App />);
-  fireEvent.click(screen.getByRole('button', {name: /switch mode/i}));
+  fireEvent.click(screen.getByRole('button', {name: /zingg home/i}));
   vi.spyOn(window.localStorage, 'setItem').mockImplementation(() => {throw new Error('full');});
   fireEvent.click(screen.getByRole('checkbox', {name: 'remove the elephant'}));
   expect(screen.getByText(/saving is unavailable/i)).toBeInTheDocument();
-  fireEvent.click(screen.getByRole('button', {name: /resume pass-the-phone/i}));
+  chooseMode('mobile');
   fireEvent.click(screen.getByRole('button', {name: 'Card A'}));
   expect(screen.getByRole('heading', {name: CardDataList[saved.mobileGameState.deck[1]].title})).toBeInTheDocument();
+});
+
+
+test('home selection previews the right start or resume action without leaving home', () => {
+  saveState(classicSave());
+  render(<App />);
+  fireEvent.click(screen.getByRole('button', {name: /zingg home/i}));
+  const before = JSON.parse(window.localStorage.getItem(STORAGE_KEY)!).gameState;
+  expect(screen.getByRole('button', {name: /resume game/i})).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('radio', {name: /pass the phone/i}));
+  expect(screen.getByRole('button', {name: /start game/i})).toBeInTheDocument();
+  expect(screen.getByRole('heading', {name: /Questionable/})).toBeInTheDocument();
+  expect(JSON.parse(window.localStorage.getItem(STORAGE_KEY)!).gameState).toEqual(before);
+  fireEvent.click(screen.getByRole('radio', {name: /shared screen/i}));
+  fireEvent.click(screen.getByRole('button', {name: /resume game/i}));
+  expect(screen.getByRole('heading', {name: 'Alex’s turn.'})).toBeInTheDocument();
+  expect(JSON.parse(window.localStorage.getItem(STORAGE_KEY)!).gameState).toEqual(before);
+});
+
+
+test('reset on a phone keeps the mobile default and offers a route to the other mode', () => {
+  setViewportWidth(390);
+  render(<App />);
+  fireEvent.click(screen.getByRole('button', {name: /start mobile game/i}));
+  expect(screen.queryByRole('button', {name: /switch mode/i})).not.toBeInTheDocument();
+  const reset = screen.getByRole('button', {name: /reset game/i});
+  expect(reset).toHaveTextContent(/^Reset$/);
+  fireEvent.click(reset);
+  fireEvent.click(screen.getByRole('dialog').querySelectorAll('button')[1]);
+  expect(screen.getByRole('button', {name: /start mobile game/i})).toBeInTheDocument();
+  expect(screen.queryByText(/Pick A or B\./i)).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', {name: /choose game mode/i}));
+  chooseMode('classic');
+  expect(screen.getByRole('heading', {name: /Build the table/i})).toBeInTheDocument();
 });

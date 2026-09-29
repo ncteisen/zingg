@@ -1,66 +1,70 @@
 import { VirtualMode } from "./GameOpts";
-import beer1 from './assets/beer1.png'
-import drink1 from './assets/drink1.png'
-import shot1 from './assets/shot1.png'
-import orator from './assets/orator.png'
-import movie1 from './assets/movie1.png'
-import confess from './assets/confess.png'
-import male from './assets/male.png'
-import female from './assets/female.png'
-import jeop from './assets/jeop.png'
-import think from './assets/think.png'
-import superlatives from './assets/superlatives.png'
-import alcoholism from './assets/alcoholism.png'
-import ketchup from './assets/ketchup.png'
-import categories from './assets/categories.png'
-import hotseat from './assets/hotseat.png'
-import hotseat2 from './assets/hotseat2.png'
-import races from './assets/races.png'
-import marriage from './assets/marriage.png'
-import cake from './assets/cake.png'
-import survey from './assets/survey.png'
-import elephant from './assets/elephant.png'
-import dare from './assets/dare.png'
-import tune from './assets/tune.png'
-import single from './assets/single.png'
-import love from './assets/love.png'
-import never from './assets/never.png'
-import chug from './assets/chug.png'
-import yenta from './assets/yenta.png'
-import rps from './assets/rps.png'
-import name from './assets/name.png'
-import lovehate from './assets/lovehate.png'
-import noah from './assets/noah.png'
-import question from './assets/question.png'
-import nickname from './assets/nickname.png'
-import viking from './assets/viking.png'
-import force from './assets/force.png'
-import quiet from './assets/quiet.png'
-import sponge from './assets/sponge.png'
-import sleuth from './assets/sleuth.png'
-import spy from './assets/spy.png'
-import coin from './assets/coin.png'
-import sobriety from './assets/sobriety.png'
-import waterfall from './assets/waterfall.png'
-import sandwich from './assets/sandwich.png'
-import coins from './assets/coins.png'
-import copyMachine from './assets/copy-machine.png'
-import handshake from './assets/handshake.png'
-import microphone from './assets/microphone.png'
-import dancer from './assets/dancer.png'
-import ruleBook from './assets/rule-book.png'
-import hockey from './assets/hockey.png'
-import bullseye from './assets/bullseye.png'
-import warning from './assets/warning.png'
-import eye from './assets/eye.png'
-import bartender from './assets/bartender.png'
-import people from './assets/people.png'
-import racingFlags from './assets/racing-flags.png'
-import molotov from './assets/molotov.png'
+import beer1 from './assets/deck/drink.webp'
+import drink1 from './assets/deck/big-drink.webp'
+import shot1 from './assets/deck/shot.webp'
+import orator from './assets/deck/the-orator.webp'
+import movie1 from './assets/deck/movie-buff.webp'
+import confess from './assets/deck/last-person-to.webp'
+import male from './assets/deck/fuck-guys.webp'
+import female from './assets/deck/fuck-girls.webp'
+import jeop from './assets/deck/quiz-bowl.webp'
+import think from './assets/deck/think-or-drink.webp'
+import superlatives from './assets/deck/superlatives.webp'
+import alcoholism from './assets/deck/alcoholism-is-funny.webp'
+import ketchup from './assets/deck/catch-up.webp'
+import categories from './assets/deck/categories.webp'
+import hotseat from './assets/deck/hot-seat.webp'
+import hotseat2 from './assets/deck/burning-throne.webp'
+import races from './assets/deck/day-at-the-races.webp'
+import marriage from './assets/deck/mawwiage.webp'
+import cake from './assets/deck/birthday-party.webp'
+import survey from './assets/deck/survey.webp'
+import elephant from './assets/deck/elephant-in-the-room.webp'
+import dare from './assets/deck/dare-or-dare.webp'
+import tune from './assets/deck/name-that-tune.webp'
+import single from './assets/deck/single.webp'
+import love from './assets/deck/love-yourself.webp'
+import never from './assets/deck/never-have-i-ever.webp'
+import chug from './assets/deck/chug.webp'
+import yenta from './assets/deck/yenta.webp'
+import rps from './assets/deck/rps.webp'
+import name from './assets/deck/name-game.webp'
+import lovehate from './assets/deck/love-it-or-hate-it.webp'
+import noah from './assets/deck/the-noah.webp'
+import question from './assets/deck/question-master.webp'
+import nickname from './assets/deck/my-name-is-my-name.webp'
+import viking from './assets/deck/viking-master.webp'
+import force from './assets/deck/force-field.webp'
+import quiet from './assets/deck/shut-the-fuck-up.webp'
+import sponge from './assets/deck/we-cant-hear-you.webp'
+import sleuth from './assets/deck/seekers-delight.webp'
+import spy from './assets/deck/i-spy.webp'
+import coin from './assets/deck/feeling-lucky.webp'
+import sobriety from './assets/deck/sobriety-test.webp'
+import waterfall from './assets/deck/waterfall.webp'
+import sandwich from './assets/deck/compliment-sandwich.webp'
+import coins from './assets/deck/lets-play-a-game.webp'
+import copyMachine from './assets/deck/copy-me.webp'
+import handshake from './assets/deck/suave.webp'
+import microphone from './assets/deck/comedian.webp'
+import dancer from './assets/deck/think-you-can-dance.webp'
+import ruleBook from './assets/deck/the-rule-book.webp'
+import hockey from './assets/deck/hockey.webp'
+import bullseye from './assets/deck/sharpshooter.webp'
+import warning from './assets/deck/boner-alert.webp'
+import eye from './assets/deck/made-you-look.webp'
+import bartender from './assets/deck/bartender.webp'
+import people from './assets/deck/perfect-person-but.webp'
+import racingFlags from './assets/deck/race-to-the-bottom.webp'
+import molotov from './assets/deck/molotov-cocktail.webp'
+import mindMeld from './assets/deck/mind-meld.webp'
 
 import { CardData, CardType } from "./Card";
 
 export const ELEPHANT_CARD_TITLE = 'Elephant in the Room';
+
+// Saved decks store indexes: append new cards and retain prior deck sizes here.
+export const LEGACY_CARD_COUNTS = [64];
 
 function MakeCard(title: string, body: string, img: any, type: CardType) {
  return new CardData(title, body, img, type, [], VirtualMode.UNSET);
@@ -587,6 +591,18 @@ let CardDataList = [
 		drink.`,
 		movie1,
 		CardType.ACTION),
+
+	MakeCardWithTips(
+		"Mind Meld",
+		`Pick a partner. On three, both say a random noun. Count down again
+		and each say a word that connects your previous two words. Keep
+		going until you say the same word. You get five tries after the
+		starting nouns. Match or you both drink.`,
+		mindMeld,
+		CardType.ACTION,
+		[
+			'You say "dog," your partner says "ocean." Next try: "seal" and "fish." Next try: you both say "salmon." Mind meld!',
+		]),
 ]
 
 export default CardDataList;

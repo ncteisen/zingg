@@ -34,7 +34,7 @@ function Lobby(Props: LobbyProps) {
   } else {
     start_button = (
       <p className="lobby-cant-start-message">
-        Add at least two friends and choose your chaos format.
+        Add at least two players and choose where you’re playing.
       </p>
     );
   }
@@ -46,8 +46,7 @@ function Lobby(Props: LobbyProps) {
           <p className="eyebrow">Lobby</p>
           <h1>Build the table.</h1>
           <p>
-            Add the people in the room, the people in the little Zoom boxes, and
-            anyone else willing to make questionable choices.
+            Two to twelve people. One host. Everyone else heckles.
           </p>
         </section>
 
@@ -92,7 +91,7 @@ function Lobby(Props: LobbyProps) {
           <aside className="setup-panel setup-panel-accent">
             <div className="panel-heading">
               <p className="eyebrow">Game options</p>
-              <h2>Choose your chaos format</h2>
+              <h2>Where’s the party?</h2>
             </div>
             <p className="option-copy">
               Choose cards for a video call or for everyone in the same room.
@@ -126,15 +125,6 @@ function Lobby(Props: LobbyProps) {
               </button>
             </div>
             <div className="start-game-holder">
-              <div className="readiness-card">
-                <span className="readiness-label">Ready check</span>
-                <strong>
-                  {Props.names.length > 1 &&
-                  Props.gameOpts.virtualMode !== VirtualMode.UNSET
-                    ? 'Locked in'
-                    : 'Needs setup'}
-                </strong>
-              </div>
               {start_button}
             </div>
           </aside>

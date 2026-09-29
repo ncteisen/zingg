@@ -1,0 +1,15 @@
+Use case: illustration-story
+Asset type: one transparent spot illustration for Zingg, an adult party card game. Aim for a small involuntary laugh when someone notices the picture. It must remain readable around 150–180 pixels tall.
+
+Rendering direction: warm ink, matching the supplied version-1 style reference. Confident, slightly uneven dark brown contours; broad rounded silhouettes; mostly flat muted color; very restrained dry screenprint texture. A skilled illustrator drew a compact, slightly disreputable visual joke for a homemade adult card game. Keep the drawing clear and the acting understated. Use simple adult proportions when people appear, economical eyes and mouths, and unshowy poses.
+
+Comic direction: draw the ordinary subject convincingly, then let ONE wrong detail carry the joke. Favor deadpan incongruity, thwarted competence, polite presentation of something rude, and a second-read double meaning. The visual punchline must be present in the image without a caption. Keep the ordinary part calm so the odd detail lands. Adult innuendo can be suggested through context or an innocent object. Do not make everything sexy or put a face on every object. Avoid trying to signal "funny" through wacky expressions, bulging eyes, huge eyebrows, tongues, manic grins, distorted anatomy, meme faces, or a pile of comedy props.
+
+Palette: warm ink brown #2f2118, with up to three main accents from beer gold #f6b33f, hot sauce #e4572e, couch green #6f9b63, rug red #b9413a, dusty pink #f3a7b5, and muted blue #6ca6c9. Cream #fffaf0 and natural muted skin tones are allowed for small details. No background fill.
+
+Composition: compact and centered on a transparent 4:3 landscape canvas, with the subject group occupying about 80% of its width and height. One clear silhouette and one readable focal gag. Keep all parts within the canvas. Make the important wrong detail large enough to see at card size; remove incidental detail instead of shrinking the joke. No scenery unless explicitly requested. At most three major subject groups.
+
+Constraints: original illustration only, no borrowed meme characters or internet screenshots. No writing, lettering, speech text, numbers, labels, logos, frame, card, badge, white sticker border, paper rectangle, background texture, or cast shadow. No photorealism, glossy shading, gradients, 3D, dense hatching, gross-out detail, or explicit sexual anatomy. The humor should feel casually inappropriate and affectionate. Preserve actual alpha transparency with clean warm-ink edges and no colored matte or halo.
+
+SUBJECT BRIEF:
+{{subject}}

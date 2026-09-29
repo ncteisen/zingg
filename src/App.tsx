@@ -1,4 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
+import Brand from './Brand';
+import SiteFooter from './SiteFooter';
+import vikingArt from './assets/deck/viking-master.webp';
 import ResetModal from './ResetModal';
 import Settings from './Settings';
 import {validatePlayerName} from './PlayerName';
@@ -32,67 +35,41 @@ type HomeProps = {
   hasMobileGame: boolean;
 };
 function Home(Props: HomeProps) {
-  console.log('Home.render()');
+  const [mode, setMode] = useState<'classic' | 'mobile'>('classic');
+  const hasGame = mode === 'classic' ? Props.hasClassicGame : Props.hasMobileGame;
   return (
     <div className="app-shell home-shell">
       <header className="site-header site-header-home">
-        <a className="brand-mark" href="http://www.getzingg.com" target="_">
-          Zingg
-        </a>
-        <span className="header-kicker">Living-room chaos, online</span>
+        <Brand />
+        <span className="header-kicker">Bring your own friends.</span>
       </header>
       <main className="home-hero">
         <section className="home-copy-panel">
-          <p className="eyebrow">Play from the couch or the call</p>
-          <h1>Welcome to Web Zingg!</h1>
-          <p className="hero-subhead">
-          A drinking game for the daring.
-          </p>
-          <div className="home-action-row">
-            <button
-              className="pill-button pill-button-primary"
-              onClick={Props.handleHomeToLobby}
-            >
-              {Props.hasClassicGame ? 'Resume classic game' : 'Classic game'}
-            </button>
-            <button
-              className="pill-button pill-button-secondary"
-              onClick={Props.handleHomeToMobile}
-            >
-              {Props.hasMobileGame ? 'Resume pass-the-phone game' : 'Pass-the-phone game'}
-            </button>
-          </div>
+          <p className="eyebrow">A drinking game for good company.</p>
+          <h1>Questionable <br />decisions. <br /><em>Excellent company.</em></h1>
+          <p className="hero-subhead">A deck of strange little challenges, unfortunate rules, and things you’ll insist never happened.</p>
+          <fieldset className="home-modes">
+            <legend>How are you playing?</legend>
+            <label>
+              <input type="radio" name="play-mode" checked={mode === 'classic'} onChange={() => setMode('classic')} />
+              <span><strong>Shared screen</strong><small>{Props.hasClassicGame ? 'Your game is ready to resume.' : 'One host. Everyone else heckles.'}</small></span>
+            </label>
+            <label>
+              <input type="radio" name="play-mode" checked={mode === 'mobile'} onChange={() => setMode('mobile')} />
+              <span><strong>Pass the phone</strong><small>{Props.hasMobileGame ? 'Your game is ready to resume.' : 'One phone. Around the table.'}</small></span>
+            </label>
+          </fieldset>
+          <button className="pill-button pill-button-primary home-start-button" onClick={mode === 'classic' ? Props.handleHomeToLobby : Props.handleHomeToMobile}>
+            {hasGame ? 'Resume game' : 'Start game'} <span aria-hidden="true">↗</span>
+          </button>
           <Settings removeElephant={Props.removeElephant} onRemoveElephantChange={Props.onRemoveElephantChange} />
         </section>
-        <section className="home-notes-panel" aria-label="How Zingg Web works">
-          <div className="note-block note-block-lilac">
-            <span className="note-number">01</span>
-            <p>
-              One host leads and shares the tab. Everyone else drinks and laughs.
-            </p>
-          </div>
-          <div className="note-block note-block-lime">
-            <span className="note-number">02</span>
-            <p>
-              Flip cards, do the thing. Take a drink.
-            </p>
-          </div>
-          <div className="note-block note-block-cream">
-            <span className="note-number">03</span>
-            <p>
-              New here? The original paper game is at{' '}
-              <a href="http://www.getzingg.com" target="_">
-                getzingg.com
-              </a>
-              .
-            </p>
-          </div>
-          <div className="note-block note-block-pink">
-            <span className="note-number">04</span>
-            <p>Refresh, close, wander off. The game will still remember.</p>
-          </div>
-        </section>
+        <figure className="home-art">
+          <img src={vikingArt} alt="A deadpan Viking with one drooping helmet horn" width="640" height="480" />
+          <figcaption>Everyone knows someone like this.</figcaption>
+        </figure>
       </main>
+      <SiteFooter />
     </div>
   );
 }
@@ -104,14 +81,11 @@ type MobileLandingProps = {
   onSwitchMode: () => void;
 };
 function MobileLanding(Props: MobileLandingProps) {
-  console.log('MobileLanding.render()');
   return (
     <div className="app-shell mobile-landing-shell">
       <header className="site-header site-header-home">
-        <a className="brand-mark" href="http://www.getzingg.com" target="_">
-          Zingg
-        </a>
-        <span className="header-kicker">Pass the phone</span>
+        <Brand />
+        <span className="header-kicker">Bring your own friends.</span>
       </header>
       <div className="mobile-landscape-guard" role="status">
         <h1>Turn your phone upright.</h1>
@@ -119,25 +93,16 @@ function MobileLanding(Props: MobileLandingProps) {
       </div>
       <main className="mobile-landing-frame">
         <section className="mobile-landing-panel">
-          <p className="eyebrow">Mobile mode</p>
-          <h1>Pass the phone then pick a card.</h1>
-          <p>
-            When the phone reaches you, tap A or B, read the 
-            card out loud, do the thing, then tap next player
-            and hand it off. Don't forget to take a drink.
-          </p>
-          <button
-            className="pill-button pill-button-primary mobile-start-button"
-            onClick={Props.handleMobileToGame}
-          >
-            Start mobile game
-          </button>
-          <button className="pill-button pill-button-secondary mobile-start-button" onClick={Props.onSwitchMode}>
-            Choose game mode
-          </button>
+          <p className="eyebrow">Pass the phone</p>
+          <h1>Questionable decisions. <br /><em>Excellent company.</em></h1>
+          <img className="mobile-landing-art" src={vikingArt} alt="A deadpan Viking with one drooping helmet horn" width="640" height="480" />
+          <p>One phone. Around the table. Pick A or B, read the card aloud, then pass it on.</p>
+          <button className="pill-button pill-button-primary mobile-start-button" onClick={Props.handleMobileToGame}>Start mobile game <span aria-hidden="true">↗</span></button>
+          <button className="pill-button pill-button-secondary mobile-start-button" onClick={Props.onSwitchMode}>Choose game mode</button>
           <Settings removeElephant={Props.removeElephant} onRemoveElephantChange={Props.onRemoveElephantChange} />
         </section>
       </main>
+      <SiteFooter />
     </div>
   );
 }
