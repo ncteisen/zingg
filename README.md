@@ -1,6 +1,6 @@
 # Zingg
 
-Play at [playzingg.com](https://playzingg.com). The paper game is at [getzingg.com](http://www.getzingg.com).
+Play at [playzingg.com](https://playzingg.com). The paper game is available on [The Game Crafter](https://www.thegamecrafter.com/games/zingg).
 
 ## Development
 
