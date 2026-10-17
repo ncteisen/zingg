@@ -458,14 +458,18 @@ function mobileSave() {
     }};
 }
 
-test.each(['classic live', 'classic virtual', 'mobile'])('%s preserves pre-expansion saves and adds Mind Meld on reshuffle', mode => {
+test.each([
+  ['classic live', 64], ['classic virtual', 64], ['mobile', 64],
+  ['classic live', 65], ['classic virtual', 65], ['mobile', 65],
+  ['classic live', 66], ['classic virtual', 66], ['mobile', 66],
+] as const)('%s preserves a %i-card release save and adds new cards on reshuffle', (mode, cardCount) => {
   for (const version of [1, 2, 3]) {
     const saved = mode === 'mobile' ? mobileSave() : classicSave(mode === 'classic virtual' ? VirtualMode.VIRTUAL : VirtualMode.LIVE);
     saved.version = version;
     const key = 'gameState' in saved ? 'gameState' : 'mobileGameState';
     const state = 'gameState' in saved ? saved.gameState : saved.mobileGameState;
-    // The original release had 64 cards. Use its exact index range as a fixture.
-    state.deck = state.deck.filter(idx => idx < 64).reverse();
+    // Earlier decks had 64, 65, or 66 cards. Keep these fixture sizes explicit.
+    state.deck = state.deck.filter(idx => idx < cardCount).reverse();
     state.deck_idx = state.deck.length - 2;
     state.deckState = DeckState.FRONT;
     state.pos = CardPosition.RIGHT;
@@ -485,6 +489,7 @@ test.each(['classic live', 'classic virtual', 'mobile'])('%s preserves pre-expan
     fireEvent.click(screen.getByRole('button', {name: /reshuffle and continue/i}));
     const restarted = JSON.parse(window.localStorage.getItem(STORAGE_KEY)!)[key];
     expect(restarted.deck).toContain(CardDataList.findIndex(card => card.title === 'Mind Meld'));
+    expect(restarted.deck).toContain(CardDataList.findIndex(card => card.title === 'Casting Call'));
     expect([...restarted.deck].sort()).toEqual(playableDeck(mode === 'classic virtual' ? VirtualMode.VIRTUAL : VirtualMode.LIVE).sort());
     expect(restarted.deckState).toBe(DeckState.BACK);
     if ('gameState' in saved) {

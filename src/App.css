@@ -123,7 +123,7 @@ button.brand-mark { cursor: pointer; }
 .card-table-revealed { grid-template-columns: 1fr; }
 .card-table-revealed .card-choice { margin: 0 auto; max-width: 380px; width: 100%; }
 .card-choice-hidden { display: none; }
-.zingg-card { background: var(--paper); border: 2px solid var(--ink-brown); border-radius: 10px; box-shadow: var(--shadow-paper); color: var(--ink-brown); display: grid; grid-template-rows: 44px auto auto 1fr; margin: 0 auto; max-width: 380px; min-height: 510px; overflow: hidden; padding: 18px 22px 24px; position: relative; width: 100%; }
+.zingg-card { background: var(--paper); border: 2px solid var(--ink-brown); border-radius: 10px; box-shadow: var(--shadow-paper); color: var(--ink-brown); display: grid; grid-template-rows: 44px auto 1fr; margin: 0 auto; max-width: 380px; min-height: 510px; overflow: hidden; padding: 18px 22px 24px; position: relative; width: 100%; }
 .card-topline { align-items: center; display: flex; gap: 10px; justify-content: space-between; }
 .card-type { color: var(--ink-brown); }
 .card-type::before { background: var(--tv-glow-blue); border: 1px solid var(--ink-brown); border-radius: 50%; content: ''; display: inline-block; height: 9px; margin-right: 7px; width: 9px; }
@@ -135,11 +135,11 @@ button.brand-mark { cursor: pointer; }
 .card-text { border-top: 1px solid var(--coffee-line); color: var(--ink-brown); font-size: 16px; line-height: 1.55; margin: 0; padding-top: 16px; }
 .card-hint-trigger { background: transparent; border: 1px solid var(--coffee-line); border-radius: 6px; color: var(--ink-brown); cursor: pointer; font-size: 12px; font-weight: 600; min-height: 44px; padding: 8px 14px; }
 .card-hint-trigger:hover { border-color: var(--ink-brown); }
-.card-hint-popover { background: var(--paper); border: 2px solid var(--ink-brown); border-radius: 10px; box-shadow: var(--shadow-paper), var(--shadow-table); color: var(--ink-brown); inset: 0; margin: auto; max-height: calc(100dvh - 48px); overflow-y: auto; overscroll-behavior: contain; padding: 20px; position: fixed; width: min(320px, calc(100vw - 80px)); }
-.card-hint-popover::backdrop { background: #2f211848; }
-.card-hint-header { align-items: center; display: flex; gap: 12px; justify-content: space-between; margin-bottom: 12px; }
-.card-hint-header h3 { font: 700 26px/1.1 var(--font-display); margin: 0; }
-.card-hint-close { align-items: center; background: var(--paper-warm); border: 1px solid var(--coffee-line); border-radius: 6px; color: var(--ink-brown); cursor: pointer; display: flex; flex: 0 0 44px; font-size: 26px; height: 44px; justify-content: center; }
+/* The front sets the card height; examples scroll within that same space. */
+.card-content { min-height: 0; min-width: 0; position: relative; }
+.card-front-content { display: grid; grid-template-rows: auto 1fr; height: 100%; }
+.card-hint-content { inset: 0; overflow-y: auto; overscroll-behavior: contain; padding: 12px 4px 4px 0; position: absolute; scrollbar-gutter: stable; }
+.card-hint-content h3 { color: var(--soft-cocoa); font: 600 12px/1.4 var(--font-sans); margin: 0 0 18px; }
 .card-hint-text { color: var(--soft-cocoa); font: 16px/1.5 var(--font-sans); margin: 0; text-align: left; }
 .card-hint-text + .card-hint-text { border-top: 1px solid var(--coffee-line); margin-top: 14px; padding-top: 14px; }
 .zingg-card-back { background: var(--ink-brown); color: var(--paper); grid-template-rows: auto 1fr auto; min-height: 400px; }

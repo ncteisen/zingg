@@ -1,0 +1,15 @@
+{
+  "status": "Casting Call expansion; approved warm-ink rendering",
+  "tool": "Built-in image_gen",
+  "basePrompt": "base-v3.txt",
+  "reference": "../pilots/mind-meld-v1.png",
+  "referenceInstruction": "Input image 1 is a STYLE REFERENCE ONLY. Transfer its warm brown contour weight, broad shapes, restrained grain, and color treatment to the new subject. Replace the entire brain subject and its spark with only the new subject brief. Keep the acting quiet and deadpan. Close all exterior contours with warm brown ink, including the bottom edge; no colored edge fringe. No borrowed characters. Preserve genuine alpha transparency.",
+  "cards": [
+    {
+      "slug": "casting-call",
+      "key": "castingCall",
+      "card": "Casting Call",
+      "subject": "An empty wooden film director's folding chair with muted-blue canvas supports a large old-fashioned golden movie reel sitting upright like the star of the production. The reel itself wears oversized dark sunglasses; one short strip of film hangs off the chair arm like a casually draped scarf. No human, arms, legs, facial features, text or insignia. The film reel acting like a precious movie star is the single quiet joke. Keep the chair, reel and shades as broad readable shapes, with a compact centered silhouette."
+    }
+  ]
+}

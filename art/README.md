@@ -1,6 +1,6 @@
 # Zingg card art
 
-The user approved **pass 3: warm ink, dry jokes**, together with its brand concept. The actual app now uses this system across home, lobby, both game modes, and all 65 cards. There are 59 distinct illustrations: four approved pilots plus 55 full-deck extensions.
+The user approved **pass 3: warm ink, dry jokes**, together with its brand concept. The actual app now uses this system across home, lobby, both game modes, and all 67 cards. There are 61 distinct illustrations: four approved pilots, 55 full-deck extensions, and the Casting Call and Rank & Tell expansions.
 
 The latest preference is **version 1 warm ink**, with clever visual gags and understated raunch. Version 3 returns to that rendering and gives each subject one wrong detail. The review defaults to version 3 with the proposed card styling. Original art and both earlier passes remain available, and artwork/style controls are independent.
 
@@ -31,7 +31,7 @@ Version 2's Viking had a bright green fringe along the lower tunic edge. A targe
 - The user prefers version 1's rendering over version 2's exaggerated expressions. Version 3 follows that preference; the user approved this direction for the deck and UI.
 - Version 3: two brains both listening; a middle finger inside a sandwich; one limp Viking horn; an elephant with a bra on its tusk.
 - The sandwich is the most immediate gag. The Viking is a double meaning. The Mind Meld listening joke is less explicit and should be judged without explanation.
-- Every card uses the actual `Card` component and its stable hint overlay. The original-style comparison keeps its 130px image cap; the approved app uses a 192px unboxed art area.
+- Every card uses the actual `Card` component and its contained Examples view. The original-style comparison keeps its 130px image cap; the approved app uses a 192px unboxed art area.
 - The first three subjects have three generated passes. Elephant was introduced in pass 3, so earlier selections display its original art and label that fallback.
 - Version 3's Viking also needed a targeted lower-edge cleanup. Preserve the raw file and use the cleaned version for review. The exact edit prompt is `prompts/viking-v3-edge-cleanup.txt`.
 - Check transparent images on cream. Alpha-channel presence alone does not rule out a colored fringe.
@@ -55,10 +55,12 @@ Open `/art/deck.html` with the dev server running to search the complete set and
 - `prompts/base-v3.txt`: shared rendering and humor prompt.
 - `prompts/pilots-v3.json`: four approved subjects.
 - `prompts/deck-v3.json`: 55 additional briefs, import keys, and exact style-reference instruction. Replace `{{subject}}` in the base prompt and append `referenceInstruction`.
+- `prompts/casting-call-v3.json`: the Casting Call brief and exact style-reference instruction, using the same base prompt and built-in ImageGen workflow.
+- `prompts/rank-and-tell-v3.json`: the Rank & Tell podium-and-pigeon brief and exact style-reference instruction, using the same base prompt and built-in ImageGen workflow.
 - `pilots/`: original pilot PNGs; approved Viking uses the cleaned version.
-- `deck/`: 55 full-resolution transparent PNG masters.
+- `deck/`: 57 full-resolution transparent PNG masters.
 - `repairs/`: original Force Field and Never Have I Ever outputs before targeted repairs. Corresponding exact repair prompts are in `prompts/`. Force Field needed an adult face and a clean outer outline; Never Have I Ever needed a simpler, anatomically correct crossed-fingers gesture.
-- `../src/assets/deck/`: 59 delivery WebPs, 640px wide, alpha preserved; about 2.0 MiB for the complete set.
+- `../src/assets/deck/`: 61 delivery WebPs, 640px wide, alpha preserved; about 2.1 MiB for the complete set.
 
 All illustration generation and semantic edits used the built-in `image_gen` tool with `transparent_background: true`. The style reference was `pilots/mind-meld-v1.png`. Originals in the tool's generated-images directory are also preserved.
 

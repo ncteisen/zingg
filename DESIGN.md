@@ -34,7 +34,7 @@ The wordmark is lowercase `zingg.` in dark ink with a brick dot. The SVG favicon
 
 - Buttons have a 7px radius, plain action labels, and at least 44px touch targets. Primary actions use brick, cream text, a 2px ink border, and a short offset ink shadow. Secondary actions use paper or transparent backgrounds and quiet borders.
 - Cards use paper, a 2px ink outline, a 10px radius, and a short flat shadow. Type is a small colored dot plus a written label. Artwork is unboxed in a reserved area up to 192px high. Rules remain selectable HTML text, separated by one fine rule.
-- Hints open in a native top-layer popover without changing card size. Opening focuses Close hint; Escape and outside clicks dismiss it. Keep the overlay inside the viewport and scroll long examples within it.
+- Hint switches the card to an Examples view, preserving its title and dimensions. Examples replace the illustration and rules, with long lists scrolling inside the card. The same button becomes Back; Escape also returns to the front and focuses Hint. Each new card starts on its front.
 - Card backs use the dark wordmark treatment. Both choices still reveal the same predetermined card. After a reveal, center the chosen card and its next action.
 - Desktop home offers Shared screen / Pass the phone and one Start or Resume action. Phone-sized first visits retain the direct pass-the-phone landing. Resizing never changes or discards an active game.
 - The classic board has a compact current-turn area and real player names beside the cards. The lobby keeps editable names and explicit In person / Over video options. Phone gameplay has large A/B choices and a sticky next-player action.

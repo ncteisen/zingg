@@ -1,0 +1,15 @@
+{
+  "status": "Rank & Tell expansion; approved warm-ink rendering",
+  "tool": "Built-in image_gen",
+  "basePrompt": "base-v3.txt",
+  "reference": "../pilots/mind-meld-v1.png",
+  "referenceInstruction": "Input image 1 is a STYLE REFERENCE ONLY. Transfer its warm brown contour weight, broad shapes, restrained grain, and color treatment to the new subject. Replace the entire brain subject and its spark with only the new subject brief. Keep the acting quiet and deadpan. Close all exterior contours with warm brown ink, including the bottom edge; no colored edge fringe. No borrowed characters. Preserve genuine alpha transparency.",
+  "cards": [
+    {
+      "slug": "rank-and-tell",
+      "key": "rankAndTell",
+      "card": "Rank & Tell",
+      "subject": "A compact three-place winners' podium with no numbers or writing. A smug ordinary pigeon stands on the tallest center step wearing an oversized gold medal. Two much fancier empty gold trophy cups occupy the lower side steps, losing to the pigeon. The mundane pigeon outranking actual trophies is the single quiet joke. Muted blue podium, warm gray pigeon, beer-gold cups and medal. No extra props, no scenery, no human limbs. Broad simple shapes and a clear silhouette, subtle deadpan expression, all parts fully within frame."
+    }
+  ]
+}

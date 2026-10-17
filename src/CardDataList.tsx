@@ -58,13 +58,15 @@ import people from './assets/deck/perfect-person-but.webp'
 import racingFlags from './assets/deck/race-to-the-bottom.webp'
 import molotov from './assets/deck/molotov-cocktail.webp'
 import mindMeld from './assets/deck/mind-meld.webp'
+import castingCall from './assets/deck/casting-call.webp'
+import rankAndTell from './assets/deck/rank-and-tell.webp'
 
 import { CardData, CardType } from "./Card";
 
 export const ELEPHANT_CARD_TITLE = 'Elephant in the Room';
 
 // Saved decks store indexes: append new cards and retain prior deck sizes here.
-export const LEGACY_CARD_COUNTS = [64];
+export const LEGACY_CARD_COUNTS = [64, 65, 66];
 
 function MakeCard(title: string, body: string, img: any, type: CardType) {
  return new CardData(title, body, img, type, [], VirtualMode.UNSET);
@@ -602,6 +604,33 @@ let CardDataList = [
 		CardType.ACTION,
 		[
 			'You say "dog," your partner says "ocean." Next try: "seal" and "fish." Next try: you both say "salmon." Mind meld!',
+		]),
+
+	MakeCardWithTips(
+		"Casting Call",
+		`Name an actor. The next player names a movie they appeared in.
+		The next names a different actor from that movie. Keep going around,
+		alternating actors and movies. No repeats. First to get one wrong
+		or get stuck for five seconds drinks.`,
+		castingCall,
+		CardType.ACTION,
+		[
+			'Tom Hanks → Toy Story → Tim Allen → Galaxy Quest. The next player names another actor from Galaxy Quest, then keep the chain going.',
+		]),
+
+	MakeCardWithTips(
+		"Rank & Tell",
+		`Secretly choose something to rank everyone by. Announce your ranking
+		from most to least, without revealing the category. Everyone else
+		guesses what you were ranking. First to get it right gives out a drink.`,
+		rankAndTell,
+		CardType.ACTION,
+		[
+			"Who I'd want beside me during a five-hour airport delay.",
+			"Who I'd least want as my landlord.",
+			"Who I'd call to get me out of a bad date.",
+			'Who would make the most money starting a religion.',
+			"Who I'd trust to give a wedding speech without running it by me.",
 		]),
 ]
 
