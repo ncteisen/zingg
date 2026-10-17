@@ -1,8 +1,10 @@
 # Zingg card art
 
-The user approved **pass 3: warm ink, dry jokes**, together with its brand concept. The actual app now uses this system across home, lobby, both game modes, and all 68 cards. There are 62 distinct illustrations: four approved pilots, 55 full-deck extensions, and the Casting Call, Rank & Tell, and Identity Crisis expansions.
+The user approved **pass 3: warm ink, dry jokes**, together with its brand concept. The actual app now uses this system across home, lobby, both game modes, and all 69 cards. There are 63 distinct illustrations: four approved pilots, 55 full-deck extensions, and the Casting Call, Rank & Tell, Identity Crisis, and Undercover expansions.
 
 Identity Crisis uses `deck/who-am-i.png` as its transparent master and `src/assets/deck/who-am-i.webp` as its production asset. The exact built-in image generation prompt and reference are saved in `prompts/who-am-i-v3.json`.
+
+Undercover uses `deck/undercover.png` as its transparent master and `src/assets/deck/undercover.webp` as its production asset. Its exact built-in image generation prompt is saved in `prompts/undercover-v3.json`.
 
 The latest preference is **version 1 warm ink**, with clever visual gags and understated raunch. Version 3 returns to that rendering and gives each subject one wrong detail. The review defaults to version 3 with the proposed card styling. Original art and both earlier passes remain available, and artwork/style controls are independent.
 

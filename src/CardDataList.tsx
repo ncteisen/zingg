@@ -61,13 +61,14 @@ import mindMeld from './assets/deck/mind-meld.webp'
 import castingCall from './assets/deck/casting-call.webp'
 import rankAndTell from './assets/deck/rank-and-tell.webp'
 import whoAmI from './assets/deck/who-am-i.webp'
+import undercover from './assets/deck/undercover.webp'
 
 import { CardData, CardType } from "./Card";
 
 export const ELEPHANT_CARD_TITLE = 'Elephant in the Room';
 
 // Saved decks store indexes: append new cards and retain prior deck sizes here.
-export const LEGACY_CARD_COUNTS = [64, 65, 66, 67];
+export const LEGACY_CARD_COUNTS = [64, 65, 66, 67, 68];
 
 function MakeCard(title: string, body: string, img: any, type: CardType) {
  return new CardData(title, body, img, type, [], VirtualMode.UNSET);
@@ -644,6 +645,17 @@ let CardDataList = [
     [],
     VirtualMode.LIVE,
     'who-am-i'),
+  new CardData(
+    'Undercover',
+    `Pass the phone to see your secret role. Everyone gets the same word,
+    except one undercover player. Give one clue each without saying the word.
+    Then vote: who’s bluffing? Catch them and they drink. Get it wrong and
+    everyone else drinks.`,
+    undercover,
+    CardType.INTERRUPT,
+    [],
+    VirtualMode.LIVE,
+    'undercover'),
 ]
 
 export default CardDataList;

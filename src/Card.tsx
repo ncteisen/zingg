@@ -1,6 +1,9 @@
 import {VirtualMode} from './GameOpts';
 import React, {useId, useRef, useState} from 'react';
 import WhoAmI from './WhoAmI';
+import Undercover from './Undercover';
+
+type CardInteraction = 'who-am-i' | 'undercover';
 
 export enum CardType {
   ACTION = 'Action',
@@ -15,7 +18,7 @@ export class CardData {
   tips: string[];
   mode: VirtualMode;
   type: CardType;
-  interaction?: 'who-am-i';
+  interaction?: CardInteraction;
   constructor(
     title: string,
     body: string,
@@ -23,7 +26,7 @@ export class CardData {
     type?: CardType,
     tips?: string[],
     mode?: VirtualMode,
-    interaction?: 'who-am-i'
+    interaction?: CardInteraction
   ) {
     this.title = title;
     this.body = body;
@@ -97,6 +100,7 @@ function CardFace(props: CardProps) {
           </div>
           <p className="card-text">{props.data.body}</p>
           {props.data.interaction === 'who-am-i' && <WhoAmI />}
+          {props.data.interaction === 'undercover' && <Undercover />}
         </div>
         {props.data.tips.length > 0 && (
           <section

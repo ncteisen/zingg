@@ -1,3 +1,7 @@
+import {createContext, useContext} from 'react';
+
+export const PlaytestContext = createContext(false);
+
 type AnalyticsProperty = string | number | boolean | null;
 type AnalyticsProperties = Record<string, AnalyticsProperty>;
 
@@ -18,5 +22,12 @@ export function trackEvent(
   }
 
   window.umami.track(eventName, eventData);
+}
+
+export function useTrackEvent() {
+  const playtesting = useContext(PlaytestContext);
+  return (eventName: string, eventData?: AnalyticsProperties) => {
+    if (!playtesting) trackEvent(eventName, eventData);
+  };
 }
 

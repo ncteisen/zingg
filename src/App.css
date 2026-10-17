@@ -173,12 +173,12 @@ button.brand-mark { cursor: pointer; }
 .mobile-card-holder .card-img-holder { height: clamp(144px, 23dvh, 192px); }
 .mobile-next-bar { background: var(--lamp-cream); bottom: 0; margin: 0 -20px -32px; padding: 12px 20px max(22px, env(safe-area-inset-bottom)); position: sticky; z-index: 1; }
 .mobile-landscape-guard { align-content: center; display: none; min-height: calc(100dvh - 88px); padding: 24px; text-align: center; }
-.who-am-i-start { background: var(--couch-green); box-shadow: 3px 3px 0 var(--ink-brown); color: var(--ink-brown); flex-direction: column; gap: 5px; margin-top: 18px; width: 100%; }
-.who-am-i-start:hover { background: #80a674; }
-.who-am-i-start small { font-size: 13px; font-weight: 400; line-height: 1.4; }
+.who-am-i-start, .undercover-start { background: var(--couch-green); box-shadow: 3px 3px 0 var(--ink-brown); color: var(--ink-brown); flex-direction: column; gap: 5px; margin-top: 18px; width: 100%; }
+.who-am-i-start:hover, .undercover-start:hover { background: #80a674; }
+.who-am-i-start small, .undercover-start small { font-size: 13px; font-weight: 400; line-height: 1.4; }
 /* Portaled outside the game frame so the round also works in landscape. */
-.who-am-i-round { background: var(--paper); border: 0; color: var(--ink-brown); height: 100dvh; inset: 0; margin: 0; max-height: none; max-width: none; padding: max(20px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); width: 100vw; }
-.who-am-i-round::backdrop { background: var(--paper); }
+.who-am-i-round, .undercover-round { background: var(--paper); border: 0; color: var(--ink-brown); height: 100dvh; inset: 0; margin: 0; max-height: none; max-width: none; padding: max(20px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); width: 100vw; }
+.who-am-i-round::backdrop, .undercover-round::backdrop { background: var(--paper); }
 .who-am-i-stage { align-items: center; display: flex; flex-direction: column; gap: 16px; min-height: 100%; text-align: center; }
 .who-am-i-stage > .eyebrow { margin: 0; }
 .who-am-i-display { align-content: center; display: grid; flex: 1; gap: 24px; width: 100%; }
@@ -186,6 +186,36 @@ button.brand-mark { cursor: pointer; }
 .who-am-i-countdown { font: 700 clamp(96px, 32vmin, 220px)/1 var(--font-display); margin: 0; }
 .who-am-i-name { font: 700 clamp(40px, 18vmin, 112px)/1.08 var(--font-display); margin: 0 auto; max-width: 1100px; overflow-wrap: anywhere; text-wrap: balance; }
 .who-am-i-stage > button { min-width: 140px; }
+.undercover-stage { display: flex; flex-direction: column; margin: 0 auto; max-width: 540px; min-height: 100%; }
+.undercover-header { align-items: center; display: flex; gap: 12px; justify-content: space-between; }
+.undercover-header h2 { margin: 0; }
+.undercover-content { align-content: center; display: grid; flex: 1; gap: 20px; padding: 32px 0; text-align: center; }
+.undercover-content h3 { font: 700 clamp(28px, 7vw, 42px)/1.1 var(--font-display); margin: 0; outline: none; }
+.undercover-content p { line-height: 1.5; margin: 0; }
+.undercover-count { align-items: center; display: flex; gap: 16px; justify-content: center; }
+.undercover-count select { background: var(--paper); border: 1px solid var(--ink-brown); border-radius: 6px; color: var(--ink-brown); font: inherit; min-height: 48px; min-width: 88px; padding: 10px; }
+.undercover-secret { display: grid; gap: 20px; }
+.undercover-content .undercover-word { font: 700 clamp(30px, 7vw, 48px)/1.15 var(--font-display); overflow-wrap: anywhere; }
+.undercover-content .undercover-start { margin-top: 0; }
+.undercover-start:disabled { background: var(--coffee-line); box-shadow: none; cursor: default; transform: none; }
+.undercover-actions { display: grid; gap: 12px; }
+.undercover-votes { border: 0; display: grid; gap: 10px; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; min-width: 0; padding: 0; text-align: left; }
+.undercover-votes legend { margin-bottom: 12px; text-align: center; width: 100%; }
+.undercover-votes label { align-items: center; border: 1px solid var(--coffee-line); border-radius: 6px; cursor: pointer; display: flex; font-size: 14px; gap: 8px; min-height: 48px; padding: 10px; }
+.undercover-votes label:has(input:checked) { background: var(--beer-gold); border-color: var(--ink-brown); }
+.undercover-votes input { accent-color: var(--ink-brown); flex-shrink: 0; height: 18px; margin: 0; width: 18px; }
+.minigame-playtest { background: var(--lamp-cream); border: 0; color: var(--ink-brown); height: 100dvh; inset: 0; margin: 0; max-height: none; max-width: none; padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left)); width: 100vw; }
+.minigame-playtest::backdrop { background: var(--lamp-cream); }
+.playtest-frame { margin: 0 auto; max-width: 600px; }
+.playtest-header { align-items: center; display: flex; gap: 12px; justify-content: space-between; margin-bottom: 24px; }
+.playtest-header h1 { font: 700 clamp(26px, 7vw, 36px)/1.1 var(--font-display); margin: 0; outline: none; }
+.playtest-description { color: var(--soft-cocoa); line-height: 1.5; margin: 0 0 24px; }
+.playtest-list { display: grid; gap: 14px; }
+.playtest-choice { align-items: center; background: var(--paper); border: 1px solid var(--coffee-line); border-radius: 8px; color: var(--ink-brown); cursor: pointer; display: grid; font: 700 22px/1.2 var(--font-display); gap: 16px; grid-template-columns: 80px 1fr auto; padding: 16px; text-align: left; }
+.playtest-choice:hover { border-color: var(--ink-brown); }
+.playtest-choice img { height: 60px; object-fit: contain; width: 80px; }
+.playtest-back { margin-bottom: 20px; }
+.playtest-card .zingg-card { max-width: 380px; }
 .deck-exhausted { grid-column: 1 / -1; margin: 30px auto; max-width: 600px; padding: 36px 24px; text-align: center; }
 .deck-exhausted h1 { font: 700 42px/1.1 var(--font-display); letter-spacing: -1px; margin: 16px 0; }
 .deck-exhausted p:not(.eyebrow) { color: var(--soft-cocoa); line-height: 1.6; margin-bottom: 28px; }
@@ -239,6 +269,8 @@ button.brand-mark { cursor: pointer; }
   .mobile-landing-frame { padding-top: 24px; }
 }
 @media (max-width: 360px) {
+  .playtest-choice { font-size: 20px; gap: 12px; grid-template-columns: 60px minmax(0, 1fr) auto; padding: 14px; }
+  .playtest-choice img { width: 60px; }
   .site-header { gap: 8px; padding-inline: 16px; }
   .brand-mark { font-size: 36px; }
   .header-actions { flex-wrap: nowrap; }
