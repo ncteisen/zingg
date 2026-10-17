@@ -41,12 +41,11 @@ function Home(Props: HomeProps) {
     <div className="app-shell home-shell">
       <header className="site-header site-header-home">
         <Brand />
-        <span className="header-kicker">Bring your own friends.</span>
       </header>
       <main className="home-hero">
         <section className="home-copy-panel">
           <p className="eyebrow">A drinking game for good company.</p>
-          <h1>Questionable <br />decisions. <br /><em>Excellent company.</em></h1>
+          <h1>Drink with your <br />idiot friends.</h1>
           <p className="hero-subhead">A deck of strange little challenges, unfortunate rules, and things you’ll insist never happened.</p>
           <fieldset className="home-modes">
             <legend>How are you playing?</legend>
@@ -85,7 +84,6 @@ function MobileLanding(Props: MobileLandingProps) {
     <div className="app-shell mobile-landing-shell">
       <header className="site-header site-header-home">
         <Brand />
-        <span className="header-kicker">Bring your own friends.</span>
       </header>
       <div className="mobile-landscape-guard" role="status">
         <h1>Turn your phone upright.</h1>
@@ -93,8 +91,7 @@ function MobileLanding(Props: MobileLandingProps) {
       </div>
       <main className="mobile-landing-frame">
         <section className="mobile-landing-panel">
-          <p className="eyebrow">Pass the phone</p>
-          <h1>Questionable decisions. <br /><em>Excellent company.</em></h1>
+          <h1>Drink with your <br />idiot friends.</h1>
           <img className="mobile-landing-art" src={vikingArt} alt="A deadpan Viking with one drooping helmet horn" width="640" height="480" />
           <button className="pill-button pill-button-primary mobile-start-button" onClick={Props.handleMobileToGame}>Start mobile game <span aria-hidden="true">↗</span></button>
           <button className="pill-button pill-button-secondary mobile-start-button" onClick={Props.onSwitchMode}>Choose game mode</button>

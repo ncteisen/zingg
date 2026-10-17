@@ -42,7 +42,7 @@ The wordmark is lowercase `zingg.` in dark ink with a brick dot. The SVG favicon
 
 ## Voice
 
-Short, dry, and welcoming: “Bring your own friends.”, “A little out of line.”, “Questionable decisions. Excellent company.” Put the joke in occasional supporting copy. Navigation and gameplay instructions remain literal. Do not casually rewrite rules as part of a design pass.
+Blunt, irreverent, and casual. The landing headline is “Drink with your idiot friends.” Let the game make fun of itself; avoid polished party slogans and elaborate “most likely to” jokes. Use specific situations people can picture and argue about. Navigation and gameplay instructions remain literal. Do not casually rewrite rules as part of a design pass.
 
 ## Illustration workflow
 

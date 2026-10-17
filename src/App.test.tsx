@@ -85,7 +85,7 @@ function trackedEvents(track: ReturnType<typeof vi.fn>) {
 test('renders the home screen with empty storage', () => {
   render(<App />);
 
-  expect(screen.getByRole('heading', {name: /Questionable/})).toBeInTheDocument();
+  expect(screen.getByRole('heading', {name: /Drink with your idiot friends/})).toBeInTheDocument();
   expect(screen.getByRole('radio', {name: /shared screen/i})).toBeInTheDocument();
   expect(
     screen.getByRole('radio', {name: /pass the phone/i})
@@ -142,7 +142,7 @@ test('phone viewport opens the mobile landing instead of classic home', () => {
 
   render(<App />);
 
-  expect(screen.getAllByText(/Pass the phone/i)[0]).toBeInTheDocument();
+  expect(screen.getByRole('heading', {name: /Drink with your idiot friends/})).toBeInTheDocument();
   expect(
     screen.getByRole('button', {name: /start mobile game/i})
   ).toBeInTheDocument();
@@ -355,7 +355,7 @@ test('reset modal can cancel or clear saved state', async () => {
   );
 
   await waitFor(function () {
-    expect(screen.getByRole('heading', {name: /Questionable/})).toBeInTheDocument();
+    expect(screen.getByRole('heading', {name: /Drink with your idiot friends/})).toBeInTheDocument();
     expect(window.localStorage.getItem(STORAGE_KEY)).toBeNull();
   });
 });
@@ -365,7 +365,7 @@ test('ignores malformed saved state without crashing', () => {
 
   render(<App />);
 
-  expect(screen.getByRole('heading', {name: /Questionable/})).toBeInTheDocument();
+  expect(screen.getByRole('heading', {name: /Drink with your idiot friends/})).toBeInTheDocument();
 });
 
 test('ignores incompatible saved game state without crashing', () => {
@@ -390,7 +390,7 @@ test('ignores incompatible saved game state without crashing', () => {
 
   render(<App />);
 
-  expect(screen.getByRole('heading', {name: /Questionable/})).toBeInTheDocument();
+  expect(screen.getByRole('heading', {name: /Drink with your idiot friends/})).toBeInTheDocument();
 });
 
 test('ignores incompatible saved mobile game state without crashing', () => {
@@ -411,7 +411,7 @@ test('ignores incompatible saved mobile game state without crashing', () => {
 
   render(<App />);
 
-  expect(screen.getByRole('heading', {name: /Questionable/})).toBeInTheDocument();
+  expect(screen.getByRole('heading', {name: /Drink with your idiot friends/})).toBeInTheDocument();
 });
 
 test('phone viewport restores classic saved state', () => {
@@ -618,7 +618,7 @@ test('failed storage deletion still resets the in-memory game', () => {
   vi.spyOn(window.localStorage, 'removeItem').mockImplementation(() => {throw new Error('denied');});
   fireEvent.click(screen.getByRole('button', {name: /reset game/i}));
   fireEvent.click(screen.getByRole('dialog').querySelectorAll('button')[1]);
-  expect(screen.getByRole('heading', {name: /Questionable/})).toBeInTheDocument();
+  expect(screen.getByRole('heading', {name: /Drink with your idiot friends/})).toBeInTheDocument();
   expect(screen.getByRole('status')).toHaveTextContent(/saving is unavailable/i);
 });
 
@@ -806,7 +806,7 @@ test('home selection previews the right start or resume action without leaving h
   expect(screen.getByRole('button', {name: /resume game/i})).toBeInTheDocument();
   fireEvent.click(screen.getByRole('radio', {name: /pass the phone/i}));
   expect(screen.getByRole('button', {name: /start game/i})).toBeInTheDocument();
-  expect(screen.getByRole('heading', {name: /Questionable/})).toBeInTheDocument();
+  expect(screen.getByRole('heading', {name: /Drink with your idiot friends/})).toBeInTheDocument();
   expect(JSON.parse(window.localStorage.getItem(STORAGE_KEY)!).gameState).toEqual(before);
   fireEvent.click(screen.getByRole('radio', {name: /shared screen/i}));
   fireEvent.click(screen.getByRole('button', {name: /resume game/i}));
