@@ -1,5 +1,6 @@
 import {VirtualMode} from './GameOpts';
 import React, {useId, useRef, useState} from 'react';
+import WhoAmI from './WhoAmI';
 
 export enum CardType {
   ACTION = 'Action',
@@ -14,13 +15,15 @@ export class CardData {
   tips: string[];
   mode: VirtualMode;
   type: CardType;
+  interaction?: 'who-am-i';
   constructor(
     title: string,
     body: string,
     img: any,
     type?: CardType,
     tips?: string[],
-    mode?: VirtualMode
+    mode?: VirtualMode,
+    interaction?: 'who-am-i'
   ) {
     this.title = title;
     this.body = body;
@@ -28,6 +31,7 @@ export class CardData {
     this.tips = (tips && tips) || [];
     this.mode = (mode && mode) || VirtualMode.UNSET;
     this.type = (type && type) || CardType.ACTION;
+    this.interaction = interaction;
   }
 }
 
@@ -92,6 +96,7 @@ function CardFace(props: CardProps) {
             <img className="card-img-top" src={props.data.img} alt="" />
           </div>
           <p className="card-text">{props.data.body}</p>
+          {props.data.interaction === 'who-am-i' && <WhoAmI />}
         </div>
         {props.data.tips.length > 0 && (
           <section

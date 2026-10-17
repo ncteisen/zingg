@@ -1,0 +1,6 @@
+{
+  "tool": "built-in image_gen",
+  "styleReference": "art/pilots/mind-meld-v1.png",
+  "transparent_background": true,
+  "prompt": "Use case: illustration-story. Asset: transparent spot illustration for the new Zingg party card \"Who Am I?\". Warm ink drawing matching reference contour weight and muted palette: slightly uneven dark brown outlines, broad simple shapes, restrained dry screenprint texture, flat beer gold, muted blue and warm skin tones. Subject: chest-up deadpan adult person holding a smartphone horizontally against their forehead, screen facing us. The screen shows a simple little gold royal crown icon while the person looks completely unimpressed, unaware of their royal status. One clear phone, two anatomically sensible hands at its edges, short hair, blue shirt. Compact centered composition on transparent 4:3 canvas with all parts in frame. No writing, letters, numbers, logos, background, frame, white border, gradients, cast shadows or 3D. Original illustration, readable at 150px tall. Input image is STYLE ONLY: do not copy brains, sparks or objects. Preserve actual alpha transparency and clean edges."
+}

@@ -173,6 +173,19 @@ button.brand-mark { cursor: pointer; }
 .mobile-card-holder .card-img-holder { height: clamp(144px, 23dvh, 192px); }
 .mobile-next-bar { background: var(--lamp-cream); bottom: 0; margin: 0 -20px -32px; padding: 12px 20px max(22px, env(safe-area-inset-bottom)); position: sticky; z-index: 1; }
 .mobile-landscape-guard { align-content: center; display: none; min-height: calc(100dvh - 88px); padding: 24px; text-align: center; }
+.who-am-i-start { background: var(--couch-green); box-shadow: 3px 3px 0 var(--ink-brown); color: var(--ink-brown); flex-direction: column; gap: 5px; margin-top: 18px; width: 100%; }
+.who-am-i-start:hover { background: #80a674; }
+.who-am-i-start small { font-size: 13px; font-weight: 400; line-height: 1.4; }
+/* Portaled outside the game frame so the round also works in landscape. */
+.who-am-i-round { background: var(--paper); border: 0; color: var(--ink-brown); height: 100dvh; inset: 0; margin: 0; max-height: none; max-width: none; padding: max(20px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); width: 100vw; }
+.who-am-i-round::backdrop { background: var(--paper); }
+.who-am-i-stage { align-items: center; display: flex; flex-direction: column; gap: 16px; min-height: 100%; text-align: center; }
+.who-am-i-stage > .eyebrow { margin: 0; }
+.who-am-i-display { align-content: center; display: grid; flex: 1; gap: 24px; width: 100%; }
+.who-am-i-instruction { font-size: clamp(16px, 3vmin, 24px); line-height: 1.4; margin: 0; }
+.who-am-i-countdown { font: 700 clamp(96px, 32vmin, 220px)/1 var(--font-display); margin: 0; }
+.who-am-i-name { font: 700 clamp(40px, 18vmin, 112px)/1.08 var(--font-display); margin: 0 auto; max-width: 1100px; overflow-wrap: anywhere; text-wrap: balance; }
+.who-am-i-stage > button { min-width: 140px; }
 .deck-exhausted { grid-column: 1 / -1; margin: 30px auto; max-width: 600px; padding: 36px 24px; text-align: center; }
 .deck-exhausted h1 { font: 700 42px/1.1 var(--font-display); letter-spacing: -1px; margin: 16px 0; }
 .deck-exhausted p:not(.eyebrow) { color: var(--soft-cocoa); line-height: 1.6; margin-bottom: 28px; }

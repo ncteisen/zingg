@@ -462,13 +462,14 @@ test.each([
   ['classic live', 64], ['classic virtual', 64], ['mobile', 64],
   ['classic live', 65], ['classic virtual', 65], ['mobile', 65],
   ['classic live', 66], ['classic virtual', 66], ['mobile', 66],
+  ['classic live', 67], ['classic virtual', 67], ['mobile', 67],
 ] as const)('%s preserves a %i-card release save and adds new cards on reshuffle', (mode, cardCount) => {
   for (const version of [1, 2, 3]) {
     const saved = mode === 'mobile' ? mobileSave() : classicSave(mode === 'classic virtual' ? VirtualMode.VIRTUAL : VirtualMode.LIVE);
     saved.version = version;
     const key = 'gameState' in saved ? 'gameState' : 'mobileGameState';
     const state = 'gameState' in saved ? saved.gameState : saved.mobileGameState;
-    // Earlier decks had 64, 65, or 66 cards. Keep these fixture sizes explicit.
+    // Earlier decks had 64–67 cards. Keep these fixture sizes explicit.
     state.deck = state.deck.filter(idx => idx < cardCount).reverse();
     state.deck_idx = state.deck.length - 2;
     state.deckState = DeckState.FRONT;

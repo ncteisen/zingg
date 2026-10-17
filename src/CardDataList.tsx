@@ -60,13 +60,14 @@ import molotov from './assets/deck/molotov-cocktail.webp'
 import mindMeld from './assets/deck/mind-meld.webp'
 import castingCall from './assets/deck/casting-call.webp'
 import rankAndTell from './assets/deck/rank-and-tell.webp'
+import whoAmI from './assets/deck/who-am-i.webp'
 
 import { CardData, CardType } from "./Card";
 
 export const ELEPHANT_CARD_TITLE = 'Elephant in the Room';
 
 // Saved decks store indexes: append new cards and retain prior deck sizes here.
-export const LEGACY_CARD_COUNTS = [64, 65, 66];
+export const LEGACY_CARD_COUNTS = [64, 65, 66, 67];
 
 function MakeCard(title: string, body: string, img: any, type: CardType) {
  return new CardData(title, body, img, type, [], VirtualMode.UNSET);
@@ -632,6 +633,17 @@ let CardDataList = [
 			'Who would make the most money starting a religion.',
 			"Who I'd trust to give a wedding speech without running it by me.",
 		]),
+  new CardData(
+    'Identity Crisis',
+    `Tap Start, then put the phone against your forehead with the screen
+    facing everyone else. Ask yes-or-no questions
+    to figure out who you are. After every question, take a drink and make
+    a guess. Keep going until you get it. No peeking.`,
+    whoAmI,
+    CardType.ACTION,
+    [],
+    VirtualMode.LIVE,
+    'who-am-i'),
 ]
 
 export default CardDataList;
