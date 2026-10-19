@@ -40,6 +40,7 @@ test('five quick logo taps open every interactive card; ordinary taps do nothing
   for (const card of CardDataList.filter(card => card.interaction)) {
     expect(within(menu).getByRole('button', {name: card.title})).toBeVisible();
   }
+  expect(within(menu).getByRole('button', {name: /On Your Frequency/})).toBeVisible();
   fireEvent.click(screen.getByRole('button', {name: 'Close playtest'}));
   expect(logo).toHaveFocus();
   expect(document.body.style.overflow).toBe('');
@@ -108,8 +109,30 @@ test('playtesting preserves both saved decks and does not emit gameplay analytic
   fireEvent.click(screen.getByRole('radio', {name: 'Player 1'}));
   fireEvent.click(screen.getByRole('button', {name: 'Reveal undercover'}));
   fireEvent.click(screen.getByRole('button', {name: 'Done'}));
+  fireEvent.click(screen.getByRole('button', {name: '← All minigames'}));
+  fireEvent.click(screen.getByRole('button', {name: /On Your Frequency/}));
+  fireEvent.click(screen.getByRole('button', {name: 'Show secret'}));
+  fireEvent.click(screen.getByRole('button', {name: 'Hide & pass'}));
+  fireEvent.change(screen.getByRole('slider', {name: 'The group’s guess'}), {target: {value: '42.5'}});
+  fireEvent.click(screen.getByRole('button', {name: 'Lock guess'}));
+  fireEvent.click(screen.getByRole('button', {name: 'Reveal'}));
   fireEvent.click(screen.getByRole('button', {name: 'Close playtest'}));
   expect(window.localStorage.getItem(storageKey)).toBe(serialized);
   expect(track).not.toHaveBeenCalled();
   expect(screen.getByRole('button', {name: /resume game/i})).toBeVisible();
+});
+
+test('Wavelength is testing-only and leaving it discards the private round', () => {
+  expect(CardDataList.some(card => /wavelength|frequency/i.test(card.title))).toBe(false);
+  render(<Brand />);
+  openPlaytest();
+  fireEvent.click(screen.getByRole('button', {name: /On Your Frequency/}));
+  fireEvent.click(screen.getByRole('button', {name: 'Show secret'}));
+  fireEvent.click(screen.getByRole('button', {name: '← All minigames'}));
+  expect(screen.queryByText('Secret spot')).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', {name: /On Your Frequency/}));
+  expect(screen.getByRole('button', {name: 'Show secret'})).toBeVisible();
+  fireEvent(screen.getByRole('dialog'), new Event('cancel', {cancelable: true}));
+  expect(screen.getByRole('button', {name: 'Zingg'})).toHaveFocus();
+  expect(document.body.style.overflow).toBe('');
 });

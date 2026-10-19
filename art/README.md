@@ -6,6 +6,8 @@ Identity Crisis uses `deck/who-am-i.png` as its transparent master and `src/asse
 
 Undercover uses `deck/undercover.png` as its transparent master and `src/assets/deck/undercover.webp` as its production asset. Its exact built-in image generation prompt is saved in `prompts/undercover-v3.json`.
 
+On Your Frequency is a testing-only minigame with its own radio-and-knotted-antenna illustration. Its transparent master is `deck/wavelength.png`, its delivery asset is `src/assets/deck/wavelength.webp`, and its exact built-in image generation prompt is in `prompts/wavelength-v3.json`. It is not included in the playable deck.
+
 The latest preference is **version 1 warm ink**, with clever visual gags and understated raunch. Version 3 returns to that rendering and gives each subject one wrong detail. The review defaults to version 3 with the proposed card styling. Original art and both earlier passes remain available, and artwork/style controls are independent.
 
 The **Site concept** view is a separate interactive home and sample-round prototype. Try Shared screen or Pass the phone, Start game, Hint, and Next player/card. It uses four sample cards and component-local state only. `brand.css` scopes the proposal to the study; it is not imported by the production app. The proposed system and reference are recorded in `brand-direction-v3.md`.

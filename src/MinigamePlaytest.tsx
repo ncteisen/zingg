@@ -3,9 +3,12 @@ import {createPortal} from 'react-dom';
 import Card from './Card';
 import CardDataList from './CardDataList';
 import {PlaytestContext} from './analytics';
+import Wavelength from './Wavelength';
+import wavelengthArt from './assets/deck/wavelength.webp';
 
-// Derive this list from the deck so new interactive cards appear automatically.
+// Shipped interactive cards appear automatically. Prototypes stay outside the deck.
 const minigames = CardDataList.filter(card => card.interaction);
+const wavelengthTitle = 'On Your Frequency';
 
 export default function MinigamePlaytest({onClose}: {onClose: () => void}) {
   const [selected, setSelected] = useState<string | null>(null);
@@ -44,12 +47,17 @@ export default function MinigamePlaytest({onClose}: {onClose: () => void}) {
         <h1 ref={heading} tabIndex={-1} id={titleId}>Minigames</h1>
         <button className="reset-link-button" type="button" onClick={close}>Close playtest</button>
       </header>
-      {card ? <>
+      {selected ? <>
         <button className="reset-link-button playtest-back" type="button" onClick={() => setSelected(null)}>← All minigames</button>
-        <div className="playtest-card"><Card key={card.title} data={card} /></div>
+        {selected === wavelengthTitle ? <Wavelength /> : card && <div className="playtest-card"><Card key={card.title} data={card} /></div>}
       </> : <>
-        <p className="playtest-description">Pick a card to try. Your saved game stays where you left it.</p>
+        <p className="playtest-description">Pick a minigame to try. Your saved game stays where you left it.</p>
         <div className="playtest-list">
+          <button className="playtest-choice" type="button" onClick={() => setSelected(wavelengthTitle)}>
+            <img src={wavelengthArt} alt="" />
+            <span>{wavelengthTitle}<small>Playtest only</small></span>
+            <span aria-hidden="true">↗</span>
+          </button>
           {minigames.map(game => <button key={game.title} className="playtest-choice" type="button" onClick={() => setSelected(game.title)}>
             <img src={game.img} alt="" />
             <span>{game.title}</span>

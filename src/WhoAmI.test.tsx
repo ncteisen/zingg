@@ -10,6 +10,7 @@ import {createIdentityPicker, WHO_AM_I_NAMES} from './WhoAmINames';
 const card = CardDataList.find(card => card.interaction === 'who-am-i')!;
 
 beforeEach(() => {
+  localStorage.clear();
   vi.useFakeTimers();
   // jsdom lacks modal dialog methods; real focus containment is checked in-browser.
   HTMLDialogElement.prototype.showModal = function () { this.open = true; };
