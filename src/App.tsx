@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Brand from './Brand';
 import SiteFooter from './SiteFooter';
 import vikingArt from './assets/deck/viking-master.webp';
@@ -25,8 +25,11 @@ import './Colors.css';
 
 const gameDebuggingMode = false;
 const STORAGE_KEY = 'zingg-game-state-v1';
+const RECOVERY_STORAGE_KEY = 'zingg-game-state-recovery-v1';
 
 type HomeProps = {
+  mode: PlayMode;
+  onModeChange: (mode: PlayMode) => void;
   removeElephant: boolean;
   onRemoveElephantChange: (checked: boolean) => void;
   handleHomeToLobby: () => void;
@@ -35,7 +38,7 @@ type HomeProps = {
   hasMobileGame: boolean;
 };
 function Home(Props: HomeProps) {
-  const [mode, setMode] = useState<'classic' | 'mobile'>('classic');
+  const mode = Props.mode;
   const hasGame = mode === 'classic' ? Props.hasClassicGame : Props.hasMobileGame;
   return (
     <div className="app-shell home-shell">
@@ -50,11 +53,11 @@ function Home(Props: HomeProps) {
           <fieldset className="home-modes">
             <legend>How are you playing?</legend>
             <label>
-              <input type="radio" name="play-mode" checked={mode === 'classic'} onChange={() => setMode('classic')} />
+              <input type="radio" name="play-mode" checked={mode === 'classic'} onChange={() => Props.onModeChange('classic')} />
               <span><strong>Shared screen</strong><small>{Props.hasClassicGame ? 'Your game is ready to resume.' : 'One host. Everyone else heckles.'}</small></span>
             </label>
             <label>
-              <input type="radio" name="play-mode" checked={mode === 'mobile'} onChange={() => setMode('mobile')} />
+              <input type="radio" name="play-mode" checked={mode === 'mobile'} onChange={() => Props.onModeChange('mobile')} />
               <span><strong>Pass the phone</strong><small>{Props.hasMobileGame ? 'Your game is ready to resume.' : 'One phone. Around the table.'}</small></span>
             </label>
           </fieldset>
@@ -135,6 +138,8 @@ type AppState = {
   mobileGameState?: SerializedMobileGameState;
   showResetModal: boolean;
   storageError?: boolean;
+  storageConflict?: boolean;
+  recoveryNotice?: string;
   nameError?: string;
 };
 
@@ -285,53 +290,24 @@ function buildDebugCardAppState(cardTitle: string): AppState | null {
   };
 }
 
-function savedNamesAreValid(value: unknown): value is string[] {
-  return (
-    Array.isArray(value) &&
-    value.length <= 12 &&
-    value.every(function (name) {
-      return typeof name === 'string' && name.trim().length > 0;
-    })
-  );
+function savedNamesHaveValidShape(value: unknown): value is string[] {
+  return Array.isArray(value) && value.length <= 12 && value.every(name => typeof name === 'string');
 }
 
-function buildClassicAppState(
-  screen: SavedScreen,
-  value: string,
-  names: string[],
-  opts: GameOpts,
-  gameState: unknown,
-  mobileGameState?: SerializedMobileGameState
-): AppState {
-  var state = screenToState(screen);
-  var validGameState = names.length >= 2 && opts.virtualMode !== VirtualMode.UNSET &&
-    isValidSerializedGameState(gameState, names, opts) ? gameState : undefined;
+function rosterNeedsRepair(names: string[]) {
+  return names.some((name, index) => !!validatePlayerName(name, names, index));
+}
 
-  if (
-    state === AppStateEnum.GAME &&
-    (names.length < 2 ||
-      opts.virtualMode === VirtualMode.UNSET ||
-      !isValidSerializedGameState(gameState, names, opts))
-  ) {
-    return createInitialAppState();
+function keepRecoveryCopy(raw: string) {
+  try {
+    // Keep the original locally before a recovered envelope replaces it.
+    window.localStorage.setItem(RECOVERY_STORAGE_KEY, raw);
+  } catch {
+    // Recovery must still work when storage is unavailable.
   }
-
-  return {
-    value: value,
-    names: names,
-    state: state,
-    playMode:
-      state === AppStateEnum.MOBILE_HOME || state === AppStateEnum.MOBILE_GAME
-        ? 'mobile'
-        : 'classic',
-    opts: opts,
-    gameState: validGameState,
-    mobileGameState: mobileGameState,
-    showResetModal: false,
-  };
 }
 
-function loadInitialAppState(): AppState {
+function loadInitialAppState(rawState: string | null | undefined): AppState {
   if (typeof window === 'undefined') {
     return createInitialAppState();
   }
@@ -344,10 +320,7 @@ function loadInitialAppState(): AppState {
     }
   }
 
-  var rawState: string | null;
-  try {
-    rawState = window.localStorage.getItem(STORAGE_KEY);
-  } catch {
+  if (rawState === undefined) {
     return {...createInitialAppState(), storageError: true};
   }
   if (!rawState) {
@@ -355,58 +328,63 @@ function loadInitialAppState(): AppState {
   }
 
   try {
-    var saved = JSON.parse(rawState);
-
-    if (
-      !isRecord(saved) ||
-      (saved.version !== 1 && saved.version !== 2 && saved.version !== 3) ||
-      !isSavedScreen(saved.screen) ||
-      typeof saved.value !== 'string' ||
-      !savedNamesAreValid(saved.names) ||
-      !isRecord(saved.opts) ||
-      !isVirtualMode(saved.opts.virtualMode)
-    ) {
-      return createInitialAppState();
+    const saved: unknown = JSON.parse(rawState);
+    if (!isRecord(saved) || (saved.version !== 1 && saved.version !== 2 && saved.version !== 3)) {
+      keepRecoveryCopy(rawState);
+      return {...createInitialAppState(), recoveryNotice: 'Saved progress could not be restored. You can start a new game.'};
     }
 
-    var mobileGameState =
-      isValidSerializedMobileGameState(saved.mobileGameState, mobileGameOpts)
-        ? (saved.mobileGameState as SerializedMobileGameState)
-        : undefined;
-
-    if (saved.version !== 1 && !isPlayMode(saved.playMode)) {
-      return createInitialAppState();
-    }
-
-    var opts = {virtualMode: saved.opts.virtualMode, removeElephant: saved.opts.removeElephant === true};
-    var state = screenToState(saved.screen);
-    var gameState = saved.gameState;
-
-    if (
-      state === AppStateEnum.MOBILE_GAME &&
-      !isValidSerializedMobileGameState(mobileGameState, mobileGameOpts)
-    ) {
-      return createInitialAppState();
-    }
-
-    return buildClassicAppState(
-      saved.screen,
-      saved.value,
-      saved.names,
-      opts,
-      gameState,
-      mobileGameState
-    );
+    const namesHaveShape = savedNamesHaveValidShape(saved.names);
+    const originalNames = namesHaveShape ? saved.names as string[] : [];
+    const names = originalNames.map(name => name.trim());
+    const savedOpts = isRecord(saved.opts) ? saved.opts : {};
+    const opts: GameOpts = {
+      virtualMode: isVirtualMode(savedOpts.virtualMode) ? savedOpts.virtualMode : VirtualMode.UNSET,
+      removeElephant: savedOpts.removeElephant === true,
+    };
+    const mobileGameState = isValidSerializedMobileGameState(saved.mobileGameState, mobileGameOpts)
+      ? saved.mobileGameState : undefined;
+    const classicIsValid = namesHaveShape && names.length >= 2 && opts.virtualMode !== VirtualMode.UNSET &&
+      isValidSerializedGameState(saved.gameState, originalNames, opts);
+    const gameState = classicIsValid ? {
+      ...saved.gameState as SerializedGameState,
+      players: (saved.gameState as SerializedGameState).players.map((player, index) => ({...player, name: names[index]})),
+    } : undefined;
+    const needsNameRepair = rosterNeedsRepair(names);
+    const screen = isSavedScreen(saved.screen) ? saved.screen : 'HOME';
+    let state = screenToState(screen);
+    const playMode = isPlayMode(saved.playMode) ? saved.playMode :
+      screen === 'MOBILE_HOME' || screen === 'MOBILE_GAME' ? 'mobile' : 'classic';
+    if (state === AppStateEnum.GAME && (!gameState || needsNameRepair)) state = AppStateEnum.LOBBY;
+    if (state === AppStateEnum.MOBILE_GAME && !mobileGameState) state = AppStateEnum.MOBILE_HOME;
+    const recovered = !namesHaveShape || !isRecord(saved.opts) || !isVirtualMode(savedOpts.virtualMode) ||
+      !isSavedScreen(saved.screen) || typeof saved.value !== 'string' ||
+      (saved.version !== 1 && !isPlayMode(saved.playMode)) ||
+      (saved.gameState !== undefined && !gameState) || (saved.mobileGameState !== undefined && !mobileGameState) ||
+      (screen === 'GAME' && !gameState) || (screen === 'MOBILE_GAME' && !mobileGameState) || needsNameRepair;
+    if (recovered) keepRecoveryCopy(rawState);
+    return {
+      value: typeof saved.value === 'string' ? saved.value : '', names, state, playMode, opts,
+      gameState, mobileGameState, showResetModal: false,
+      recoveryNotice: recovered ? (needsNameRepair
+        ? 'Some saved player names need attention. Edit the highlighted names in the lobby to resume. Available progress has been kept.'
+        : 'Some saved progress could not be restored. Available progress and settings have been kept.') : undefined,
+    };
   } catch {
-    return createInitialAppState();
+    keepRecoveryCopy(rawState);
+    return {...createInitialAppState(), recoveryNotice: 'Saved progress could not be restored. You can start a new game.'};
   }
 }
 
-function saveAppState(state: AppState) {
-  if (typeof window === 'undefined') {
-    return;
+function readStoredState(): string | null | undefined {
+  try {
+    return window.localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return undefined;
   }
+}
 
+function serializeAppState(state: AppState) {
   var savedState: SavedAppState = {
     version: 3,
     playMode: state.playMode,
@@ -417,19 +395,66 @@ function saveAppState(state: AppState) {
     gameState: state.gameState,
     mobileGameState: state.mobileGameState,
   };
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(savedState));
-    return true;
-  } catch {
-    return false;
-  }
+  return JSON.stringify(savedState);
 }
 
 class App extends React.Component<AppProps, AppState> {
   private skipNextPersist = false;
   private resetTrigger: HTMLElement | null = null;
+  private gameInstance = 0;
 
-  state = loadInitialAppState();
+  private lastStoredState = readStoredState();
+  state = loadInitialAppState(this.lastStoredState);
+
+  componentDidMount() {
+    window.addEventListener('storage', this.handleStorageChange);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('storage', this.handleStorageChange);
+  }
+
+  handleStorageChange = (event: StorageEvent) => {
+    if (event.key !== STORAGE_KEY && event.key !== null) return;
+    if (event.storageArea && event.storageArea !== window.localStorage) return;
+    const latest = readStoredState();
+    if (latest !== undefined && latest !== this.lastStoredState) this.setState({storageConflict: true});
+  };
+
+  persistState(state: AppState, clear = false, replace = false) {
+    if (this.state.storageConflict && !replace) return 'conflict';
+    const latest = readStoredState();
+    if (latest === undefined) return 'unavailable';
+    if (!replace && latest !== (this.lastStoredState ?? null)) return 'conflict';
+    const serialized = clear ? null : serializeAppState(state);
+    try {
+      if (serialized === null) window.localStorage.removeItem(STORAGE_KEY);
+      else window.localStorage.setItem(STORAGE_KEY, serialized);
+      this.lastStoredState = serialized;
+      return 'saved';
+    } catch {
+      return 'unavailable';
+    }
+  }
+
+  handleLoadSavedGame = () => {
+    const raw = readStoredState();
+    if (raw === undefined) {
+      this.setState({storageError: true});
+      return;
+    }
+    const nextState = loadInitialAppState(raw);
+    this.lastStoredState = raw;
+    this.gameInstance++;
+    this.skipNextPersist = true;
+    this.setState({...nextState, storageConflict: false, nameError: undefined,
+      storageError: nextState.storageError, recoveryNotice: nextState.recoveryNotice});
+  };
+
+  handleKeepThisGame = () => {
+    const result = this.persistState(this.state, false, true);
+    this.setState({storageConflict: result !== 'saved', storageError: result === 'unavailable'});
+  };
 
   componentDidUpdate(_prevProps: AppProps, prevState: AppState) {
     if (this.skipNextPersist) {
@@ -437,17 +462,22 @@ class App extends React.Component<AppProps, AppState> {
       return;
     }
     if (prevState.value === this.state.value && prevState.names === this.state.names &&
-        prevState.opts === this.state.opts && prevState.state === this.state.state &&
+        prevState.opts === this.state.opts && prevState.state === this.state.state && prevState.playMode === this.state.playMode &&
         prevState.gameState === this.state.gameState &&
         prevState.mobileGameState === this.state.mobileGameState) {
       return;
     }
-    const storageError = !saveAppState(this.state);
-    if (storageError !== !!this.state.storageError) this.setState({storageError});
+    const result = this.persistState(this.state);
+    const storageError = result === 'unavailable';
+    const storageConflict = result === 'conflict';
+    if (storageError !== !!this.state.storageError || storageConflict !== !!this.state.storageConflict) {
+      this.setState({storageError, storageConflict});
+    }
   }
 
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (this.state.gameState) return;
     const name = this.state.value.trim();
     const error = this.state.names.length >= 12 ? 'Twelve players max!' :
       validatePlayerName(name, this.state.names);
@@ -467,7 +497,7 @@ class App extends React.Component<AppProps, AppState> {
 
   handleHomeToLobby = () => {
     trackEvent('classic_mode_selected');
-    this.setState({state: this.state.gameState ? AppStateEnum.GAME : AppStateEnum.LOBBY, playMode: 'classic'});
+    this.setState({state: this.state.gameState && !rosterNeedsRepair(this.state.names) ? AppStateEnum.GAME : AppStateEnum.LOBBY, playMode: 'classic'});
   };
 
   handleHomeToMobile = () => {
@@ -479,6 +509,7 @@ class App extends React.Component<AppProps, AppState> {
   };
 
   handleLobbyToGame = () => {
+    if (this.state.names.length < 2 || rosterNeedsRepair(this.state.names) || this.state.opts.virtualMode === VirtualMode.UNSET) return;
     trackEvent('classic_game_started', {
       player_count: this.state.names.length,
       virtual_mode: virtualModeToAnalyticsValue(this.state.opts.virtualMode),
@@ -486,7 +517,7 @@ class App extends React.Component<AppProps, AppState> {
     this.setState({
       state: AppStateEnum.GAME,
       playMode: 'classic',
-      gameState: undefined,
+      recoveryNotice: undefined,
     });
   };
 
@@ -503,6 +534,10 @@ class App extends React.Component<AppProps, AppState> {
     this.setState({state: AppStateEnum.HOME});
   };
 
+  handleModeChange = (playMode: PlayMode) => {
+    this.setState({playMode});
+  };
+
   handleRemoveElephantChange = (removeElephant: boolean) => {
     this.setState(state => ({opts: {...state.opts, removeElephant}}));
   };
@@ -510,11 +545,16 @@ class App extends React.Component<AppProps, AppState> {
   handleRenamePlayer = (index: number, value: string) => {
     const name = value.trim();
     const error = validatePlayerName(name, this.state.names, index);
-    if (!error) this.setState({names: this.state.names.map((oldName, idx) => idx === index ? name : oldName)});
+    if (!error) this.setState(state => ({
+      names: state.names.map((oldName, idx) => idx === index ? name : oldName),
+      gameState: state.gameState ? {...state.gameState,
+        players: state.gameState.players.map((player, idx) => idx === index ? {...player, name} : player)} : undefined,
+    }));
     return error;
   };
 
   handleRemovePlayer = (index: number) => {
+    if (this.state.gameState) return;
     this.setState({names: this.state.names.filter((_name, idx) => idx !== index), nameError: undefined});
   };
 
@@ -523,6 +563,7 @@ class App extends React.Component<AppProps, AppState> {
   };
 
   handleVirtualClick = (virtualMode: VirtualMode) => {
+    if (this.state.gameState) return;
     trackEvent('game_format_selected', {
       virtual_mode: virtualModeToAnalyticsValue(virtualMode),
     });
@@ -554,23 +595,21 @@ class App extends React.Component<AppProps, AppState> {
     trackEvent('game_reset_confirmed');
     const initialState = createInitialAppState();
     initialState.opts.removeElephant = !!this.state.opts.removeElephant;
-    let storageError = false;
-    if (initialState.opts.removeElephant) {
-      storageError = !saveAppState(initialState);
-    } else {
-      try {
-        window.localStorage.removeItem(STORAGE_KEY);
-      } catch {
-        storageError = true;
-      }
+    let result = this.persistState(initialState, !initialState.opts.removeElephant);
+    if (result === 'saved') {
+      try { window.localStorage.removeItem(RECOVERY_STORAGE_KEY); }
+      catch { result = 'unavailable'; }
     }
     this.skipNextPersist = true;
-    this.setState({...initialState, storageError, nameError: undefined});
+    this.setState({...initialState, storageError: result === 'unavailable', storageConflict: result === 'conflict',
+      nameError: undefined, recoveryNotice: undefined});
   };
 
   renderHome() {
     return (
       <Home
+        mode={this.state.playMode}
+        onModeChange={this.handleModeChange}
         removeElephant={!!this.state.opts.removeElephant}
         onRemoveElephantChange={this.handleRemoveElephantChange}
         handleHomeToLobby={this.handleHomeToLobby}
@@ -589,6 +628,7 @@ class App extends React.Component<AppProps, AppState> {
   renderLobby() {
     return (
       <Lobby
+        key={this.gameInstance}
         names={this.state.names}
         value={this.state.value}
         gameOpts={this.state.opts}
@@ -601,6 +641,7 @@ class App extends React.Component<AppProps, AppState> {
         onRenamePlayer={this.handleRenamePlayer}
         onRemovePlayer={this.handleRemovePlayer}
         nameError={this.state.nameError}
+        hasSavedGame={!!this.state.gameState}
       />
     );
   }
@@ -608,6 +649,7 @@ class App extends React.Component<AppProps, AppState> {
   renderGame() {
     return (
       <Game
+        key={this.gameInstance}
         player_names={this.state.names}
         gameOpts={this.state.opts}
         initialGameState={this.state.gameState}
@@ -621,6 +663,7 @@ class App extends React.Component<AppProps, AppState> {
   renderMobileGame() {
     return (
       <MobileGame
+        key={this.gameInstance}
         removeElephant={this.state.opts.removeElephant}
         initialGameState={this.state.mobileGameState}
         onGameStateChange={this.handleMobileGameStateChange}
@@ -656,7 +699,15 @@ class App extends React.Component<AppProps, AppState> {
     return (
       <>
         <div inert={this.state.showResetModal}>
+          {this.state.storageConflict && <section className="storage-notice" role="status">
+            <p>Another tab changed the saved game. This tab’s progress is only in memory. Load the saved game, or replace it with this game.</p>
+            <div className="header-actions">
+              <button className="reset-link-button" type="button" onClick={this.handleLoadSavedGame}>Load saved game</button>
+              <button className="reset-link-button" type="button" onClick={this.handleKeepThisGame}>Save this game instead</button>
+            </div>
+          </section>}
           {this.state.storageError && <p className="storage-notice" role="status">Saving is unavailable. You can keep playing, but changes may be lost when you reload or close this tab.</p>}
+          {this.state.recoveryNotice && <p className="storage-notice" role="status">{this.state.recoveryNotice}</p>}
           {content}
         </div>
         {this.state.showResetModal && (

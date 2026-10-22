@@ -39,17 +39,24 @@ export type SerializedMobileGameState = {
 
 // Keep the saved deck intact so changing settings preserves its order and older saves.
 // Call before presenting a new or resumed turn, including after a reshuffle.
-export function skipElephant<T extends SerializedMobileGameState>(state: T, removeElephant?: boolean): T {
-  if (!removeElephant || state.deckState === DeckState.EXHAUSTED ||
-      CardDataList[state.deck[state.deck_idx]].title !== ELEPHANT_CARD_TITLE) {
-    return state;
+export function skipUnavailableCards<T extends SerializedMobileGameState>(
+  state: T,
+  options: {removeElephant?: boolean; playerCount?: number}
+): T {
+  if (state.deckState === DeckState.EXHAUSTED) return state;
+  let nextIndex = state.deck_idx;
+  while (true) {
+    const card = CardDataList[state.deck[nextIndex]];
+    const unavailable = (options.removeElephant && card.title === ELEPHANT_CARD_TITLE) ||
+      (options.playerCount !== undefined && options.playerCount < (card.minPlayers ?? 1));
+    if (!unavailable) break;
+    if (nextIndex === state.deck.length - 1) {
+      return {...state, deck_idx: nextIndex, deckState: DeckState.EXHAUSTED, pos: CardPosition.UNSET};
+    }
+    nextIndex++;
   }
-  const exhausted = state.deck_idx === state.deck.length - 1;
-  return {
-    ...state,
-    deck_idx: exhausted ? state.deck_idx : state.deck_idx + 1,
-    deckState: exhausted ? DeckState.EXHAUSTED : DeckState.BACK,
-    pos: CardPosition.UNSET,
+  return nextIndex === state.deck_idx ? state : {
+    ...state, deck_idx: nextIndex, deckState: DeckState.BACK, pos: CardPosition.UNSET,
   };
 }
 

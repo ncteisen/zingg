@@ -12,7 +12,7 @@ import {
   SerializedMobileGameState,
   createPlayableDeck,
   isValidSerializedMobileGameState,
-  skipElephant,
+  skipUnavailableCards,
 } from './GamePersistence';
 
 const mobileGameOpts: GameOpts = {
@@ -35,6 +35,8 @@ type MobileGameState = {
 };
 
 class MobileGame extends React.Component<MobileGameProps, MobileGameState> {
+  private publicHeading = React.createRef<HTMLHeadingElement>();
+
   constructor(props: MobileGameProps) {
     super(props);
 
@@ -42,21 +44,21 @@ class MobileGame extends React.Component<MobileGameProps, MobileGameState> {
       props.initialGameState &&
       isValidSerializedMobileGameState(props.initialGameState, mobileGameOpts)
     ) {
-      this.state = skipElephant({
+      this.state = skipUnavailableCards({
         deck: props.initialGameState.deck,
         deck_idx: props.initialGameState.deck_idx,
         deckState: props.initialGameState.deckState,
         pos: props.initialGameState.pos,
-      }, props.removeElephant);
+      }, {removeElephant: props.removeElephant});
       return;
     }
 
-    this.state = skipElephant({
+    this.state = skipUnavailableCards({
       deck: createPlayableDeck(mobileGameOpts),
       deck_idx: 0,
       deckState: DeckState.BACK,
       pos: CardPosition.UNSET,
-    }, props.removeElephant);
+    }, {removeElephant: props.removeElephant});
   }
 
   componentDidMount() {
@@ -66,6 +68,9 @@ class MobileGame extends React.Component<MobileGameProps, MobileGameState> {
   componentDidUpdate(_prevProps: MobileGameProps, prevState: MobileGameState) {
     if (prevState !== this.state) {
       this.props.onGameStateChange(this.serializeState());
+    }
+    if (prevState.deckState !== this.state.deckState || prevState.deck_idx !== this.state.deck_idx) {
+      this.publicHeading.current?.focus();
     }
   }
 
@@ -112,17 +117,17 @@ class MobileGame extends React.Component<MobileGameProps, MobileGameState> {
     trackEvent('next_player', {
       play_mode: 'mobile',
     });
-    this.setState(state => skipElephant({
+    this.setState(state => skipUnavailableCards({
       ...state,
       deck_idx: Math.min(state.deck_idx + 1, state.deck.length - 1),
       deckState: state.deck_idx === state.deck.length - 1 ? DeckState.EXHAUSTED : DeckState.BACK,
       pos: CardPosition.UNSET,
-    }, this.props.removeElephant));
+    }, {removeElephant: this.props.removeElephant}));
   };
 
   handleRestart = () => {
-    this.setState(skipElephant({deck: createPlayableDeck(mobileGameOpts), deck_idx: 0,
-      deckState: DeckState.BACK, pos: CardPosition.UNSET}, this.props.removeElephant));
+    this.setState(skipUnavailableCards({deck: createPlayableDeck(mobileGameOpts), deck_idx: 0,
+      deckState: DeckState.BACK, pos: CardPosition.UNSET}, {removeElephant: this.props.removeElephant}));
   };
 
   renderChoiceButton(label: string, pos: CardPosition) {
@@ -144,7 +149,7 @@ class MobileGame extends React.Component<MobileGameProps, MobileGameState> {
       <section className="mobile-choice-screen">
         <div className="mobile-turn-copy">
           <p className="eyebrow">Your turn</p>
-          <h1>Pick A or B.</h1>
+          <h1 ref={this.publicHeading} tabIndex={-1}>Pick A or B.</h1>
           <p>Tap one side, read it out loud, then do what it says.</p>
         </div>
         <div className="mobile-choice-grid">
@@ -159,7 +164,7 @@ class MobileGame extends React.Component<MobileGameProps, MobileGameState> {
     return (
       <section className="mobile-card-screen">
         <div className="mobile-card-holder">
-          <Card data={this.currentCard()} />
+          <Card data={this.currentCard()} headingRef={this.publicHeading} />
         </div>
         <div className="mobile-next-bar">
           <button

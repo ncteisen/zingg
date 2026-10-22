@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import GameOpts, {VirtualMode} from './GameOpts';
 import GameHeader from './GameHeader';
+import {validatePlayerName} from './PlayerName';
 
 type LobbyProps = {
   handleLobbyToGame: () => void;
@@ -15,12 +16,14 @@ type LobbyProps = {
   onRenamePlayer: (index: number, name: string) => string;
   onRemovePlayer: (index: number) => void;
   nameError?: string;
+  hasSavedGame?: boolean;
 };
 function Lobby(Props: LobbyProps) {
   console.log('Lobby.render()');
   let start_button: React.ReactNode;
   if (
     Props.names.length > 1 &&
+    Props.names.every((name, index) => !validatePlayerName(name, Props.names, index)) &&
     Props.gameOpts.virtualMode !== VirtualMode.UNSET
   ) {
     start_button = (
@@ -28,13 +31,15 @@ function Lobby(Props: LobbyProps) {
         className="pill-button pill-button-primary lobby-btn-start"
         onClick={Props.handleLobbyToGame}
       >
-        Start game
+        {Props.hasSavedGame ? 'Resume game' : 'Start game'}
       </button>
     );
   } else {
     start_button = (
       <p className="lobby-cant-start-message">
-        Add at least two players and choose where you’re playing.
+        {Props.names.some((name, index) => validatePlayerName(name, Props.names, index))
+          ? 'Give each player a unique, non-empty name to continue.'
+          : 'Add at least two players and choose where you’re playing.'}
       </p>
     );
   }
@@ -56,7 +61,7 @@ function Lobby(Props: LobbyProps) {
               <p className="eyebrow">Players</p>
               <h2>{Props.names.length}/12 seats filled</h2>
             </div>
-            <form onSubmit={Props.handleSubmit} className="lobby-form">
+            {Props.hasSavedGame ? <p className="option-copy">Edit the highlighted names to resume your saved game. Reset to start with a different group or format.</p> : <form onSubmit={Props.handleSubmit} className="lobby-form">
               <label htmlFor="player-name">Name</label>
               <div className="input-row">
                 <input
@@ -76,13 +81,14 @@ function Lobby(Props: LobbyProps) {
                 />
               </div>
               {Props.nameError && <p id="name-error" className="form-error" role="alert">{Props.nameError}</p>}
-            </form>
+            </form>}
             <div className="player-roster" aria-label="Players">
               {Props.names.length === 0 && (
                 <p className="empty-state">No players yet.</p>
               )}
               {Props.names.map((name, index) => (
-                <RosterPlayer key={name} name={name} index={index}
+                <RosterPlayer key={`${index}-${name}`} name={name} index={index}
+                  nameError={validatePlayerName(name, Props.names, index)} canRemove={!Props.hasSavedGame}
                   onRename={Props.onRenamePlayer} onRemove={Props.onRemovePlayer} />
               ))}
             </div>
@@ -102,6 +108,7 @@ function Lobby(Props: LobbyProps) {
               aria-label="Game format"
             >
               <button
+                disabled={Props.hasSavedGame}
                 onClick={() => Props.handleVirtualClick(VirtualMode.VIRTUAL)}
                 aria-pressed={Props.gameOpts.virtualMode === VirtualMode.VIRTUAL}
                 className={
@@ -113,6 +120,7 @@ function Lobby(Props: LobbyProps) {
                 Over video
               </button>
               <button
+                disabled={Props.hasSavedGame}
                 onClick={() => Props.handleVirtualClick(VirtualMode.LIVE)}
                 aria-pressed={Props.gameOpts.virtualMode === VirtualMode.LIVE}
                 className={
@@ -134,7 +142,7 @@ function Lobby(Props: LobbyProps) {
   );
 }
 
-function RosterPlayer(props: {name: string; index: number;
+function RosterPlayer(props: {name: string; index: number; nameError: string; canRemove: boolean;
   onRename: (index: number, name: string) => string; onRemove: (index: number) => void}) {
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState(props.name);
@@ -147,7 +155,7 @@ function RosterPlayer(props: {name: string; index: number;
       setError(message);
       if (!message) setEditing(false);
     }}>
-      <input autoFocus className="text-input" aria-label={'Rename ' + props.name}
+      <input autoFocus className="text-input" aria-label={'Rename ' + (props.name || 'player ' + (props.index + 1))}
         aria-invalid={!!error} aria-describedby={error ? 'rename-error-' + props.index : undefined}
         value={value} onChange={event => setValue(event.target.value)} />
       <div className="roster-actions">
@@ -156,10 +164,13 @@ function RosterPlayer(props: {name: string; index: number;
       </div>
       {error && <p id={'rename-error-' + props.index} className="form-error" role="alert">{error}</p>}
     </form> : <>
-      <span className="roster-name">{props.name}</span>
+      <span className="roster-name">{props.name || 'Unnamed player'}
+        {props.nameError && <span className="form-error" style={{display: 'block'}}>{props.nameError}</span>}
+      </span>
       <div className="roster-actions">
-        <button className="reset-link-button" type="button" aria-label={'Edit ' + props.name} onClick={() => setEditing(true)}>Edit</button>
-        <button className="reset-link-button" type="button" aria-label={'Remove ' + props.name} onClick={() => props.onRemove(props.index)}>Remove</button>
+        <button className="reset-link-button" type="button" aria-label={'Edit ' + (props.name || 'player ' + (props.index + 1))}
+          onClick={() => {setValue(props.name); setEditing(true);}}>Edit</button>
+        {props.canRemove && <button className="reset-link-button" type="button" aria-label={'Remove ' + (props.name || 'player ' + (props.index + 1))} onClick={() => props.onRemove(props.index)}>Remove</button>}
       </div>
     </>}
   </div>;

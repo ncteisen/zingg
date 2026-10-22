@@ -8,7 +8,7 @@ type AnalyticsProperties = Record<string, AnalyticsProperty>;
 declare global {
   interface Window {
     umami?: {
-      track: (eventName: string, eventData?: AnalyticsProperties) => void;
+      track: (eventName: string, eventData?: AnalyticsProperties) => void | PromiseLike<unknown>;
     };
   }
 }
@@ -21,7 +21,14 @@ export function trackEvent(
     return;
   }
 
-  window.umami.track(eventName, eventData);
+  try {
+    // Tracking is optional: neither synchronous throws nor rejected requests may
+    // interrupt local play or create an unhandled rejection.
+    const result = window.umami.track(eventName, eventData);
+    if (result) void Promise.resolve(result).catch(() => {});
+  } catch {
+    // Keep gameplay usable if the provider fails.
+  }
 }
 
 export function useTrackEvent() {

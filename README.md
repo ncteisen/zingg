@@ -11,7 +11,7 @@ npm ci
 npm start
 ```
 
-`npm run validate` runs TypeScript, ESLint, and the Vitest suite. `npm run build` creates `dist/`; `npm run preview` serves that production build locally.
+`npm run validate` runs TypeScript, ESLint, and the Vitest suite. The TypeScript check covers application source, Vite configuration, and the art review components. `npm run build` creates `dist/`; `npm run preview` serves that production build locally.
 
 ## Gameplay and saved progress
 
@@ -23,4 +23,4 @@ Use “Switch mode” to choose or resume either game. Classic setup and both ga
 
 ## Deployment
 
-Work on `master`. `.github/workflows/deploy.yml` validates and builds pull requests; pushes to `master` also deploy `dist/` to GitHub Pages. The workflow can also be dispatched manually. `public/CNAME` carries the custom domain. Do not edit generated artifacts or the historical `gh-pages` branch by hand.
+Work on `master`. `.github/workflows/deploy.yml` validates and builds pull requests; pushes to `master` also deploy `dist/` to GitHub Pages. The workflow can also be dispatched manually. The repository's GitHub Pages settings are the source of truth for the custom domain, `playzingg.com`; custom Actions deployments ignore the `CNAME` file. `public/CNAME` retains the single canonical domain for reference. Do not edit generated artifacts or the historical `gh-pages` branch by hand.

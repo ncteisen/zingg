@@ -368,7 +368,7 @@ test('ignores malformed saved state without crashing', () => {
   expect(screen.getByRole('heading', {name: /Drink with your idiot friends/})).toBeInTheDocument();
 });
 
-test('ignores incompatible saved game state without crashing', () => {
+test('recovers the lobby from an incompatible game without losing its roster', () => {
   saveState({
     version: 1,
     screen: 'GAME',
@@ -390,7 +390,10 @@ test('ignores incompatible saved game state without crashing', () => {
 
   render(<App />);
 
-  expect(screen.getByRole('heading', {name: /Drink with your idiot friends/})).toBeInTheDocument();
+  expect(screen.getByRole('heading', {name: /Build the table/})).toBeInTheDocument();
+  expect(screen.getByText('Noah')).toBeInTheDocument();
+  expect(screen.getByText('Sarah')).toBeInTheDocument();
+  expect(screen.getByRole('status')).toHaveTextContent(/could not be restored/);
 });
 
 test('ignores incompatible saved mobile game state without crashing', () => {
@@ -506,6 +509,9 @@ test.each(['classic live', 'classic virtual', 'mobile'])('%s pauses at deck exha
   const saved = mode === 'mobile' ? mobileSave() : classicSave(mode === 'classic virtual' ? VirtualMode.VIRTUAL : VirtualMode.LIVE);
   const key = 'gameState' in saved ? 'gameState' : 'mobileGameState';
   const state = 'gameState' in saved ? saved.gameState : saved.mobileGameState;
+  // Use a card all supported rosters can play as the final revealed card.
+  const finalCard = CardDataList.findIndex(card => card.title === 'Categories');
+  state.deck = [...state.deck.filter(idx => idx !== finalCard), finalCard];
   state.deck_idx = state.deck.length - 1;
   state.deckState = DeckState.FRONT;
   state.pos = CardPosition.LEFT;
@@ -760,7 +766,8 @@ test.each(gameModes)('%s exhausts when the only remaining card is the elephant a
   const saved = saveForMode(mode);
   const state = 'gameState' in saved ? saved.gameState : saved.mobileGameState;
   saved.opts.removeElephant = true;
-  state.deck = [...state.deck.filter(idx => idx !== elephantIndex), elephantIndex];
+  const finalPlayedCard = CardDataList.findIndex(card => card.title === 'Categories');
+  state.deck = [...state.deck.filter(idx => idx !== elephantIndex && idx !== finalPlayedCard), finalPlayedCard, elephantIndex];
   state.deck_idx = state.deck.length - 2;
   state.deckState = DeckState.FRONT;
   state.pos = CardPosition.LEFT;

@@ -11,7 +11,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "compile": "tsc --noEmit",
+    "compile": "tsc --noEmit && tsc --noEmit -p tsconfig.tooling.json",
     "lint": "eslint .",
     "test": "vitest run",
     "validate": "npm run compile && npm run lint && npm run test"
@@ -29,8 +29,8 @@
     "jsdom": "^29.1.1",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.59.1",
-    "vite": "^8.0.10",
-    "vitest": "^4.1.5"
+    "vite": "^8.1.6",
+    "vitest": "^4.1.12"
   },
   "homepage": "https://playzingg.com"
 }

@@ -14,7 +14,7 @@ import {
   createPlayableDeck,
   isValidSerializedGameState,
   playableCardIndexes,
-  skipElephant,
+  skipUnavailableCards,
 } from './GamePersistence';
 
 const cardDebuggingMode = false;
@@ -36,6 +36,8 @@ type GameState = {
   pos: CardPosition;
 };
 class Game extends React.Component<GameProps, GameState> {
+  private publicHeading = React.createRef<HTMLHeadingElement>();
+
   constructor(props: GameProps) {
     super(props);
 
@@ -47,7 +49,7 @@ class Game extends React.Component<GameProps, GameState> {
         props.gameOpts
       )
     ) {
-      this.state = skipElephant({
+      this.state = skipUnavailableCards({
         deck: props.initialGameState.deck,
         deck_idx: props.initialGameState.deck_idx,
         deckState: props.initialGameState.deckState,
@@ -56,7 +58,7 @@ class Game extends React.Component<GameProps, GameState> {
         }),
         player_idx: props.initialGameState.player_idx,
         pos: props.initialGameState.pos,
-      }, props.gameOpts.removeElephant);
+      }, {...props.gameOpts, playerCount: props.player_names.length});
       return;
     }
 
@@ -65,14 +67,14 @@ class Game extends React.Component<GameProps, GameState> {
       players.push(new PlayerData(name, '', i));
     });
     var deck = playableCardIndexes(props.gameOpts);
-    this.state = skipElephant({
+    this.state = skipUnavailableCards({
       deck: cardDebuggingMode ? deck : createPlayableDeck(props.gameOpts),
       deck_idx: 0,
       deckState: cardDebuggingMode ? DeckState.FRONT : DeckState.BACK,
       players: players,
       player_idx: 0,
       pos: cardDebuggingMode ? CardPosition.RIGHT : CardPosition.UNSET,
-    }, props.gameOpts.removeElephant);
+    }, {...props.gameOpts, playerCount: props.player_names.length});
   }
 
   componentDidMount() {
@@ -82,6 +84,9 @@ class Game extends React.Component<GameProps, GameState> {
   componentDidUpdate(_prevProps: GameProps, prevState: GameState) {
     if (prevState !== this.state) {
       this.props.onGameStateChange(this.serializeState());
+    }
+    if (prevState.deckState !== this.state.deckState || prevState.deck_idx !== this.state.deck_idx) {
+      this.publicHeading.current?.focus();
     }
   }
 
@@ -136,7 +141,7 @@ class Game extends React.Component<GameProps, GameState> {
 
       case DeckState.FRONT:
         if (pos === this.state.pos) {
-          return <Card data={this.currentCard()} />;
+          return <Card data={this.currentCard()} headingRef={this.publicHeading} />;
         } else {
           return <BackOfCard />;
         }
@@ -147,18 +152,19 @@ class Game extends React.Component<GameProps, GameState> {
   }
 
   advanceToNextPlayer() {
-    this.setState(state => skipElephant({
+    this.setState(state => skipUnavailableCards({
       ...state,
       deckState: state.deck_idx === state.deck.length - 1 ? DeckState.EXHAUSTED :
         cardDebuggingMode ? DeckState.FRONT : DeckState.BACK,
       player_idx: (state.player_idx + 1) % state.players.length,
       deck_idx: Math.min(state.deck_idx + 1, state.deck.length - 1),
-    }, this.props.gameOpts.removeElephant));
+    }, {...this.props.gameOpts, playerCount: this.state.players.length}));
   }
 
   handleRestart = () => {
-    this.setState(skipElephant({deck: createPlayableDeck(this.props.gameOpts), deck_idx: 0,
-      deckState: DeckState.BACK, pos: CardPosition.UNSET}, this.props.gameOpts.removeElephant));
+    this.setState(skipUnavailableCards({deck: createPlayableDeck(this.props.gameOpts), deck_idx: 0,
+      deckState: DeckState.BACK, pos: CardPosition.UNSET},
+    {...this.props.gameOpts, playerCount: this.state.players.length}));
   };
 
   handleButtonClick = (pos: CardPosition) => {
@@ -258,7 +264,9 @@ class Game extends React.Component<GameProps, GameState> {
             {this.state.deckState === DeckState.EXHAUSTED ? <DeckExhausted onRestart={this.handleRestart} /> : <>
             <div className="turn-banner">
               <p className="eyebrow">Current turn</p>
-              <h1>{this.state.players[this.state.player_idx].name}’s turn.</h1>
+              <h1 ref={this.state.deckState === DeckState.BACK ? this.publicHeading : undefined} tabIndex={-1}>
+                {this.state.players[this.state.player_idx].name}’s turn.
+              </h1>
               <p>{this.state.deckState === DeckState.BACK ? 'Pick A or B. Trust your instincts.' : this.getBannerText()}</p>
             </div>
 

@@ -19,6 +19,7 @@ export class CardData {
   mode: VirtualMode;
   type: CardType;
   interaction?: CardInteraction;
+  minPlayers?: number;
   constructor(
     title: string,
     body: string,
@@ -26,7 +27,8 @@ export class CardData {
     type?: CardType,
     tips?: string[],
     mode?: VirtualMode,
-    interaction?: CardInteraction
+    interaction?: CardInteraction,
+    minPlayers?: number
   ) {
     this.title = title;
     this.body = body;
@@ -35,6 +37,7 @@ export class CardData {
     this.mode = (mode && mode) || VirtualMode.UNSET;
     this.type = (type && type) || CardType.ACTION;
     this.interaction = interaction;
+    this.minPlayers = minPlayers;
   }
 }
 
@@ -51,13 +54,14 @@ function ColorForCardType(type: CardType): string {
 
 type CardProps = {
   data: CardData;
+  headingRef?: React.Ref<HTMLHeadingElement>;
 };
 function Card(props: CardProps) {
   return <CardFace key={props.data.title} {...props} />;
 }
 
-function CardFace(props: CardProps) {
-  const color = ColorForCardType(props.data.type);
+function CardFace({data, headingRef}: CardProps) {
+  const color = ColorForCardType(data.type);
   const hintId = useId();
   const hintButton = useRef<HTMLButtonElement>(null);
   const [showHints, setShowHints] = useState(false);
@@ -73,8 +77,8 @@ function CardFace(props: CardProps) {
       }}
     >
       <div className="card-topline">
-        <span className="card-type">{props.data.type}</span>
-        {props.data.tips.length > 0 && (
+        <span className="card-type">{data.type}</span>
+        {data.tips.length > 0 && (
           <button
             aria-controls={hintId}
             aria-expanded={showHints}
@@ -87,7 +91,7 @@ function CardFace(props: CardProps) {
           </button>
         )}
       </div>
-      <h2 className="card-title">{props.data.title}</h2>
+      <h2 className="card-title" ref={headingRef} tabIndex={-1}>{data.title}</h2>
       <div className="card-content">
         <div
           className="card-front-content"
@@ -96,13 +100,13 @@ function CardFace(props: CardProps) {
           style={{visibility: showHints ? 'hidden' : undefined}}
         >
           <div className="card-img-holder">
-            <img className="card-img-top" src={props.data.img} alt="" />
+            <img className="card-img-top" src={data.img} alt="" />
           </div>
-          <p className="card-text">{props.data.body}</p>
-          {props.data.interaction === 'who-am-i' && <WhoAmI />}
-          {props.data.interaction === 'undercover' && <Undercover />}
+          <p className="card-text">{data.body}</p>
+          {data.interaction === 'who-am-i' && <WhoAmI />}
+          {data.interaction === 'undercover' && <Undercover />}
         </div>
-        {props.data.tips.length > 0 && (
+        {data.tips.length > 0 && (
           <section
             aria-labelledby={hintId + '-title'}
             className="card-hint-content"
@@ -111,7 +115,7 @@ function CardFace(props: CardProps) {
             tabIndex={0}
           >
             <h3 id={hintId + '-title'}>Examples</h3>
-            {props.data.tips.map((text, index) => (
+            {data.tips.map((text, index) => (
               <p key={index} className="card-hint-text">{text}</p>
             ))}
           </section>

@@ -114,7 +114,9 @@ test('playtesting preserves both saved decks and does not emit gameplay analytic
   fireEvent.click(screen.getByRole('button', {name: 'Show secret'}));
   fireEvent.click(screen.getByRole('button', {name: 'Hide & pass'}));
   fireEvent.change(screen.getByRole('slider', {name: 'The group’s guess'}), {target: {value: '42.5'}});
+  act(() => vi.advanceTimersByTime(700));
   fireEvent.click(screen.getByRole('button', {name: 'Lock guess'}));
+  act(() => vi.advanceTimersByTime(700));
   fireEvent.click(screen.getByRole('button', {name: 'Reveal'}));
   fireEvent.click(screen.getByRole('button', {name: 'Close playtest'}));
   expect(window.localStorage.getItem(storageKey)).toBe(serialized);

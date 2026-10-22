@@ -15,6 +15,7 @@ function targetZone(target: number) {
 export default function Wavelength() {
   const [pickScale] = useState(createWavelengthScalePicker);
   const [phase, setPhase] = useState<Phase>('handoff');
+  const [hasPlayed, setHasPlayed] = useState(false);
   const [round, setRound] = useState<Round | null>(null);
   const [guess, setGuess] = useState(50);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -32,6 +33,7 @@ export default function Wavelength() {
 
   function showSecret() {
     if (!round) setRound({scale: pickScale(), target: Math.round(Math.random() * 1000) / 10});
+    setHasPlayed(true);
     setPhase('secret');
   }
 
@@ -51,7 +53,7 @@ export default function Wavelength() {
       {phase === 'handoff' ? <>
         <div className="card-img-holder"><img className="card-img-top" src={wavelengthArt} alt="" /></div>
         <p className="card-text">Privately check the spot and give a clue. Everyone else agrees on a guess. Hit the zone: nobody drinks. Miss: everyone drinks, including you.</p>
-        <button className="pill-button" type="button" onClick={showSecret}>Show secret</button>
+        <PhaseAction key={phase} guarded={hasPlayed} onClick={showSecret}>Show secret</PhaseAction>
       </> : <>
         <div className="wavelength-play-area">
           <div className="wavelength-scale" aria-label="The scale">
@@ -80,19 +82,35 @@ export default function Wavelength() {
         </div>
         {phase === 'secret' ? <>
           <p className="card-text">Hide the spot before giving your clue.</p>
-          <button className="pill-button" type="button" onClick={() => setPhase('guess')}>Hide & pass</button>
+          <PhaseAction key={phase} guarded={false} onClick={() => setPhase('guess')}>Hide & pass</PhaseAction>
         </> : phase === 'guess' ?
-          <button className="pill-button" type="button" onClick={() => setPhase('locked')}>Lock guess</button> :
+          <PhaseAction key={phase} onClick={() => setPhase('locked')}>Lock guess</PhaseAction> :
           phase === 'locked' ?
-            <button className="pill-button" type="button" onClick={() => setPhase('result')}>Reveal</button> :
+            <PhaseAction key={phase} onClick={() => setPhase('result')}>Reveal</PhaseAction> :
             <>
               <p className="card-text wavelength-outcome" role="status">{hit ?
                 'Hit. Nobody drinks.' : 'Miss. Everyone drinks, including the clue giver.'}</p>
-              <button className="pill-button" type="button" onClick={nextRound}>Next clue giver</button>
+              <PhaseAction key={phase} onClick={nextRound}>Next clue giver</PhaseAction>
             </>}
       </>}
     </div>
   </article>;
+}
+
+function PhaseAction({children, onClick, guarded = true}: {
+  children: string;
+  onClick: () => void;
+  guarded?: boolean;
+}) {
+  const [ready, setReady] = useState(!guarded);
+  useEffect(() => {
+    if (!guarded) return;
+    // Each phase gets a fresh button: a double tap cannot activate its next action.
+    const timer = window.setTimeout(() => setReady(true), 700);
+    return () => window.clearTimeout(timer);
+  }, [guarded]);
+  // Hiding a visible secret is always available, including during a rapid tap.
+  return <button className="pill-button" type="button" disabled={!ready} onClick={onClick}>{children}</button>;
 }
 
 function positionText(position: number) {

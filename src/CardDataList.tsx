@@ -280,8 +280,9 @@ let CardDataList = [
 
 	MakeCardWithTips(
 		"Categories",
-		`Pick a category. Now go around the player order from the top of
-		the screen and name things within the category. First to hesitate 
+		`Pick a category. Starting with you, follow the player roster if one
+		is shown; otherwise go clockwise around the room. Name things within
+		the category. First to hesitate
 		or repeat a word must drink.`,
 		categories,
 		CardType.ACTION,
@@ -332,8 +333,9 @@ let CardDataList = [
 
 	MakeVirtualCard(
 		"RPS",
-		`Choose two players who are on the same screen. They play rock paper 
-		scissors, best of three. Loser drinks. For every tie, the spectators 
+		`Choose two players to play rock paper scissors, best of three.
+		On separate cameras, count down together and keep your hands in view.
+		Loser drinks. For every tie, the spectators
 		drink.`,
 		rps,
 		CardType.ACTION),
@@ -419,7 +421,8 @@ let CardDataList = [
 
 	MakeVirtualCard(
 		"Day at the Races",
-		`Choose two players who are on the same screen to race to the bottom. 
+		`Choose two players to race to the bottom. If they are on separate
+		cameras, count down together and keep both drinks in view.
 		Loser drinks again. Everyone else should make racing noises.`,
 		races,
 		CardType.ACTION),
@@ -517,7 +520,7 @@ let CardDataList = [
 		CardType.ACTION,
 		[
 			"This is the only state in which the biggest three cities start with the letter C",
-			"This was the only president to server two non-consecutive terms",
+			"This was the first US president to serve two nonconsecutive terms",
 			"This chemical bond forms between two non metal elements and involves a shared electron",
 		]),
 
@@ -647,7 +650,7 @@ let CardDataList = [
     'who-am-i'),
   new CardData(
     'Undercover',
-    `Pass the phone to see your secret role. Everyone gets the same word,
+    `For 3–12 players. Pass the phone to see your secret role. Everyone gets the same word,
     except one undercover player. Give one clue each without saying the word.
     Then vote: who’s bluffing? Catch them and they drink. Get it wrong and
     everyone else drinks.`,
@@ -655,7 +658,8 @@ let CardDataList = [
     CardType.INTERRUPT,
     [],
     VirtualMode.LIVE,
-    'undercover'),
+    'undercover',
+    3),
 ]
 
 export default CardDataList;
