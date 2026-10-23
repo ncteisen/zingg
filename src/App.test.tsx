@@ -137,6 +137,21 @@ test('tracks the classic gameplay funnel without player names', () => {
   expect(JSON.stringify(events)).not.toContain('Sarah');
 });
 
+test.each(['In person', 'Over video'])('how-to-play link stays on home only for %s play', format => {
+  render(<App />);
+  expect(screen.getByRole('link', {name: 'How to play'})).toHaveAttribute('href', '/how-to-play/');
+  chooseMode('classic');
+  expect(screen.queryByRole('link', {name: 'How to play'})).not.toBeInTheDocument();
+  addPlayer('Alex');
+  addPlayer('Sam');
+  fireEvent.click(screen.getByRole('button', {name: format}));
+  fireEvent.click(screen.getByRole('button', {name: /start game/i}));
+  expect(screen.getByRole('button', {name: /flip card a/i})).toBeInTheDocument();
+  expect(screen.queryByRole('link', {name: 'How to play'})).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', {name: /flip card a/i}));
+  expect(screen.queryByRole('link', {name: 'How to play'})).not.toBeInTheDocument();
+});
+
 test('phone viewport opens the mobile landing instead of classic home', () => {
   setViewportWidth(390);
 

@@ -46,6 +46,8 @@ button.brand-mark { cursor: pointer; }
 .header-reset-button { min-height: 36px; padding-block: 8px; }
 .site-footer { align-items: center; border-top: 1px solid var(--coffee-line); color: var(--soft-cocoa); display: flex; font-size: 12px; gap: 16px; justify-content: space-between; margin-top: auto; padding: 20px max(32px, calc((100vw - 1160px) / 2)); }
 .site-footer a { color: var(--soft-cocoa); display: inline-flex; align-items: center; min-height: 44px; }
+.site-footer .how-to-play-link { font-weight: 400; text-decoration: none; }
+.site-footer .how-to-play-link:hover, .site-footer .how-to-play-link:focus-visible { text-decoration: underline; }
 .home-hero, .page-frame { margin: 0 auto; max-width: 1240px; padding: 48px 40px; width: 100%; }
 .home-hero { align-items: center; display: grid; gap: 48px; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); padding-bottom: 56px; }
 .home-copy-panel { min-width: 0; }

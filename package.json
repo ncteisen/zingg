@@ -9,7 +9,7 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
-    "build": "vite build",
+    "build": "node scripts/build.mjs",
     "preview": "vite preview",
     "compile": "tsc --noEmit && tsc --noEmit -p tsconfig.tooling.json",
     "lint": "eslint .",

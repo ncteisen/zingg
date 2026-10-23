@@ -37,7 +37,7 @@ type HomeProps = {
   hasClassicGame: boolean;
   hasMobileGame: boolean;
 };
-function Home(Props: HomeProps) {
+export function Home(Props: HomeProps) {
   const mode = Props.mode;
   const hasGame = mode === 'classic' ? Props.hasClassicGame : Props.hasMobileGame;
   return (
@@ -71,7 +71,7 @@ function Home(Props: HomeProps) {
           <figcaption>Everyone knows someone like this.</figcaption>
         </figure>
       </main>
-      <SiteFooter />
+      <SiteFooter showHowToPlay />
     </div>
   );
 }
@@ -82,7 +82,7 @@ type MobileLandingProps = {
   handleMobileToGame: () => void;
   onSwitchMode: () => void;
 };
-function MobileLanding(Props: MobileLandingProps) {
+export function MobileLanding(Props: MobileLandingProps) {
   return (
     <div className="app-shell mobile-landing-shell">
       <header className="site-header site-header-home">
@@ -101,7 +101,7 @@ function MobileLanding(Props: MobileLandingProps) {
           <Settings removeElephant={Props.removeElephant} onRemoveElephantChange={Props.onRemoveElephantChange} />
         </section>
       </main>
-      <SiteFooter />
+      <SiteFooter showHowToPlay />
     </div>
   );
 }

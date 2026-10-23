@@ -1,0 +1,14 @@
+.how-to-play-page { margin: 0 auto; max-width: 720px; padding: 48px 32px 64px; width: 100%; }
+.how-to-play-page h1 { font: 700 clamp(36px, 5vw, 48px)/1.08 var(--font-display); letter-spacing: -1px; margin: 0 0 20px; }
+.how-to-play-page h2 { color: var(--ink-brown); font: 700 25px/1.2 var(--font-display); margin: 0 0 14px; }
+.how-to-play-page h3 { color: var(--ink-brown); font-size: 16px; margin: 24px 0 8px; }
+.how-to-play-page p, .how-to-play-page li { color: var(--soft-cocoa); font-size: 16px; line-height: 1.7; }
+.how-to-play-page p { margin: 0 0 16px; }
+.how-to-play-page .how-to-play-intro { font-size: 18px; }
+.how-to-play-page section { border-top: 1px solid var(--coffee-line); margin-top: 32px; padding-top: 28px; }
+.how-to-play-page ul { padding-left: 22px; }
+.how-to-play-page li { margin-bottom: 12px; padding-left: 4px; }
+.how-to-play-return { align-items: center; display: inline-flex; font-size: 14px; margin-top: 20px; min-height: 44px; }
+@media (max-width: 767px) {
+  .how-to-play-page { padding: 32px 20px 48px; }
+}
